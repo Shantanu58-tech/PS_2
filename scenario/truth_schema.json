@@ -1,0 +1,12 @@
+﻿{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "coordinated_account_ids": {"type": "array", "items": {"type": "string"}},
+    "rumour_post_ids": {"type": "array", "items": {"type": "string"}},
+    "origin_post_id": {"type": "string"},
+    "decoy_topic": {"type": "string"},
+    "bridge_account_id": {"type": "string"},
+    "scenario_seed": {"type": "integer"}
+  }
+}

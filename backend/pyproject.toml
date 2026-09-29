@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "satyanet-backend"
+version = "1.0.0"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.111",
+    "uvicorn[standard]>=0.29",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.3",
+    "aiosqlite>=0.20",
+    "httpx>=0.27",
+    "python-jose[cryptography]>=3.3",
+    "passlib[bcrypt]>=1.7",
+    "cryptography>=42",
+    "imagehash>=4.3",
+    "Pillow>=10",
+    "faiss-cpu>=1.8",
+    "sentence-transformers>=3.0",
+    "transformers>=4.41",
+    "torch>=2.3",
+    "numpy>=1.26",
+    "scipy>=1.13",
+    "scikit-learn>=1.5",
+    "networkx>=3.3",
+    "bertopic>=0.16",
+    "umap-learn>=0.5",
+    "hdbscan>=0.8",
+    "jinja2>=3.1",
+    "weasyprint>=62",
+    "langdetect>=1.0",
+    "python-multipart>=0.0.9",
+    "sse-starlette>=2.1",
+    "pytesseract>=0.3",
+    "opencv-python-headless>=4.9",
+    "twscrape>=0.12",
+    "telethon>=1.36",
+    "praw>=7.7",
+    "google-api-python-client>=2.130",
+    "requests>=2.31",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "pytest-asyncio>=0.23",
+    "hypothesis>=6.100",
+    "ruff>=0.4",
+    "mypy>=1.10",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*", "ledger*", "scenario*", "eval*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"

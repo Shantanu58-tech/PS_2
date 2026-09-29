@@ -1,0 +1,17 @@
+PRAHARI
+Copyright (c) 2026 Om Soma (Team Leader) and Team MOGGERS, VIT Pune. All rights reserved.
+
+This software and its documentation were created for Smart India Hackathon problem statement
+SIH26152 (Social Media Analytics, sponsored by NTRO).
+
+No licence is granted to copy, modify, distribute or use this software, in whole or in part,
+without prior written permission from the copyright holders, except for evaluation by Smart
+India Hackathon organisers and jury members for the purpose of judging.
+
+Third-party datasets and models used by this project remain under their own licences, which
+are listed in ml/datasets/LICENSES.md.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR ITS USE.

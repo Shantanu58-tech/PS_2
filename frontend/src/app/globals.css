@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #07090d;
+  --panel: #0d1117;
+  --panel-raised: #121823;
+  --line: #1d2633;
+  --line-strong: #2a3647;
+  --ink: #d7dee8;
+  --ink-muted: #8b98a9;
+  --ink-faint: #5b6778;
+  --accent: #e0a526;
+  --accent-soft: #3a2c0c;
+  --ok: #3fb68b;
+  --warn: #e0a526;
+  --alert: #e5534b;
+  --info: #58a6ff;
+  --live: #3fb68b;
+  --replay: #58a6ff;
+  --import: #a371f7;
+  --synthetic: #e0a526;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-panel-raised: var(--panel-raised);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-alert: var(--alert);
+  --color-info: var(--info);
+  --color-live: var(--live);
+  --color-replay: var(--replay);
+  --color-import: var(--import);
+  --color-synthetic: var(--synthetic);
+  --font-sans: var(--font-plex-sans);
+  --font-mono: var(--font-plex-mono);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-plex-sans), system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--accent);
+}

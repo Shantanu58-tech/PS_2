@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  backend:
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./replay:/app/replay
+      - ./.env:/app/.env
+    environment:
+      - DB_PATH=/app/data/satya.db
+    restart: unless-stopped
