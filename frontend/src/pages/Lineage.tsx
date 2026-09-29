@@ -1,63 +1,101 @@
-import { useQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
+import { ArrowRight, ImageIcon } from 'lucide-react'
+import { useLineage } from '../hooks/useApi'
+import { Card, Empty, InfoPop, PageHead, Seg, StatusBadge } from '../components/ui'
+import { PLATFORM_LABEL, PLATFORM_SLOT } from '../lib/viz'
+import { ist, minutesBetween, num, pct } from '../lib/fmt'
 
-const PLATFORM_STYLE: Record<string, { bg: string; fg: string }> = {
-  telegram: { bg: '#1e3a8a', fg: '#93c5fd' },
-  x: { bg: '#0c4a6e', fg: '#7dd3fc' },
-  reddit: { bg: '#431407', fg: '#fdba74' },
-  youtube: { bg: '#450a0a', fg: '#fca5a5' },
+function Swimlanes({ lin }: { lin: any }) {
+  const plats: any[] = lin.platforms ?? []
+  const t0 = plats.length ? new Date(plats[0].first_seen).getTime() : 0
+  const t1 = plats.length ? Math.max(...plats.map(p => new Date(p.first_seen).getTime())) : 0
+  const span = Math.max(1, t1 - t0)
+  return (
+    <div className="stack" style={{ gap: 6 }}>
+      {plats.map((p, i) => {
+        const x = 4 + 88 * ((new Date(p.first_seen).getTime() - t0) / span)
+        return (
+          <div key={p.platform} className="lane">
+            <span className="row" style={{ fontSize: 13 }}>
+              <span style={{ width: 10, height: 10, borderRadius: 3, background: PLATFORM_SLOT[p.platform] ?? 'var(--ink-3)', display: 'inline-block' }} />
+              {PLATFORM_LABEL[p.platform] ?? p.platform}
+            </span>
+            <div className="lane-track">
+              <span className="lane-dot" style={{ left: `${x}%`, background: PLATFORM_SLOT[p.platform] ?? 'var(--ink-3)' }} title={ist(p.first_seen)} />
+              <span className="muted" style={{ position: 'absolute', ...(x > 50 ? { right: `calc(${100 - x}% + 12px)` } : { left: `calc(${x}% + 12px)` }), top: 4, fontSize: 12, whiteSpace: 'nowrap' }}>
+                {i === 0 ? 'earliest observed' : `+${minutesBetween(plats[0].first_seen, p.first_seen)} min`} · {num(p.n_posts)} posts{p.has_media ? ' · image' : ''}
+              </span>
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
 }
-const ist = (ts: string) =>
-  new Date(ts).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short' }) + ' IST'
-const minutesBetween = (a: string, b: string) => Math.round((new Date(b).getTime() - new Date(a).getTime()) / 60000)
 
 export default function Lineage() {
-  const { data } = useQuery({ queryKey: ['lineage'], queryFn: () => fetch('/api/lineage').then(r => r.json()) })
-  const topics: any[] = data?.topics || []
-  const images: any[] = data?.image_matches || []
+  const { data } = useLineage()
+  const topics: any[] = data?.topics ?? []
+  const images: any[] = data?.image_matches ?? []
+  const [sel, setSel] = useState<string>('')
+  useEffect(() => { if (!sel && topics.length) setSel(String(topics[0].topic_id)) }, [topics, sel])
+  const lin = topics.find(t => String(t.topic_id) === sel)
+
   return (
     <div>
-      <h1 style={{color:'white',fontSize:22,fontWeight:700,marginBottom:16}}>Narrative Lineage</h1>
-      <p style={{color:'#9ca3af',fontSize:13,lineHeight:1.7,marginBottom:16}}>
-        Earliest observed appearance of each narrative across platforms, from text-claim clustering, repost/forward chains and perceptual image hashing.
-      </p>
-      {topics.length === 0 && <div style={{color:'#4b5563',fontSize:13}}>No lineage yet - start the replay from the Command Center.</div>}
-      {topics.map(t => (
-        <div key={t.topic_id} style={{background:'#0d1326',border:`1px solid ${t.nature==='manufactured'?'#7f1d1d':'#1e2740'}`,borderRadius:12,padding:20,marginBottom:16}}>
-          <div style={{display:'flex',justifyContent:'space-between',marginBottom:12}}>
-            <span style={{color:'white',fontWeight:600}}>{t.label}</span>
-            <span style={{fontSize:11,color:t.nature==='manufactured'?'#f87171':'#86efac'}}>
-              {t.nature} - {((t.coordinated_share||0)*100).toFixed(0)}% coordinated - {t.n_posts} posts
-            </span>
+      <PageHead code="V3" title="Narrative lineage"
+        sub="Where a narrative was first seen and how it moved across platforms: text-claim clustering, repost and forward chains (Telegram forward headers), and perceptual image hashing." />
+      {topics.length === 0 ? <Empty>No lineage yet.</Empty> : (
+        <div className="stack">
+          <div className="row-wrap">
+            <Seg label="Narrative" value={sel} onChange={setSel}
+              options={topics.slice(0, 4).map(t => ({ value: String(t.topic_id), label: t.label }))} />
           </div>
-          <div style={{fontFamily:'monospace',fontSize:12,color:'#9ca3af',lineHeight:2}}>
-            {(t.platforms||[]).map((p: any, i: number) => {
-              const s = PLATFORM_STYLE[p.platform] || { bg: '#1f2937', fg: '#e5e7eb' }
-              return (
-                <div key={p.platform} style={{display:'flex',alignItems:'center',gap:12,marginBottom:4}}>
-                  <span style={{background:s.bg,color:s.fg,padding:'3px 10px',borderRadius:4,minWidth:80,textAlign:'center'}}>{p.platform.toUpperCase()}</span>
-                  <span style={{color:'#6b7280'}}>
-                    {i === 0 ? 'Earliest observed' : `+${minutesBetween(t.platforms[0].first_seen, p.first_seen)} min`} - {ist(p.first_seen)} - {p.n_posts} posts{p.has_media ? ' - with image' : ''}
-                  </span>
+          {lin && (
+            <div className="grid g-main">
+              <Card title={lin.label} sub={`${num(lin.n_posts)} posts · ${pct(lin.coordinated_share)} from coordinated accounts`}
+                actions={lin.nature === 'manufactured' ? <StatusBadge status="critical">Manufactured</StatusBadge> : <StatusBadge status="good">Organic</StatusBadge>}>
+                <Swimlanes lin={lin} />
+                <div className="divider" />
+                <div className="row-wrap" style={{ fontSize: 13 }}>
+                  {(lin.hops ?? []).map((h: any, i: number) => (
+                    <span key={i} className="row">
+                      <span className="chip">{PLATFORM_LABEL[h.from] ?? h.from}</span><ArrowRight size={13} /><span className="chip">{PLATFORM_LABEL[h.to] ?? h.to}</span>
+                      <span className="muted">in {minutesBetween(h.from_ts, h.to_ts)} min</span>
+                    </span>
+                  ))}
                 </div>
-              )
-            })}
-          </div>
-          {t.origin_candidate && (
-            <div style={{marginTop:10,fontSize:12,color:'#9ca3af',borderLeft:'2px solid #374151',paddingLeft:12}}>
-              "{t.origin_candidate.text}"
+                <p className="muted" style={{ fontSize: 12, marginTop: 10, fontStyle: 'italic' }}>{lin.caveat}</p>
+              </Card>
+              <Card title="Origin candidate" sub={ist(lin.earliest_observed)}>
+                {lin.origin_candidate && (
+                  <div className="stack" style={{ gap: 8 }}>
+                    <span className="badge"><span className="dot" style={{ background: PLATFORM_SLOT[lin.origin_candidate.platform] }} />{PLATFORM_LABEL[lin.origin_candidate.platform]}</span>
+                    <blockquote style={{ margin: 0, paddingLeft: 12, borderLeft: '2px solid var(--axis)', color: 'var(--ink-1)' }}>{lin.origin_candidate.text}</blockquote>
+                    <div className="muted mono" style={{ fontSize: 12 }}>{lin.origin_candidate.first_post_id} · author {lin.origin_candidate.author_id}</div>
+                    <div className="muted" style={{ fontSize: 12 }}>{num((lin.chains ?? []).length)} explicit repost/forward links traced from here.</div>
+                  </div>
+                )}
+              </Card>
             </div>
           )}
-          <p style={{color:'#4b5563',fontSize:11,marginTop:12,fontStyle:'italic'}}>{t.caveat}</p>
-        </div>
-      ))}
-      {images.length > 0 && (
-        <div style={{background:'#0d1326',border:'1px solid #1e2740',borderRadius:12,padding:20}}>
-          <h3 style={{color:'white',fontWeight:600,marginBottom:10}}>Image variants (pHash)</h3>
-          {images.map((m, i) => (
-            <div key={i} style={{fontFamily:'monospace',fontSize:12,color:'#9ca3af',marginBottom:4}}>
-              {m.media_id_a} ({m.platform_a}) {'->'} {m.media_id_b} ({m.platform_b}): Hamming {m.hamming} (threshold {m.threshold})
-            </div>
-          ))}
+          <Card title="Image variants" sub="perceptual hash (pHash) matches: same picture after re-encoding, cropping or watermarking"
+            actions={<InfoPop>64-bit pHash; a match is a Hamming distance ≤ threshold. On our 200-image transformation suite the chosen threshold gives the recall and false-positive rate shown on the PS 26152 &amp; Eval page.</InfoPop>}>
+            {images.length === 0 ? <Empty>No image matches.</Empty> : (
+              <table className="tbl">
+                <thead><tr><th>First seen</th><th /><th>Variant</th><th className="num">Hamming</th><th className="num">Posts</th></tr></thead>
+                <tbody>{images.map((m, i) => (
+                  <tr key={i}>
+                    <td><span className="row"><ImageIcon size={14} /><span className="mono" style={{ fontSize: 12 }}>{m.media_id_a}</span></span><div className="muted" style={{ fontSize: 11 }}>{PLATFORM_LABEL[m.platform_a]} · {ist(m.first_seen_a)}</div></td>
+                    <td><ArrowRight size={14} /></td>
+                    <td><span className="mono" style={{ fontSize: 12 }}>{m.media_id_b}</span><div className="muted" style={{ fontSize: 11 }}>{PLATFORM_LABEL[m.platform_b]} · {ist(m.first_seen_b)}</div></td>
+                    <td className="num">{m.hamming} / {m.threshold}</td>
+                    <td className="num">{m.posts_b}</td>
+                  </tr>
+                ))}</tbody>
+              </table>
+            )}
+          </Card>
         </div>
       )}
     </div>

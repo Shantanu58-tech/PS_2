@@ -1,43 +1,44 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { lazy, Suspense, useEffect } from 'react'
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import { ChevronLeft, ChevronRight, PlayCircle, X } from 'lucide-react'
 import Layout from './components/Layout'
+import { Loading } from './components/ui'
 import CommandCenter from './pages/CommandCenter'
-import TimelineEmotions from './pages/TimelineEmotions'
-import Trends from './pages/Trends'
-import Network from './pages/Network'
-import Audience from './pages/Audience'
-import Lineage from './pages/Lineage'
-import CaseFile from './pages/CaseFile'
-import Ledger from './pages/Ledger'
-import Search from './pages/Search'
-import Compliance from './pages/Compliance'
+
+// Route-level code splitting: only the landing page ships in the first bundle.
+const TimelineEmotions = lazy(() => import('./pages/TimelineEmotions'))
+const Trends = lazy(() => import('./pages/Trends'))
+const Coordination = lazy(() => import('./pages/Coordination'))
+const Network = lazy(() => import('./pages/Network'))
+const Audience = lazy(() => import('./pages/Audience'))
+const Lineage = lazy(() => import('./pages/Lineage'))
+const CaseFile = lazy(() => import('./pages/CaseFile'))
+const Ledger = lazy(() => import('./pages/Ledger'))
+const Search = lazy(() => import('./pages/Search'))
+const Sources = lazy(() => import('./pages/Sources'))
+const Compliance = lazy(() => import('./pages/Compliance'))
 import { useAppStore } from './store/app'
+import { useEvalSummary } from './hooks/useApi'
 
 function MissionBriefing() {
   const { setShowBriefing, setTourActive } = useAppStore()
   return (
-    <div style={{position:'fixed',inset:0,zIndex:50,display:'flex',alignItems:'center',justifyContent:'center',background:'rgba(0,0,0,0.92)'}}>
-      <div style={{maxWidth:560,width:'100%',margin:'0 16px',background:'#0d1326',border:'1px solid #1e2740',borderRadius:16,padding:32}}>
-        <div style={{textAlign:'center',marginBottom:24}}>
-          <div style={{fontSize:32,fontWeight:700,color:'white'}}>PRAHARI</div>
-          <div style={{fontSize:12,color:'#3b82f6',fontFamily:'monospace'}}>NARRATIVE INTELLIGENCE PLATFORM · SIH 2026 · PS 26152</div>
+    <div className="overlay" role="dialog" aria-modal="true" aria-labelledby="briefing-title">
+      <div className="card" style={{ maxWidth: 600, width: '100%', padding: 28 }}>
+        <div className="muted mono" style={{ fontSize: 11, letterSpacing: '0.14em' }}>SIH 2026 · PS 26152 · NTRO</div>
+        <h1 id="briefing-title" style={{ fontSize: 30, margin: '6px 0 2px', letterSpacing: '0.04em' }}>PRAHARI</h1>
+        <div className="secondary" style={{ marginBottom: 16 }}>प्रहरी · coordination-adjusted social media intelligence</div>
+        <div className="notice crit" style={{ marginBottom: 16 }}>SIMULATED SCENARIO: fictional places, accounts and events.</div>
+        <div className="stack secondary" style={{ gap: 10, fontSize: 14 }}>
+          <p style={{ margin: 0 }}><b style={{ color: 'var(--ink-1)' }}>Problem.</b> Narratives, real and manufactured, spread across Telegram, X, Reddit and YouTube in English and Hinglish. Analysts cannot tell organic virality from coordinated amplification.</p>
+          <p style={{ margin: 0 }}><b style={{ color: 'var(--ink-1)' }}>PRAHARI</b> detects coordinated clusters, shows every metric raw or organic-only, traces where a narrative was first seen, and keeps every record in a tamper-evident, Bitcoin-anchored ledger.</p>
+          <p style={{ margin: 0 }}><b style={{ color: 'var(--ink-1)' }}>Scenario.</b> Seven days of synthetic posts: a dam-crack rumour seeded on Telegram and amplified on X by coordinated accounts, anxious organic reactions, and a bigger but genuine cricket surge as a decoy.</p>
         </div>
-        <div style={{background:'rgba(161,51,0,0.2)',border:'1px solid #7c2d12',borderRadius:8,padding:12,marginBottom:20,textAlign:'center'}}>
-          <span style={{color:'#fca5a5',fontSize:13,fontWeight:600}}>⚠ SIMULATED SCENARIO — no real persons or events</span>
-        </div>
-        <div style={{color:'#9ca3af',fontSize:14,lineHeight:1.7,marginBottom:24}}>
-          <p><strong style={{color:'white'}}>Problem:</strong> Social media narratives — real and manufactured — spread across Telegram, X, Reddit, and YouTube in Hinglish and English. Analysts cannot distinguish organic virality from coordinated amplification.</p>
-          <p style={{marginTop:8}}><strong style={{color:'white'}}>PRAHARI:</strong> Detects coordinated clusters, separates organic from manufactured sentiment, traces narrative lineage cross-platform, and assembles tamper-proof evidence cases.</p>
-          <p style={{marginTop:8}}><strong style={{color:'white'}}>Demo:</strong> 7-day seeded scenario: cricket surge (organic), dam-scare rumour (60 coordinated accounts), anxious organic reactions.</p>
-        </div>
-        <div style={{display:'flex',gap:12}}>
-          <button onClick={() => { setShowBriefing(false); setTourActive(true) }}
-            style={{flex:1,background:'#3b82f6',color:'white',border:'none',borderRadius:8,padding:'12px 16px',fontSize:14,fontWeight:600,cursor:'pointer'}}>
-            ▶ Start 3-min Guided Tour
+        <div className="row" style={{ marginTop: 22 }}>
+          <button className="btn btn-primary" style={{ flex: 1, justifyContent: 'center' }} onClick={() => { setShowBriefing(false); setTourActive(true) }}>
+            <PlayCircle size={16} />Start the 3-minute guided investigation
           </button>
-          <button onClick={() => setShowBriefing(false)}
-            style={{flex:1,background:'#1e2740',color:'#e2e8f0',border:'none',borderRadius:8,padding:'12px 16px',fontSize:14,fontWeight:600,cursor:'pointer'}}>
-            Explore Freely
-          </button>
+          <button className="btn" style={{ flex: 1, justifyContent: 'center' }} onClick={() => setShowBriefing(false)}>Explore freely</button>
         </div>
       </div>
     </div>
@@ -45,36 +46,56 @@ function MissionBriefing() {
 }
 
 function GuidedTour() {
-  const { tourStep, setTourStep, setTourActive } = useAppStore()
+  const { tourStep, setTourStep, setTourActive, setOrganicOnly } = useAppStore()
+  const navigate = useNavigate()
+  const { data: ev } = useEvalSummary()
+  const lead = ev?.burst?.lead_time_minutes
+  const mig = ev?.lineage?.telegram_to_x_minutes
+  const tamper = ev?.ledger?.tamper_detection_rate
   const STEPS = [
-    { title: 'Signal Card Fired', desc: 'A manufactured surge is detected: coordinated accounts amplifying a false dam-scare that moved from Telegram to X. The card shows its priority score and why it fired.' },
-    { title: 'Raw vs Organic Toggle', desc: 'Enable "Organic only" in the sidebar to exclude coordinated accounts and see how much they distorted the emotion timeline (measured in the eval report).' },
-    { title: 'Narrative Lineage', desc: 'The dam-scare meme is traced to its earliest observed post and platform, with the migration time to X and image variants matched by perceptual hash.' },
-    { title: 'Network & KOLs', desc: 'A bridge account connects two communities. Coordinated accounts are marked. The organic-only recompute shows who really influences versus who is being amplified.' },
-    { title: 'Tamper-Proof Ledger', desc: 'Click Verify to re-check every hash and signature. Tamper Simulation mutates one record in a scratch copy and verification fails at that exact sequence number.' },
-    { title: 'Case & §63 Draft', desc: 'Create a case from any alert. Auto-assembles brief with Merkle root. §63 draft certificate generated (DRAFT label, needs counsel review).' },
-    { title: 'PS 26152 Compliance', desc: 'Every requirement A–E plus the Blockchain theme, with metrics read from eval/reports/summary.json (or "not yet measured"). Limitations stated openly.' },
+    { route: '/', organic: false, title: 'A Signal Card fires',
+      body: `The top card is a manufactured surge: a dam-crack rumour amplified by coordinated accounts. Open "Why it fired" to see the priority formula.${lead != null ? ` In evaluation it was flagged ${lead} minutes before a keyword-volume alarm.` : ''}` },
+    { route: '/trends', organic: false, title: 'Manufactured vs organic trends',
+      body: 'Trends marks the rumour as a Manufactured trend, while the bigger cricket surge stays Organic. Shaded bands are Kleinberg burst windows; the purple band is the forecast.' },
+    { route: '/coordination', organic: false, title: 'Why accounts are flagged',
+      body: 'The cluster was flagged for synchrony, low timing entropy and near-duplicate text, and each account is scored on its own cadence. This is a statistical signal, not an accusation.' },
+    { route: '/timeline', organic: true, title: 'Raw vs organic',
+      body: 'The global switch is now on Organic only. Every panel compares all accounts (gray) with coordinated accounts removed (colour).' },
+    { route: '/lineage', organic: false, title: 'Where it started',
+      body: `The rumour was first observed on Telegram, then moved to X${mig != null ? ` about ${Math.round(mig)} minutes later` : ''}. Re-encoded and cropped copies of the meme are matched by perceptual hash.` },
+    { route: '/network', organic: false, title: 'Who spreads it',
+      body: 'Coordinated accounts carry a red ring. Switch to Organic only in the top bar to see how the influencer ranking changes when amplification is removed.' },
+    { route: '/ledger', organic: false, title: 'Tamper-evident evidence',
+      body: `Click Verify to re-check every hash, Merkle root and signature, then run the Tamper simulation: one changed character in a copy fails at that exact record.${tamper != null ? ` Evaluation: ${Math.round(tamper * 100)}% of ${ev?.ledger?.tamper_trials} tampers detected.` : ''}` },
+    { route: '/cases', organic: false, title: 'Case & §63 draft',
+      body: 'Open a case from a signal: the brief assembles lineage, coordination and an evidence index with ledger sequence numbers, plus a draft BSA §63 certificate for counsel review.' },
+    { route: '/compliance', organic: false, title: 'PS 26152 coverage',
+      body: 'Requirements A–E and the theme, each with the page that implements it and a measured number from the evaluation harness, including the limitations.' },
   ]
   const step = STEPS[tourStep]
+  useEffect(() => {
+    if (!step) return
+    navigate(step.route)
+    setOrganicOnly(step.organic)
+  }, [tourStep]) // eslint-disable-line react-hooks/exhaustive-deps
   if (!step) return null
+  const last = tourStep === STEPS.length - 1
   return (
-    <div style={{position:'fixed',bottom:24,right:24,zIndex:40,maxWidth:340,width:'100%',background:'#111827',border:'1px solid #3b82f6',borderRadius:12,padding:20,boxShadow:'0 20px 60px rgba(0,0,0,0.5)'}}>
-      <div style={{display:'flex',justifyContent:'space-between',marginBottom:8}}>
-        <span style={{fontSize:11,color:'#3b82f6',fontFamily:'monospace'}}>STEP {tourStep+1}/{STEPS.length}</span>
-        <button onClick={() => setTourActive(false)} style={{background:'none',border:'none',color:'#6b7280',cursor:'pointer',fontSize:18}}>×</button>
+    <div className="tour card" role="dialog" aria-label="Guided investigation" style={{ padding: 18, borderColor: 'var(--accent)' }}>
+      <div className="spread" style={{ marginBottom: 6 }}>
+        <span className="mono muted" style={{ fontSize: 11 }}>STEP {tourStep + 1} / {STEPS.length}</span>
+        <button className="btn btn-ghost btn-sm" aria-label="Close tour" onClick={() => setTourActive(false)}><X size={14} /></button>
       </div>
-      <div style={{color:'white',fontWeight:600,marginBottom:8}}>{step.title}</div>
-      <p style={{color:'#9ca3af',fontSize:13,lineHeight:1.6,marginBottom:16}}>{step.desc}</p>
-      <div style={{display:'flex',gap:8}}>
-        <button onClick={() => { if (tourStep < STEPS.length-1) setTourStep(tourStep+1); else setTourActive(false) }}
-          style={{flex:1,background:'#3b82f6',color:'white',border:'none',borderRadius:8,padding:'8px 12px',fontSize:13,fontWeight:600,cursor:'pointer'}}>
-          {tourStep < STEPS.length-1 ? 'Next →' : 'Finish'}
+      <h2 style={{ fontSize: 15, margin: '0 0 6px' }}>{step.title}</h2>
+      <p className="secondary" style={{ margin: 0, fontSize: 13 }}>{step.body}</p>
+      <div className="row" style={{ marginTop: 14 }}>
+        <button className="btn btn-sm" disabled={tourStep === 0} onClick={() => setTourStep(tourStep - 1)}><ChevronLeft size={14} />Back</button>
+        <button className="btn btn-sm btn-primary" onClick={() => (last ? setTourActive(false) : setTourStep(tourStep + 1))}>
+          {last ? 'Finish' : 'Next'}{!last && <ChevronRight size={14} />}
         </button>
-        <button onClick={() => setTourActive(false)}
-          style={{background:'#1e2740',color:'#9ca3af',border:'none',borderRadius:8,padding:'8px 12px',fontSize:13,cursor:'pointer'}}>Skip</button>
-      </div>
-      <div style={{display:'flex',gap:3,marginTop:12}}>
-        {STEPS.map((_,i) => <div key={i} style={{height:3,flex:1,borderRadius:2,background:i<=tourStep?'#3b82f6':'#253454'}} />)}
+        <div className="row" style={{ marginLeft: 'auto', gap: 3 }} aria-hidden="true">
+          {STEPS.map((_, i) => <span key={i} style={{ width: 14, height: 3, borderRadius: 2, background: i <= tourStep ? 'var(--accent)' : 'var(--surface-3)' }} />)}
+        </div>
       </div>
     </div>
   )
@@ -83,24 +104,28 @@ function GuidedTour() {
 export default function App() {
   const { showBriefing, tourActive } = useAppStore()
   return (
-    <div style={{minHeight:'100vh',background:'#0a0e1a'}}>
+    <>
       {showBriefing && <MissionBriefing />}
       {tourActive && <GuidedTour />}
       <Layout>
+        <Suspense fallback={<Loading label="Loading view" />}>
         <Routes>
           <Route path="/" element={<CommandCenter />} />
           <Route path="/timeline" element={<TimelineEmotions />} />
           <Route path="/trends" element={<Trends />} />
+          <Route path="/coordination" element={<Coordination />} />
           <Route path="/network" element={<Network />} />
           <Route path="/audience" element={<Audience />} />
           <Route path="/lineage" element={<Lineage />} />
           <Route path="/cases" element={<CaseFile />} />
           <Route path="/ledger" element={<Ledger />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/sources" element={<Sources />} />
           <Route path="/compliance" element={<Compliance />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
+        </Suspense>
       </Layout>
-    </div>
+    </>
   )
 }

@@ -1,52 +1,122 @@
-﻿import { useState } from 'react'
-import { useLedgerStatus } from '../hooks/useApi'
+import { useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { Bomb, KeyRound, Search as SearchIcon, ShieldCheck } from 'lucide-react'
+import { getJSON, postJSON, useAudit, useCheckpoints, useLedgerStatus } from '../hooks/useApi'
+import { Card, InfoPop, Kpi, PageHead, StatusBadge } from '../components/ui'
+import { ist, num } from '../lib/fmt'
+
+const short = (h?: string) => (h ? `${h.slice(0, 10)}…${h.slice(-6)}` : '—')
+
 export default function Ledger() {
+  const qc = useQueryClient()
   const { data: status } = useLedgerStatus()
-  const [verifyResult, setVerifyResult] = useState<any>(null)
-  const [tamperResult, setTamperResult] = useState<any>(null)
-  const [loading, setLoading] = useState(false)
-  const verify = async () => { setLoading(true); const r = await fetch('/api/ledger/verify',{method:'POST'}); setVerifyResult(await r.json()); setLoading(false) }
-  const tamper = async () => { setLoading(true); const r = await fetch('/api/ledger/tamper-sim',{method:'POST'}); setTamperResult(await r.json()); setLoading(false) }
+  const { data: cps } = useCheckpoints()
+  const { data: audit } = useAudit()
+  const [verify, setVerify] = useState<any>(null)
+  const [tamper, setTamper] = useState<any>(null)
+  const [busy, setBusy] = useState<'' | 'verify' | 'tamper' | 'proof'>('')
+  const [err, setErr] = useState('')
+  const [seq, setSeq] = useState('150')
+  const [proof, setProof] = useState<any>(null)
+
+  const run = async (kind: 'verify' | 'tamper') => {
+    setBusy(kind); setErr('')
+    try {
+      if (kind === 'verify') setVerify(await postJSON('/api/ledger/verify'))
+      else setTamper(await postJSON('/api/ledger/tamper-sim'))
+      qc.invalidateQueries({ queryKey: ['audit'] })
+    } catch (e) { setErr(String((e as Error).message)) } finally { setBusy('') }
+  }
+  const lookup = async () => {
+    setBusy('proof'); setErr(''); setProof(null)
+    try { setProof(await getJSON(`/api/ledger/proof/${Number(seq)}`)) } catch (e) { setErr(`No proof for seq ${seq}: ${(e as Error).message}`) } finally { setBusy('') }
+  }
+
   return (
     <div>
-      <h1 style={{color:'white',fontSize:22,fontWeight:700,marginBottom:6}}>Evidence Ledger</h1>
-      <p style={{color:'#6b7280',fontSize:13,marginBottom:20}}>Every collected record is SHA-256 hash-chained. Hourly Merkle checkpoints signed with Ed25519. Tamper-evident append-only storage.</p>
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:20}}>
-        <div style={{background:'#0d1326',border:'1px solid #1e2740',borderRadius:12,padding:16}}>
-          <div style={{color:'#6b7280',fontSize:11,marginBottom:4}}>Total Records</div>
-          <div style={{fontSize:28,fontWeight:700,color:'white'}}>{(status?.record_count||0).toLocaleString()}</div>
-        </div>
-        <div style={{background:'#0d1326',border:'1px solid #1e2740',borderRadius:12,padding:16}}>
-          <div style={{color:'#6b7280',fontSize:11,marginBottom:4}}>Last Merkle Root</div>
-          <div style={{fontSize:11,fontFamily:'monospace',color:'#9ca3af',wordBreak:'break-all'}}>{status?.last_checkpoint?.merkle_root?.slice(0,32)||'No checkpoint yet'}</div>
-        </div>
+      <PageHead code="THEME" title="Evidence ledger"
+        sub="Append-only and tamper-evident: every record is hashed (SHA-256) and chained to the previous entry. Every 100 entries a Merkle root is signed with Ed25519, and roots can be anchored to Bitcoin through OpenTimestamps." />
+      <div className="grid g-4" style={{ marginBottom: 16 }}>
+        <Kpi label="Records" value={num(status?.record_count)} foot={`last seq ${num(status?.last_seq)}`} />
+        <Kpi label="Signed checkpoints" value={num(status?.checkpoint_count)} foot="Merkle root + Ed25519 per 100 records" />
+        <Kpi label="Signing key" value={<span className="mono" style={{ fontSize: 18 }}>{status?.pubkey_id ?? '—'}</span>} foot="public-key fingerprint" />
+        <Kpi label="Bitcoin anchoring" value={status?.last_checkpoint?.ots_status ?? (status?.ots_enabled ? 'enabled' : 'off')} foot="OpenTimestamps"
+          info={<>The newest checkpoint root is stamped on public OpenTimestamps calendars and later upgraded to a Bitcoin block attestation. Because entries are chained, one anchor covers every earlier record.</>} />
       </div>
-      <div style={{display:'flex',gap:12,marginBottom:20}}>
-        <button onClick={verify} disabled={loading} style={{background:'#166534',color:'white',border:'none',borderRadius:8,padding:'10px 20px',fontSize:13,fontWeight:600,cursor:'pointer'}}>
-          {loading?'Verifying...':'Verify Integrity'}
-        </button>
-        <button onClick={tamper} disabled={loading} style={{background:'#7f1d1d',color:'white',border:'none',borderRadius:8,padding:'10px 20px',fontSize:13,fontWeight:600,cursor:'pointer'}}>
-          Tamper Simulation (scratch copy only)
-        </button>
+
+      <div className="grid g-2" style={{ marginBottom: 16 }}>
+        <Card title="Verify integrity" sub="recompute every record hash, chain link, Merkle root and signature">
+          <button className="btn btn-primary" disabled={!!busy} onClick={() => run('verify')}><ShieldCheck size={15} />{busy === 'verify' ? 'Verifying…' : 'Verify integrity'}</button>
+          {verify && (
+            <div style={{ marginTop: 12 }}>
+              {verify.status === 'PASS'
+                ? <StatusBadge status="good">VERIFICATION PASSED</StatusBadge>
+                : <StatusBadge status="critical">VERIFICATION FAILED</StatusBadge>}
+              <div className="secondary" style={{ marginTop: 8, fontSize: 13 }}>
+                {num(verify.records)} records and {num(verify.checkpoints)} signed checkpoints checked in {verify.seconds}s.
+                {verify.status !== 'PASS' && <> First failure at seq {verify.seq}: {verify.reason}.</>}
+              </div>
+            </div>
+          )}
+        </Card>
+        <Card title="Tamper simulation" sub="change one character of one stored record, on a scratch copy only"
+          actions={<InfoPop>The real ledger is never modified: the database is copied to a temporary file, the append-only trigger is dropped on the copy, one record's payload is changed, and the copy is verified and deleted.</InfoPop>}>
+          <button className="btn btn-danger" disabled={!!busy} onClick={() => run('tamper')}><Bomb size={15} />{busy === 'tamper' ? 'Simulating…' : 'Run tamper simulation'}</button>
+          {tamper && (
+            <div style={{ marginTop: 12 }}>
+              <div className="secondary" style={{ fontSize: 13 }}>Mutated record <b className="mono">seq {tamper.tampered_seq}</b> at byte {tamper.byte_offset} (scratch copy).</div>
+              <div className="row-wrap" style={{ marginTop: 8 }}>
+                {tamper.verify_result?.status === 'FAIL'
+                  ? <StatusBadge status="critical">Detected: {tamper.verify_result.reason}</StatusBadge>
+                  : <StatusBadge status="warning">Not detected</StatusBadge>}
+                {tamper.detected_at_expected_seq && <StatusBadge status="good">Pinpointed exact record</StatusBadge>}
+              </div>
+              <div className="muted" style={{ fontSize: 12, marginTop: 6 }}>The original ledger is unchanged. Run Verify again to confirm.</div>
+            </div>
+          )}
+        </Card>
       </div>
-      {verifyResult && (
-        <div style={{background:verifyResult.status==='PASS'?'rgba(20,83,45,0.2)':'rgba(127,29,29,0.2)',border:`1px solid ${verifyResult.status==='PASS'?'#166534':'#7f1d1d'}`,borderRadius:12,padding:16,marginBottom:12}}>
-          <div style={{fontWeight:700,marginBottom:8,color:verifyResult.status==='PASS'?'#86efac':'#f87171'}}>
-            {verifyResult.status==='PASS'?'VERIFICATION PASSED':'VERIFICATION FAILED'}
+      {err && <div className="notice crit" style={{ marginBottom: 16 }}>{err}</div>}
+
+      <div className="grid g-2">
+        <Card title="Signed checkpoints" sub="newest first">
+          <table className="tbl">
+            <thead><tr><th>#</th><th>Seq range</th><th>Merkle root</th><th>OTS</th></tr></thead>
+            <tbody>{(cps?.checkpoints ?? []).map((c: any) => (
+              <tr key={c.id}><td className="tnum">{c.id}</td><td className="tnum">{c.first_seq}–{c.last_seq}</td><td className="mono" style={{ fontSize: 12 }} title={c.merkle_root}>{short(c.merkle_root)}</td>
+                <td>{c.ots_status ? <span className="chip">{c.ots_status}</span> : <span className="muted">—</span>}</td></tr>
+            ))}</tbody>
+          </table>
+        </Card>
+        <Card title="Inclusion proof" sub="prove one record belongs to a signed checkpoint">
+          <div className="row">
+            <input className="input" style={{ width: 140 }} inputMode="numeric" value={seq} onChange={e => setSeq(e.target.value.replace(/\D/g, ''))} aria-label="Record sequence number" />
+            <button className="btn" disabled={!seq || !!busy} onClick={lookup}><SearchIcon size={14} />Get proof</button>
+            <InfoPop>A verifier needs only the record, this Merkle path and the ledger public key. Hash the entry up the path and compare with the signed root.</InfoPop>
           </div>
-          <pre style={{fontSize:11,fontFamily:'monospace',color:'#9ca3af',overflow:'auto'}}>{JSON.stringify(verifyResult,null,2)}</pre>
-        </div>
-      )}
-      {tamperResult && (
-        <div style={{background:'rgba(127,29,29,0.2)',border:'1px solid #7f1d1d',borderRadius:12,padding:16}}>
-          <div style={{fontWeight:700,color:'#f87171',marginBottom:8}}>Tamper Demo Result</div>
-          <div style={{color:'#9ca3af',fontSize:13,marginBottom:8}}>Mutated seq {tamperResult.tampered_seq} in scratch copy.</div>
-          <div style={{color:tamperResult.verify_result?.status==='FAIL'?'#f87171':'#9ca3af',fontWeight:600,fontSize:13}}>
-            Verify: {tamperResult.verify_result?.status}
-          </div>
-          <p style={{color:'#4b5563',fontSize:11,marginTop:8,fontStyle:'italic'}}>Original DB unchanged. Simulation ran on a scratch copy.</p>
-        </div>
-      )}
+          {proof && (
+            <div style={{ marginTop: 12, fontSize: 13 }} className="stack">
+              <div className="row"><KeyRound size={14} />Checkpoint {proof.checkpoint.id} (seq {proof.checkpoint.first_seq}–{proof.checkpoint.last_seq}) · leaf index {proof.index}</div>
+              <div className="mono" style={{ fontSize: 12 }}>entry {short(proof.record.entry_hash)}</div>
+              <ol style={{ margin: 0, paddingLeft: 18 }} className="mono">
+                {proof.path.map((p: any, i: number) => <li key={i} style={{ fontSize: 12 }}>{p.position === 'left' ? 'left ' : 'right'} {short(p.hash)}</li>)}
+              </ol>
+              <div className="mono" style={{ fontSize: 12 }}>root {short(proof.checkpoint.merkle_root)} · signed by {proof.checkpoint.pubkey_id}</div>
+            </div>
+          )}
+        </Card>
+      </div>
+
+      <Card title="Audit trail" sub="analyst actions are written into the same hash chain" style={{ marginTop: 16 }}>
+        {(audit?.entries ?? []).length === 0 ? <div className="muted">No analyst actions yet.</div> : (
+          <table className="tbl">
+            <thead><tr><th>Time</th><th>Action</th><th>Detail</th><th className="num">Ledger seq</th></tr></thead>
+            <tbody>{audit.entries.map((a: any) => (
+              <tr key={a.id}><td>{ist(a.ts)}</td><td>{a.action.replace(/_/g, ' ')}</td><td className="mono" style={{ fontSize: 12 }}>{a.detail_json}</td><td className="num mono">{a.ledger_seq}</td></tr>
+            ))}</tbody>
+          </table>
+        )}
+      </Card>
     </div>
   )
 }

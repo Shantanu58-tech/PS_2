@@ -4,15 +4,17 @@ import { test, expect } from '@playwright/test'
 // and fails on uncaught page errors or failed API calls.
 const ROUTES: [string, RegExp][] = [
   ['/', /Command Center/],
-  ['/timeline', /Timeline and Emotions/],
-  ['/trends', /Trends/],
-  ['/network', /Network/],
+  ['/timeline', /Timeline & Emotions/],
+  ['/trends', /Trends & topic detection/],
+  ['/coordination', /Coordination detector/],
+  ['/network', /Network & influence/],
   ['/audience', /Audience/],
-  ['/lineage', /Narrative Lineage/],
-  ['/cases', /Case Files/],
-  ['/ledger', /Evidence Ledger/],
+  ['/lineage', /Narrative lineage/],
+  ['/cases', /Case files/],
+  ['/ledger', /Evidence ledger/],
   ['/search', /Search/],
-  ['/compliance', /PS 26152 Compliance/],
+  ['/sources', /Sources & collectors/],
+  ['/compliance', /Problem statement coverage/],
 ]
 
 for (const [path, heading] of ROUTES) {
@@ -21,7 +23,7 @@ for (const [path, heading] of ROUTES) {
     page.on('pageerror', e => errors.push(String(e)))
     page.on('response', r => { if (r.url().includes('/api/') && r.status() >= 500) errors.push(`${r.status()} ${r.url()}`) })
     await page.goto(path)
-    const skip = page.getByText('Explore Freely')
+    const skip = page.getByText('Explore freely')
     if (await skip.isVisible().catch(() => false)) await skip.click()
     await expect(page.locator('h1').first()).toHaveText(heading)
     await expect(page.getByText('SIMULATED SCENARIO').first()).toBeVisible()
@@ -31,10 +33,10 @@ for (const [path, heading] of ROUTES) {
 
 test('ledger verify passes and tamper simulation is detected', async ({ page }) => {
   await page.goto('/ledger')
-  const skip = page.getByText('Explore Freely')
+  const skip = page.getByText('Explore freely')
   if (await skip.isVisible().catch(() => false)) await skip.click()
-  await page.getByRole('button', { name: 'Verify Integrity' }).click()
+  await page.getByRole('button', { name: /Verify integrity/ }).click()
   await expect(page.getByText('VERIFICATION PASSED')).toBeVisible({ timeout: 90_000 })
-  await page.getByRole('button', { name: /Tamper Simulation/ }).click()
-  await expect(page.getByText('Verify: FAIL')).toBeVisible({ timeout: 90_000 })
+  await page.getByRole('button', { name: /Run tamper simulation/ }).click()
+  await expect(page.getByText(/Detected:/)).toBeVisible({ timeout: 90_000 })
 })
