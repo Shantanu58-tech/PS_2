@@ -1,0 +1,11 @@
+name = "satyanet-keepalive"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+workers_dev = true
+
+# Every 10 minutes, so the free Hugging Face Space never goes idle.
+[triggers]
+crons = ["*/10 * * * *"]
+
+[observability]
+enabled = true

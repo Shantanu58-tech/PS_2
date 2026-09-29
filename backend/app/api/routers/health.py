@@ -11,7 +11,8 @@ router = APIRouter()
 
 @router.get("/healthz")
 async def healthz():
-    base = {"service": "satya-net", "version": VERSION, "mode": settings.mode}
+    base = {"service": "satya-net", "version": VERSION, "mode": settings.mode,
+            "demo_readonly": settings.demo_readonly}
     try:
         async with aiosqlite.connect(get_db_path()) as db:
             await db.execute("SELECT 1")

@@ -101,3 +101,17 @@ def test_eval_summary_serves_file_or_not_measured(client):
     j = client.get("/api/eval/summary").json()
     assert "generated_at" in j or j["status"] == "not_yet_measured"
     json.dumps(j)
+
+
+def test_demo_readonly_blocks_writes_but_allows_demo_actions(client):
+    from app.config import settings
+
+    settings.demo_readonly = True
+    try:
+        assert client.post("/api/replay/start", json={"force": True}).status_code == 403
+        assert client.post("/api/pipeline/run").status_code == 403
+        assert client.post("/api/collectors/x/targets?target=abc").status_code == 403
+        assert client.post("/api/ledger/verify").json()["status"] == "PASS"
+        assert client.get("/healthz").json()["demo_readonly"] is True
+    finally:
+        settings.demo_readonly = False

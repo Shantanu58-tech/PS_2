@@ -13,7 +13,11 @@ import pytest
 os.environ.setdefault("EMBED_BACKEND", "hashing")
 os.environ.setdefault("EMOTION_CACHE", "0")
 os.environ["ENABLE_OTS"] = "false"  # never contact real calendars from tests
-os.environ.pop("GEMINI_API_KEY", None)
+# Tests must never call real services, even when backend/.env holds real
+# credentials: an empty env var overrides the .env file value.
+for _secret in ("GEMINI_API_KEY", "X_AUTH_TOKEN", "X_CT0", "TG_API_ID", "TG_API_HASH", "TG_SESSION_STRING",
+                "REDDIT_CLIENT_ID", "REDDIT_CLIENT_SECRET", "YT_API_KEY", "HF_TOKEN"):
+    os.environ[_secret] = ""
 
 
 @pytest.fixture(autouse=True)

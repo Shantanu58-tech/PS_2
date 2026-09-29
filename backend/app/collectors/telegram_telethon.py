@@ -55,8 +55,13 @@ class TelegramCollector:
     def _client(self):
         from telethon import TelegramClient
 
-        session = Path(settings.data_dir) / settings.tg_session
-        return TelegramClient(str(session), int(settings.tg_api_id), settings.tg_api_hash)
+        if settings.tg_session_string:  # hosted: no session file on disk
+            from telethon.sessions import StringSession
+
+            session: object = StringSession(settings.tg_session_string)
+        else:
+            session = str(Path(settings.data_dir) / settings.tg_session)
+        return TelegramClient(session, int(settings.tg_api_id), settings.tg_api_hash)
 
     async def stream(self, targets: list[str], limit: int = 200) -> AsyncIterator[RawRecord]:
         if not (settings.tg_api_id and settings.tg_api_hash):

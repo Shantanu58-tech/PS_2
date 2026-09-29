@@ -64,9 +64,13 @@ class Settings(BaseSettings):
     neo4j_password: str = ""
 
     gemini_api_key: str = ""
-    gemini_model: str = "gemini-2.5-flash"
+    gemini_model: str = "gemini-flash-latest"  # alias survives model retirements
 
     frontend_dist: str = ""  # defaults to <repo>/frontend/dist
+    # Public hosted demo: block endpoints that ingest, re-run analytics or change
+    # configuration (PRD 12: public read-only demo mode).
+    demo_readonly: bool = False
+    tg_session_string: str = ""  # Telethon StringSession (hosted live mode)
 
     @model_validator(mode="after")
     def _absolute_paths(self) -> "Settings":

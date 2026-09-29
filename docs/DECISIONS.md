@@ -245,3 +245,29 @@ hypothesis was changed to "This message expresses or spreads fear, panic or
 alarm." This definition change was made after seeing seed-7 descriptive
 results; thresholds were re-tuned on seed 7 and held-out numbers recomputed.
 Sarcasm remains weak for every pre-trained option (see eval/reports/emotion.md).
+
+## 5. Hosting
+
+### D-33 Public demo on Hugging Face Spaces, kept awake by a Cloudflare cron
+Same pattern as the team's TRIVENI deployment (D:\SIH): a Docker service whose
+image carries no private data; a private Hugging Face dataset repo
+(`ZOROxJODD/satyanet-bundle`) supplies the analysed demo database and the
+ledger signing key at start-up via the `HF_TOKEN` Space secret; a Cloudflare
+Worker (`deploy/keepalive`) pings `/healthz` every 10 minutes. Render's free
+plan (512 MB, 0.1 CPU) was rejected because the models need ~3 GB, but the
+hosted demo needs no models at all: every analytic is precomputed in the
+bundled DB, so the image installs only `deploy/huggingface/requirements-runtime.txt`
+(no torch). The Space clones the public GitHub repo at build time, so each
+push updates the site after a Space rebuild.
+`DEMO_READONLY=true` blocks every write except verify, the tamper simulation,
+case/brief generation and LLM summaries (PRD 12 public read-only demo).
+Container storage is ephemeral: cases and audit entries created by visitors
+disappear on restart, and the ledger returns to the bundled state.
+
+### D-34 Gemini model alias with fallback
+`gemini-2.5-flash` is retired for new keys. The default is the
+`gemini-flash-latest` alias, with fallback to `gemini-3.8-flash` and
+`gemini-flash-lite-latest` on 404 (retired) and retry on 429/503 (overload).
+The model that answered is stored with each summary. Tests blank every
+credential through environment variables so they can never call real services,
+even when backend/.env holds real keys.

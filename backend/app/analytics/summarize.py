@@ -55,17 +55,34 @@ class _GoogleGenAI:
         self._client = genai.Client(api_key=api_key)
         self._model = model
 
-    def generate(self, system: str, prompt: str) -> str:
-        from google.genai import types
+    # Tried in order when the configured model is overloaded (503/429) or retired (404).
+    FALLBACKS = ("gemini-3.8-flash", "gemini-flash-lite-latest")
 
-        resp = self._client.models.generate_content(
-            model=self._model,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                system_instruction=system, temperature=0.2, response_mime_type="application/json",
-            ),
+    def generate(self, system: str, prompt: str) -> str:
+        import time
+
+        from google.genai import errors, types
+
+        config = types.GenerateContentConfig(
+            system_instruction=system, temperature=0.2, response_mime_type="application/json",
+            automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True),
         )
-        return resp.text or ""
+        last: Exception | None = None
+        for model in dict.fromkeys((self._model, *self.FALLBACKS)):
+            for attempt in range(2):
+                try:
+                    resp = self._client.models.generate_content(model=model, contents=prompt, config=config)
+                    self.used_model = model
+                    return resp.text or ""
+                except (errors.ServerError, errors.ClientError) as exc:
+                    last = exc
+                    code = getattr(exc, "code", None)
+                    if code == 404:
+                        break  # retired for this key: try the next model
+                    if code not in (429, 500, 503):
+                        raise
+                    time.sleep(2 * (attempt + 1))
+        raise RuntimeError(f"Gemini unavailable: {last}")
 
 
 class SummaryRejected(ValueError):
@@ -109,13 +126,16 @@ def validate_output(raw: str, posts: list[dict]) -> dict[str, Any]:
     return {k: data[k] for k in required}
 
 
+def default_client() -> GeminiClient:
+    if not settings.gemini_api_key:
+        raise RuntimeError("GEMINI_API_KEY is not set; LLM summaries are disabled.")
+    return _GoogleGenAI(settings.gemini_api_key, settings.gemini_model)
+
+
 def summarize_posts(posts: list[dict], context: str, client: GeminiClient | None = None) -> dict[str, Any]:
     if not posts:
         raise SummaryRejected("no posts")
-    if client is None:
-        if not settings.gemini_api_key:
-            raise RuntimeError("GEMINI_API_KEY is not set; LLM summaries are disabled.")
-        client = _GoogleGenAI(settings.gemini_api_key, settings.gemini_model)
+    client = client or default_client()
     nonce = secrets.token_hex(6)
     raw = client.generate(SYSTEM_INSTRUCTION.format(nonce=nonce), build_prompt(posts, nonce, context))
     return validate_output(raw, posts)
@@ -134,8 +154,9 @@ def summarize_topic(db_path: str, topic_id: int, client: GeminiClient | None = N
             (topic_id, MAX_POSTS),
         )]
     context = f"Topic '{topic['label']}' (classified {topic['nature']}). SIMULATED scenario data."
+    client = client or default_client()
     result = summarize_posts(posts, context, client)
-    model = settings.gemini_model if client is None else type(client).__name__
+    model = getattr(client, "used_model", None) or type(client).__name__
     with sqlite3.connect(db_path) as conn:
         conn.execute(
             "INSERT OR REPLACE INTO summaries (scope, scope_id, model, summary, created_at) VALUES (?,?,?,?,?)",

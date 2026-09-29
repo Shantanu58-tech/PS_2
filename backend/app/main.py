@@ -4,9 +4,9 @@ import asyncio
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 
 from app.api.routers import (
     alerts, cases, collectors, coordination, demographics, eval_router, graph, health, ledger_router,
@@ -43,6 +43,19 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Allowed in the public read-only demo: verification, the tamper simulation (scratch
+# copy), case/brief generation and LLM summaries. Everything else that writes is blocked.
+_DEMO_ALLOWED_WRITES = ("/api/ledger/verify", "/api/ledger/tamper-sim", "/api/cases", "/api/summaries/")
+
+
+@app.middleware("http")
+async def demo_readonly_guard(request: Request, call_next):
+    if (settings.demo_readonly and request.method not in ("GET", "HEAD", "OPTIONS")
+            and not request.url.path.startswith(_DEMO_ALLOWED_WRITES)):
+        return JSONResponse({"detail": "Disabled in the public read-only demo."}, status_code=403)
+    return await call_next(request)
+
 
 app.include_router(health.router)
 app.include_router(health.router, prefix="/api")
