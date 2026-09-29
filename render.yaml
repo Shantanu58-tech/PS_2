@@ -1,0 +1,16 @@
+# Render Blueprint: free Docker web service for the public read-only demo.
+services:
+  - type: web
+    name: satyanet
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./deploy/render/Dockerfile
+    dockerContext: .
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: HF_TOKEN
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false

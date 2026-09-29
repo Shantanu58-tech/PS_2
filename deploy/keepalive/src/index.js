@@ -1,6 +1,6 @@
-// SATYA-NET keep-alive: free Hugging Face Spaces sleep after long inactivity.
+// SATYA-NET keep-alive: Render free web services sleep after ~15 idle minutes.
 // A Cloudflare cron trigger pings the health endpoint every 10 minutes.
-const TARGET = "https://zoroxjodd-satyanet.hf.space/healthz";
+const TARGET = "https://satyanet.onrender.com/healthz"; // updated after the first Render deploy
 
 async function ping() {
   const started = Date.now();
