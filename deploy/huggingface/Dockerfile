@@ -1,4 +1,4 @@
-# SATYA-NET public demo on Hugging Face Spaces (Docker, free CPU tier).
+# PRAHARI public demo on Hugging Face Spaces (Docker, free CPU tier).
 # Code is cloned from the public GitHub repo at build time; the analysed demo
 # database and the ledger signing key come from a PRIVATE Hugging Face dataset
 # repo at start-up (Space secret HF_TOKEN). Kept awake by deploy/keepalive.

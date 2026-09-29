@@ -1,13 +1,13 @@
-# SATYA-NET
+# PRAHARI
 
 **SIH 2026 · Problem Statement 26152 (Social Media Analytics) · NTRO · Theme: Blockchain & Cybersecurity**
 **Team MOGGERS — VIT Pune**
 
-> **SATYA-NET** (Social-media Analysis & Threat-awareness Yet Accountable Network Event Tracker)
+> **PRAHARI** (प्रहरी, "sentinel")
 > is a next-generation, privacy-first intelligence platform engineered to detect coordinated inauthentic
 > behavior and sophisticated disinformation campaigns across major platforms including X (Twitter), Telegram, Reddit, and YouTube.
 > Built with military-grade tamper-evident ledgers, advanced behavioral heuristics, and k-anonymized demographic analysis,
-> SATYA-NET empowers analysts with real-time, actionable insights while maintaining uncompromising ethical standards and data integrity.
+> PRAHARI empowers analysts with real-time, actionable insights while maintaining uncompromising ethical standards and data integrity.
 
 **Core idea: coordination-adjusted analytics.** Every view (sentiment, trends,
 demographics, influence) can be shown *raw* or *organic-only*, with coordinated

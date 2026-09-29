@@ -1,5 +1,5 @@
 # Single image: FastAPI backend + built console served from the same origin (PRD 14 / B5).
-#   docker build -t satyanet . && docker run -p 8000:8000 satyanet
+#   docker build -t prahari . && docker run -p 8000:8000 prahari
 # Mount data/, models/ and replay/ at /data, /models, /replay (see docker-compose.yml).
 
 FROM node:20-alpine AS frontend

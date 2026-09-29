@@ -251,7 +251,7 @@ Sarcasm remains weak for every pre-trained option (see eval/reports/emotion.md).
 ### D-33 Public demo on Hugging Face Spaces, kept awake by a Cloudflare cron
 Same pattern as the team's TRIVENI deployment (D:\SIH): a Docker service whose
 image carries no private data; a private Hugging Face dataset repo
-(`ZOROxJODD/satyanet-bundle`) supplies the analysed demo database and the
+(`ZOROxJODD/prahari-bundle`) supplies the analysed demo database and the
 ledger signing key at start-up via the `HF_TOKEN` Space secret; a Cloudflare
 Worker (`deploy/keepalive`) pings `/healthz` every 10 minutes. Render's free
 plan (512 MB, 0.1 CPU) was rejected because the models need ~3 GB, but the

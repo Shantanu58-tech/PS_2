@@ -10,7 +10,7 @@ import sqlite3
 from app.config import settings
 from app.pipeline import events
 
-log = logging.getLogger("satyanet.scheduler")
+log = logging.getLogger("prahari.scheduler")
 
 POLL_SECONDS = 300
 ANALYTICS_SECONDS = 600

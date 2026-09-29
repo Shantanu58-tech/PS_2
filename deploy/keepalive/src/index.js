@@ -1,11 +1,11 @@
-// SATYA-NET keep-alive: Render free web services sleep after ~15 idle minutes.
+// PRAHARI keep-alive: Render free web services sleep after ~15 idle minutes.
 // A Cloudflare cron trigger pings the health endpoint every 10 minutes.
-const TARGET = "https://satyanet.onrender.com/healthz"; // updated after the first Render deploy
+const TARGET = "https://prahari.onrender.com/healthz"; // updated after the first Render deploy
 
 async function ping() {
   const started = Date.now();
   try {
-    const res = await fetch(TARGET, { headers: { "User-Agent": "satyanet-keepalive/1.0" } });
+    const res = await fetch(TARGET, { headers: { "User-Agent": "prahari-keepalive/1.0" } });
     return { ok: res.ok, status: res.status, ms: Date.now() - started };
   } catch (err) {
     return { ok: false, status: 0, ms: Date.now() - started, error: String(err) };

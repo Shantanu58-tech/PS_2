@@ -1,6 +1,6 @@
-# SATYA-NET — instructions for Claude Code
+# PRAHARI — instructions for Claude Code
 
-You are building the system in PRD sections 5–14 of SATYANET_PRD_and_Dev_Handoff.md.
+You are building the system in PRD sections 5–14 of PRAHARI_PRD_and_Dev_Handoff.md.
 
 ## Rules
 1. Build milestone by milestone (PRD §15). After each milestone: run `make test`, then report what passed and what didn't. Do not start the next milestone with failing tests.

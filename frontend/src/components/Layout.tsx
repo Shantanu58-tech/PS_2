@@ -24,12 +24,12 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div style={{display:'flex',flexDirection:'column',height:'100vh'}}>
       <div style={{background:'linear-gradient(90deg,#7c2d12,#991b1b)',color:'#fca5a5',padding:'6px 16px',fontSize:11,fontWeight:600,textAlign:'center',letterSpacing:'0.05em'}}>
-        ⚠ SIMULATED SCENARIO — no real persons or events · SATYA-NET v1.0 · SIH 2026 · PS 26152 (NTRO) · Team MOGGERS, VIT Pune
+        ⚠ SIMULATED SCENARIO — no real persons or events · PRAHARI v1.0 · SIH 2026 · PS 26152 (NTRO) · Team MOGGERS, VIT Pune
       </div>
       <div style={{display:'flex',flex:1,overflow:'hidden'}}>
         <aside style={{width:180,background:'#0d1326',borderRight:'1px solid #1e2740',display:'flex',flexDirection:'column',flexShrink:0}}>
           <div style={{padding:'16px',borderBottom:'1px solid #1e2740'}}>
-            <div style={{fontSize:16,fontWeight:700,color:'white'}}>SATYA-NET</div>
+            <div style={{fontSize:16,fontWeight:700,color:'white'}}>PRAHARI</div>
             <div style={{fontSize:10,color:'#6b7280',fontFamily:'monospace'}}>NARRATIVE INTEL</div>
           </div>
           <nav style={{flex:1,overflowY:'auto',padding:'8px 0'}}>

@@ -26,7 +26,7 @@ switch ($Target) {
   "test" { Push-Location $Backend; & $Py -m pytest tests/ -q; Pop-Location }
   "eval" { Push-Location $Backend; & $Py -m eval.run_all; Pop-Location }
   "eval-quick" { Push-Location $Backend; & $Py -m eval.run_all --quick; Pop-Location }
-  "verify" { Push-Location $Backend; & $Py -m app.ledger.verify --db (Join-Path $Root "data\satya.db"); Pop-Location }
+  "verify" { Push-Location $Backend; & $Py -m app.ledger.verify --db (Join-Path $Root "data\prahari.db"); Pop-Location }
   "lint" {
     Push-Location $Backend; & (Join-Path $Backend ".venv\Scripts\ruff.exe") check app/ eval/ scenario/; & (Join-Path $Backend ".venv\Scripts\mypy.exe") app/; Pop-Location
     Push-Location (Join-Path $Root "frontend"); npx tsc --noEmit; Pop-Location

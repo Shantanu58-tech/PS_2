@@ -1,9 +1,9 @@
-# SATYA-NET on Render (free)
+# PRAHARI on Render (free)
 
 Docker web service built from this repo (`render.yaml` blueprint,
 `deploy/render/Dockerfile`, context = repo root). At start-up `start.sh`
 downloads the private demo bundle from the Hugging Face dataset
-`ZOROxJODD/satyanet-bundle` (analysed demo DB + ledger signing key).
+`ZOROxJODD/prahari-bundle` (analysed demo DB + ledger signing key).
 
 Secrets (Render environment): `HF_TOKEN` (read access to the bundle),
 `GEMINI_API_KEY` (optional, LLM summaries). Health check: `/healthz`.

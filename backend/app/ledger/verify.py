@@ -105,7 +105,7 @@ def verify_chain(db_path: str) -> dict:
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("--db", default="data/satya.db")
+    parser.add_argument("--db", default="data/prahari.db")
     args = parser.parse_args()
     result = verify_chain(args.db)
     print(result)

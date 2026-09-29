@@ -7,7 +7,7 @@ cd /home/user/app
 python - <<'PY'
 import os, tarfile
 from huggingface_hub import hf_hub_download
-path = hf_hub_download(repo_id=os.environ.get("BUNDLE_REPO", "ZOROxJODD/satyanet-bundle"),
+path = hf_hub_download(repo_id=os.environ.get("BUNDLE_REPO", "ZOROxJODD/prahari-bundle"),
                        repo_type="dataset", filename="bundle.tar.gz", token=os.environ["HF_TOKEN"])
 tarfile.open(path).extractall(".", filter="data")
 print("bundle extracted", flush=True)

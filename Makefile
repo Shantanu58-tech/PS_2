@@ -28,7 +28,7 @@ eval-quick:
 	cd backend && $(PY) -m eval.run_all --quick
 
 verify:
-	cd backend && $(PY) -m app.ledger.verify --db ../data/satya.db
+	cd backend && $(PY) -m app.ledger.verify --db ../data/prahari.db
 
 lint:
 	cd backend && ruff check app/ eval/ scenario/ && mypy app/

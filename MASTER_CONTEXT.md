@@ -1,4 +1,4 @@
-# SATYA-NET: Master Context
+# PRAHARI: Master Context
 
 **Team MOGGERS · VIT Pune · Smart India Hackathon 2026**
 **Problem Statement 26152 "Social Media Analytics" · NTRO · Category: Software · Theme: Blockchain & Cybersecurity**
@@ -13,7 +13,7 @@
 
 ## 1. One-liner and thesis
 
-**One-liner:** SATYA-NET turns raw multi-platform social streams into evidence-grade
+**One-liner:** PRAHARI turns raw multi-platform social streams into evidence-grade
 intelligence. It shows what narrative is spreading, where it was first seen, who is
 amplifying it, whether that amplification is organic or coordinated, and it keeps every
 collected record in a tamper-evident, independently verifiable ledger.

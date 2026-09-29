@@ -18,7 +18,7 @@ function MissionBriefing() {
     <div style={{position:'fixed',inset:0,zIndex:50,display:'flex',alignItems:'center',justifyContent:'center',background:'rgba(0,0,0,0.92)'}}>
       <div style={{maxWidth:560,width:'100%',margin:'0 16px',background:'#0d1326',border:'1px solid #1e2740',borderRadius:16,padding:32}}>
         <div style={{textAlign:'center',marginBottom:24}}>
-          <div style={{fontSize:32,fontWeight:700,color:'white'}}>SATYA-NET</div>
+          <div style={{fontSize:32,fontWeight:700,color:'white'}}>PRAHARI</div>
           <div style={{fontSize:12,color:'#3b82f6',fontFamily:'monospace'}}>NARRATIVE INTELLIGENCE PLATFORM · SIH 2026 · PS 26152</div>
         </div>
         <div style={{background:'rgba(161,51,0,0.2)',border:'1px solid #7c2d12',borderRadius:8,padding:12,marginBottom:20,textAlign:'center'}}>
@@ -26,7 +26,7 @@ function MissionBriefing() {
         </div>
         <div style={{color:'#9ca3af',fontSize:14,lineHeight:1.7,marginBottom:24}}>
           <p><strong style={{color:'white'}}>Problem:</strong> Social media narratives — real and manufactured — spread across Telegram, X, Reddit, and YouTube in Hinglish and English. Analysts cannot distinguish organic virality from coordinated amplification.</p>
-          <p style={{marginTop:8}}><strong style={{color:'white'}}>SATYA-NET:</strong> Detects coordinated clusters, separates organic from manufactured sentiment, traces narrative lineage cross-platform, and assembles tamper-proof evidence cases.</p>
+          <p style={{marginTop:8}}><strong style={{color:'white'}}>PRAHARI:</strong> Detects coordinated clusters, separates organic from manufactured sentiment, traces narrative lineage cross-platform, and assembles tamper-proof evidence cases.</p>
           <p style={{marginTop:8}}><strong style={{color:'white'}}>Demo:</strong> 7-day seeded scenario: cricket surge (organic), dam-scare rumour (60 coordinated accounts), anxious organic reactions.</p>
         </div>
         <div style={{display:'flex',gap:12}}>
