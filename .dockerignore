@@ -10,10 +10,22 @@
 **/.env.*
 !.env.example
 **/*.session
-**/keys/ledger_ed25519
-data/
-models/
-replay/
-eval/reports/
-frontend/dist
 .git
+frontend/dist
+frontend/test-results
+frontend/playwright-report
+
+# Secrets and heavy/generated data. The gazetteer, lexicons, public ledger key,
+# replay/truth.json and eval/reports ARE needed in the image (Render build).
+**/keys/ledger_ed25519
+data/**/*.db
+data/**/*.db-wal
+data/**/*.db-shm
+data/**/*.sqlite
+data/eval/
+data/cache/
+data/cases/
+data/media/
+models/
+replay/*.jsonl
+backend/.render_*
