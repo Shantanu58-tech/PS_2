@@ -1,9 +1,20 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
+
+from pydantic import model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+BACKEND_DIR = Path(__file__).resolve().parents[1]
+# Repo root locally; "/" inside the container (data/, models/, replay/ are
+# mounted at /data, /models, /replay by docker-compose).
+ROOT = BACKEND_DIR.parent
+
+_PATH_FIELDS = ("db_path", "data_dir", "media_dir", "models_dir", "scenario_path", "keys_dir",
+                "eval_dir")
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    # Later files win: repo-root .env, then backend/.env.
+    model_config = SettingsConfigDict(env_file=(ROOT / ".env", BACKEND_DIR / ".env"), extra="ignore")
 
     mode: str = "replay"
     db_path: str = "data/satya.db"
@@ -31,7 +42,39 @@ class Settings(BaseSettings):
     embed_model: str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 
     enable_ots: bool = False
+    ots_calendars: str = (
+        "https://a.pool.opentimestamps.org,https://b.pool.opentimestamps.org,"
+        "https://a.pool.eternitywall.com"
+    )
     replay_speed: int = 60
+    scenario_path: str = "replay/scenario_v1.jsonl"
+    data_dir: str = "data"
+    media_dir: str = "data/media"
+    models_dir: str = "models"
+    keys_dir: str = "data/keys"
+    eval_dir: str = "eval/reports"
+    # Laplace-mechanism privacy budget for released demographic counts.
+    dp_epsilon: float = 1.0
+    # Run the analytics pipeline automatically when a replay finishes.
+    auto_analytics: bool = True
+
+    graph_store: str = "networkx"  # networkx | neo4j
+    neo4j_uri: str = ""
+    neo4j_user: str = ""
+    neo4j_password: str = ""
+
+    gemini_api_key: str = ""
+    gemini_model: str = "gemini-2.5-flash"
+
+    frontend_dist: str = ""  # defaults to <repo>/frontend/dist
+
+    @model_validator(mode="after")
+    def _absolute_paths(self) -> "Settings":
+        for name in _PATH_FIELDS:
+            value = getattr(self, name)
+            if value and not Path(value).is_absolute():
+                setattr(self, name, str(ROOT / value))
+        return self
 
 
 settings = Settings()

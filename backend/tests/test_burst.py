@@ -2,7 +2,15 @@
 
 
 def test_burstiness_regular():
-    assert abs(burstiness([1.0] * 100)) < 0.05
+    # Perfectly periodic gaps: sigma = 0 -> B = (0 - mu) / (0 + mu) = -1 (Goh & Barabasi 2008;
+    # PRD 2: "scripted bots are regular (B -> -1)"). The earlier expectation of 0 contradicted the spec.
+    assert burstiness([1.0] * 100) == -1.0
+
+
+def test_burstiness_poisson_near_zero():
+    import random
+    rng = random.Random(3)
+    assert abs(burstiness([rng.expovariate(1.0) for _ in range(20000)])) < 0.05
 
 
 def test_burstiness_bursty():

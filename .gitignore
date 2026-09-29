@@ -1,4 +1,6 @@
 .env
+.env.*
+!.env.example
 *.session
 *.session-journal
 __pycache__/
@@ -8,14 +10,37 @@ __pycache__/
 node_modules/
 dist/
 build/
-data/satya.db
-data/satya_scratch.db
-data/media/
-models/
-replay/scenario_v1.jsonl
-*.ots
-keys/ledger_ed25519
+.pytest_cache/
+.hypothesis/
+.ruff_cache/
+.mypy_cache/
 *.log
 .DS_Store
-eval/reports/*.json
-eval/reports/*.md
+*.ots
+
+# Patterns below use **/ so they also match under backend/ (a pattern with a
+# middle slash is otherwise anchored to the repo root).
+**/data/**/*.db
+**/data/**/*.db-wal
+**/data/**/*.db-shm
+**/data/**/*.sqlite
+**/data/media/
+**/data/cache/
+**/data/cases/
+**/data/eval/
+**/keys/ledger_ed25519
+models/
+
+# Generated scenarios (regenerate with `make scenario`; truth.json is kept)
+**/replay/*.jsonl
+replay/truth_scenario_seed*.json
+
+# eval/reports/ (summary.json + *.md) IS committed: it is the evidence behind
+# every number in the README and slides. Only the old backend-local copy is ignored.
+backend/eval/reports/
+
+frontend/test-results/
+frontend/playwright-report/
+
+# stale pre-v0.2 output location
+backend/replay/

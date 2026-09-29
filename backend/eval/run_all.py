@@ -1,71 +1,83 @@
+"""Run every evaluation and write eval/reports/*.md + summary.json.
+
+    cd backend && python -m eval.run_all [--quick] [--rebuild]
+
+--quick: 100 tamper trials, skip the 100k verify benchmark.
+Every number the README / slides / UI shows must come from summary.json.
+"""
 from __future__ import annotations
+
+import argparse
 import json
-from pathlib import Path
+import time
 from datetime import datetime, timezone
 
-
-def run_burst_eval() -> dict:
-    from app.analytics.burst import kleinberg_bursts, burstiness, norm_entropy
-    import random
-    rng = random.Random(42)
-    base = list(range(0, 10000, 200))
-    burst = list(range(5000, 5000 + 20 * 5, 5))
-    ts = sorted(base + burst)
-    results = kleinberg_bursts([float(t) for t in ts])
-    detected = len(results) > 0
-    return {
-        "burst_detected": detected,
-        "burst_count": len(results),
-        "status": "PASS" if detected else "FAIL",
-    }
-
-
-def run_ledger_eval(db_path: str = "data/satya.db") -> dict:
-    from pathlib import Path as P
-    if not P(db_path).exists():
-        return {"status": "SKIP", "reason": "DB not found"}
-    from app.ledger.verify import verify_chain
-    return verify_chain(db_path)
-
-
-def run_coordination_eval() -> dict:
-    from app.analytics.burst import burstiness, norm_entropy
-    scripted_gaps = [60.0 + i * 0.1 for i in range(100)]
-    organic_gaps = [abs(300 + 200 * (i % 7 - 3)) for i in range(100)]
-    B_scripted = burstiness(scripted_gaps)
-    B_organic = burstiness(organic_gaps)
-    Hn_scripted = norm_entropy(scripted_gaps)
-    Hn_organic = norm_entropy(organic_gaps)
-    return {
-        "scripted_burstiness": B_scripted,
-        "organic_burstiness": B_organic,
-        "scripted_entropy": Hn_scripted,
-        "organic_entropy": Hn_organic,
-        "status": "PASS" if Hn_organic > Hn_scripted else "FAIL",
-    }
+from eval.common import HELDOUT_SEED, REPORTS, VALIDATION_SEED, build_db
 
 
 def main() -> None:
-    reports_dir = Path("eval/reports")
-    reports_dir.mkdir(parents=True, exist_ok=True)
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--quick", action="store_true")
+    ap.add_argument("--rebuild", action="store_true")
+    ap.add_argument("--only", default="", help="comma list of sections to recompute, merged into the "
+                    "existing summary.json (coordination,burst,emotion,phash,ledger,components)")
+    args = ap.parse_args()
 
-    results = {
+    from eval import alerts_eval, components_eval, coordination_eval, emotion_eval, ledger_eval, phash_suite
+
+    t0 = time.perf_counter()
+    val = build_db(VALIDATION_SEED, force=args.rebuild)
+    held = build_db(HELDOUT_SEED, force=args.rebuild)
+    if args.only:
+        only = {x.strip() for x in args.only.split(",") if x.strip()}
+        path = REPORTS / "summary.json"
+        summary = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+        if "coordination" in only:
+            summary["coordination"] = coordination_eval.evaluate(val, held)
+        if "burst" in only:
+            summary["burst"] = alerts_eval.evaluate(val)
+        if "emotion" in only:
+            summary["emotion"] = emotion_eval.evaluate(val, held)
+        if "phash" in only:
+            summary["phash"] = phash_suite.run()
+        if "ledger" in only:
+            summary["ledger"] = ledger_eval.evaluate(val, trials=100 if args.quick else 1000,
+                                                     sizes=(10_000,) if args.quick else (10_000, 100_000))
+        if "components" in only:
+            summary.update(components_eval.evaluate(val))
+        summary["generated_at"] = datetime.now(timezone.utc).isoformat()
+        summary.setdefault("partial_updates", []).append({"sections": sorted(only), "at": summary["generated_at"]})
+        path.write_text(json.dumps(summary, indent=2, default=str), encoding="utf-8")
+        print(f"Updated {sorted(only)} in {path}")
+        return
+    comp = components_eval.evaluate(val)
+    summary = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "burst": run_burst_eval(),
-        "ledger": run_ledger_eval(),
-        "coordination": run_coordination_eval(),
-        "emotion": {"status": "not_yet_measured", "message": "Run with real data"},
-        "demographics": {"status": "not_yet_measured", "message": "Run with real data"},
-        "pipeline": {"status": "not_yet_measured", "message": "Run replay scenario"},
+        "scenario": {"validation_seed": VALIDATION_SEED, "heldout_seed": HELDOUT_SEED,
+                     "records_validation": val["records"], "records_heldout": held["records"],
+                     "synthetic": True},
+        "coordination": coordination_eval.evaluate(val, held),
+        "burst": alerts_eval.evaluate(val),
+        "emotion": emotion_eval.evaluate(val, held),
+        "phash": phash_suite.run(),
+        "ledger": ledger_eval.evaluate(val, trials=100 if args.quick else 1000,
+                                      sizes=(10_000,) if args.quick else (10_000, 100_000)),
+        **comp,
     }
-
-    summary_path = reports_dir / "summary.json"
-    summary_path.write_text(json.dumps(results, indent=2))
-    print(f"Eval complete. Results at {summary_path}")
-    for k, v in results.items():
-        if isinstance(v, dict):
-            status = v.get("status", "?")
-            print(f"  {k}: {status}")
+    summary["runtime_seconds"] = round(time.perf_counter() - t0, 1)
+    REPORTS.mkdir(parents=True, exist_ok=True)
+    (REPORTS / "summary.json").write_text(json.dumps(summary, indent=2, default=str), encoding="utf-8")
+    print(f"Eval complete -> {REPORTS / 'summary.json'} ({summary['runtime_seconds']} s)")
+    c, b, e, lg = summary["coordination"], summary["burst"], summary["emotion"], summary["ledger"]
+    print(f"  coordination (held-out seed {c['heldout_seed']}): P {c['precision']} R {c['recall']} F1 {c['f1']}; "
+          f"decoy flagged {c['decoy_accounts_flagged']}")
+    print(f"  alerts: rumour recall {b['injected_event_recall']}, decoy high-priority {b['decoy_high_priority_alerts']}, "
+          f"lead vs naive {b['lead_time_minutes']} min")
+    print(f"  emotion macro-F1 (synthetic labels) {e['macro_f1']} vs lexicon {e['baseline_lexicon_macro_f1']}; "
+          f"distortion {e['distortion']['distortion_ratio']}")
+    print(f"  phash T={summary['phash']['chosen_threshold']} recall {summary['phash']['recall_at_chosen']} "
+          f"FPR {summary['phash']['fpr_at_chosen']}")
+    print(f"  ledger tamper detection {lg['tamper_detection_rate']} over {lg['tamper_trials']} trials")
 
 
 if __name__ == "__main__":

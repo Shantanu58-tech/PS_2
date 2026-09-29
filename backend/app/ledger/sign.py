@@ -5,15 +5,16 @@ from pathlib import Path
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives import serialization
 
+from app.config import settings
 
-KEYS_DIR = Path("keys")
+KEYS_DIR = Path(settings.keys_dir)
 PRIVATE_KEY_PATH = KEYS_DIR / "ledger_ed25519"
 PUBLIC_KEY_PATH = KEYS_DIR / "ledger_ed25519.pub"
 
 
 class Signer:
     def __init__(self) -> None:
-        KEYS_DIR.mkdir(exist_ok=True)
+        KEYS_DIR.mkdir(parents=True, exist_ok=True)
         if PRIVATE_KEY_PATH.exists():
             raw = PRIVATE_KEY_PATH.read_bytes()
             self._private = Ed25519PrivateKey.from_private_bytes(raw)

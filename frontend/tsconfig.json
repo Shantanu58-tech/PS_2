@@ -16,5 +16,14 @@
     "noUnusedParameters": false
   },
   "include": ["src"],
+  "exclude": [
+    "src/app",
+    "src/components/Sidebar.tsx",
+    "src/components/EngineStatus.tsx",
+    "src/components/SectionPlaceholder.tsx",
+    "src/components/ProvenanceBadge.tsx",
+    "src/lib/api.ts",
+    "src/lib/nav.ts"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

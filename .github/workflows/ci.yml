@@ -1,0 +1,107 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/pyproject.toml
+      - name: Install (CPU torch)
+        run: |
+          pip install --index-url https://download.pytorch.org/whl/cpu torch
+          pip install -e ".[dev]"
+      - name: Lint
+        run: |
+          ruff check app/ eval/ scenario/
+          mypy app/
+      - name: Tests
+        env:
+          EMBED_BACKEND: hashing
+          EMOTION_BACKEND: lexicon
+        run: pytest tests/ -q
+
+  gitleaks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: frontend/dist
+
+  e2e:
+    needs: [backend, frontend]
+    runs-on: ubuntu-latest
+    env:
+      EMBED_BACKEND: hashing
+      EMOTION_BACKEND: lexicon
+      DB_PATH: data/ci.db
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/pyproject.toml
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: frontend/dist
+      - name: Install backend
+        working-directory: backend
+        run: |
+          pip install --index-url https://download.pytorch.org/whl/cpu torch
+          pip install -e .
+      - name: Small scenario -> ledger -> analytics
+        working-directory: backend
+        run: |
+          python -c "from scenario.generate import generate_scenario; generate_scenario(7, '../replay/scenario_v1.jsonl', '../data/media', organic_target=3000)"
+          python -c "from app.db.session import init_db_sync; init_db_sync(); from app.collectors.replay import run_replay_sync; from app.config import settings; print(run_replay_sync(settings.scenario_path))"
+      - name: Serve (single URL)
+        working-directory: backend
+        run: |
+          nohup uvicorn app.main:app --port 8000 > ../uvicorn.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf localhost:8000/healthz && break; sleep 2; done
+      - name: Playwright smoke
+        working-directory: frontend
+        env:
+          BASE_URL: http://localhost:8000
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+          npx playwright test

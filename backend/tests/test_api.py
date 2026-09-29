@@ -1,0 +1,103 @@
+"""API contract tests on the analysed mini scenario (FastAPI TestClient)."""
+import json
+
+import pytest
+from fastapi.testclient import TestClient
+
+FORBIDDEN_KEYS = {"age_bracket", "inferred_age", "inferred_state", "inferred_interest", "gender",
+                  "per_account_demographics", "individual_demographic"}
+
+
+@pytest.fixture(scope="module")
+def client(analysed_db):
+    from app.config import settings
+    from app.main import app
+    from app.pipeline.workers import reset_ingestors
+
+    old = settings.db_path
+    settings.db_path = analysed_db
+    reset_ingestors()
+    with TestClient(app) as c:
+        yield c
+    settings.db_path = old
+    reset_ingestors()
+
+
+def _walk_keys(obj):
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            yield k
+            yield from _walk_keys(v)
+    elif isinstance(obj, list):
+        for v in obj:
+            yield from _walk_keys(v)
+
+
+GET_ENDPOINTS = [
+    "/healthz", "/api/posts?limit=5", "/api/timeline/emotions", "/api/timeline/compare", "/api/topics",
+    "/api/graph?max_nodes=40", "/api/influencers?limit=5", "/api/graph/spread", "/api/coordination/clusters",
+    "/api/behaviour", "/api/lineage", "/api/lineage/images", "/api/demographics", "/api/alerts",
+    "/api/ledger/status", "/api/collectors", "/api/search?q=dam", "/api/traceability", "/api/pipeline/status",
+]
+
+
+@pytest.mark.parametrize("path", GET_ENDPOINTS)
+def test_get_endpoints_ok_and_no_per_account_demographics(client, path):
+    r = client.get(path)
+    assert r.status_code == 200, r.text
+    assert not FORBIDDEN_KEYS & set(_walk_keys(r.json()))
+
+
+def test_no_route_exposes_individual_demographics(client):
+    paths = list(client.get("/openapi.json").json()["paths"])
+    assert any(p.startswith("/api/demographics") for p in paths)
+    assert not [p for p in paths if "demographic" in p and "{" in p]
+
+
+def test_demographics_are_aggregate_with_privacy_params(client):
+    j = client.get("/api/demographics").json()
+    assert j["k_anon"] == 10 and j["dp_epsilon"] > 0
+    for d in j["dimensions"].values():
+        assert all(b["count"] >= 10 for b in d["buckets"])
+
+
+def test_verify_and_tamper_simulation_on_scratch_copy(client):
+    assert client.post("/api/ledger/verify").json()["status"] == "PASS"
+    r = client.post("/api/ledger/tamper-sim?seq=3").json()
+    assert r["scratch_copy"] and r["verify_result"]["status"] == "FAIL" and r["detected_at_expected_seq"]
+    assert client.post("/api/ledger/verify").json()["status"] == "PASS"  # real ledger untouched
+
+
+def test_replay_twice_refused(client):
+    assert client.post("/api/replay/start", json={}).status_code == 409
+
+
+def test_case_brief_and_draft_certificate(client):
+    alert = client.get("/api/alerts").json()["alerts"][0]
+    case = client.post("/api/cases", json={"alert_id": alert["alert_id"], "title": "t"}).json()
+    brief = client.get(case["brief_url"]).text
+    cert = client.get(case["certificate_url"]).text
+    assert "Evidence index" in brief and "SIMULATED" in brief
+    assert "DRAFT" in cert and "Section 63" in cert
+    assert client.get("/api/audit").json()["entries"]
+
+
+def test_search_survives_fts_syntax(client):
+    assert client.get('/api/search?q=%22bad:query(').status_code == 200
+
+
+def test_traceability_is_computed_not_asserted(client):
+    rows = client.get("/api/traceability").json()["requirements"]
+    assert {r["ps"] for r in rows} >= {"A", "B", "C", "D", "E", "Theme"}
+    assert all("metric_value" in r and isinstance(r["tests_present"], dict) for r in rows)
+
+
+def test_summary_disabled_without_key(client):
+    tid = client.get("/api/topics").json()["topics"][0]["topic_id"]
+    assert client.post(f"/api/summaries/topic/{tid}").status_code == 503
+
+
+def test_eval_summary_serves_file_or_not_measured(client):
+    j = client.get("/api/eval/summary").json()
+    assert "generated_at" in j or j["status"] == "not_yet_measured"
+    json.dumps(j)

@@ -1,16 +1,18 @@
-version: "3.9"
 services:
-  backend:
+  satyanet:
     build:
-      context: backend
+      context: .
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
+    # The backend resolves relative paths against the repo root, which is "/"
+    # inside the container (app lives in /app), so these mounts line up with the
+    # local layout: data/, models/, replay/.
     volumes:
-      - ./data:/app/data
-      - ./models:/app/models
-      - ./replay:/app/replay
-      - ./.env:/app/.env
+      - ./data:/data
+      - ./models:/models
+      - ./replay:/replay
+      - ./.env:/app/.env:ro
     environment:
-      - DB_PATH=/app/data/satya.db
+      - MODE=replay
     restart: unless-stopped

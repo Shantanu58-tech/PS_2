@@ -1,0 +1,27 @@
+{
+  "nli": {
+    "anxiety": 0.42,
+    "excitement": 0.5,
+    "supportive": 0.5,
+    "against": 0.5,
+    "sarcasm": 0.86
+  },
+  "_tuned_on": {
+    "seed": 7,
+    "engine": "nli",
+    "validation": {
+      "anxiety": {
+        "threshold": 0.42,
+        "validation_f1": 0.7451
+      },
+      "sarcasm": {
+        "threshold": 0.86,
+        "validation_f1": 0.26
+      },
+      "excitement": {
+        "threshold": 0.5,
+        "validation_f1": 0.9236
+      }
+    }
+  }
+}

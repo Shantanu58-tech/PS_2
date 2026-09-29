@@ -1,12 +1,23 @@
 from __future__ import annotations
-import hashlib
 import re
 from datetime import datetime, timezone
+from typing import Literal
 from app.models.canonical import Post, Account, RawRecord
+
+PostKind = Literal["post", "reply", "repost", "quote", "forward", "comment"]
 
 
 def _now() -> datetime:
     return datetime.now(timezone.utc)
+
+
+def _parse_dt(value) -> datetime | None:
+    if not value:
+        return None
+    try:
+        return datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except ValueError:
+        return None
 
 
 def _extract_hashtags(text: str) -> list[str]:
@@ -33,7 +44,7 @@ def normalize_x(raw: RawRecord) -> tuple[Post, Account | None]:
     except Exception:
         created_at = _now()
 
-    kind = "post"
+    kind: PostKind = "post"
     if p.get("inReplyToTweetId") or p.get("in_reply_to_tweet_id"):
         kind = "reply"
     elif p.get("retweetedTweet") or p.get("retweeted_tweet"):
@@ -49,7 +60,7 @@ def normalize_x(raw: RawRecord) -> tuple[Post, Account | None]:
         text=text,
         created_at=created_at,
         collected_at=raw.collected_at,
-        parent_post_id=str(p.get("inReplyToTweetId") or ""),
+        parent_post_id=str(p["inReplyToTweetId"]) if p.get("inReplyToTweetId") else None,
         origin_post_id=str(
             (p.get("retweetedTweet") or {}).get("id")
             or (p.get("quotedTweet") or {}).get("id")
@@ -72,8 +83,11 @@ def normalize_x(raw: RawRecord) -> tuple[Post, Account | None]:
             handle=author.get("username") or author.get("screen_name"),
             display_name=author.get("displayname") or author.get("name"),
             bio=author.get("rawDescription") or author.get("description"),
+            location_text=author.get("location"),
+            created_at=_parse_dt(author.get("created") or author.get("created_at")),
             followers=author.get("followersCount") or author.get("followers_count"),
             following=author.get("friendsCount") or author.get("friends_count"),
+            verified=author.get("verified"),
         )
     return post, acc
 
@@ -89,16 +103,22 @@ def normalize_telegram(raw: RawRecord) -> tuple[Post, Account | None]:
     except Exception:
         created_at = _now()
 
+    fwd = p.get("fwd_from")
+    origin = None
+    if isinstance(fwd, dict) and fwd.get("from_id"):
+        origin = f"{fwd['from_id']}_{fwd.get('channel_post') or ''}".rstrip("_")
+    elif fwd:
+        origin = str(fwd)
     post = Post(
         platform="telegram",
         post_id=f"{channel}_{msg_id}",
         author_id=str(p.get("from_id") or channel),
-        kind="forward" if p.get("fwd_from") else ("reply" if p.get("reply_to") else "post"),
+        kind="forward" if fwd else ("reply" if p.get("reply_to") else "post"),
         text=text,
         created_at=created_at,
         collected_at=raw.collected_at,
-        parent_post_id=str(p.get("reply_to")) if p.get("reply_to") else None,
-        origin_post_id=str(p.get("fwd_from")) if p.get("fwd_from") else None,
+        parent_post_id=f"{channel}_{p['reply_to']}" if p.get("reply_to") else None,
+        origin_post_id=origin,
         channel_or_community=channel,
         hashtags=_extract_hashtags(text),
         urls=_extract_urls(text),
@@ -118,11 +138,11 @@ def normalize_reddit(raw: RawRecord) -> tuple[Post, Account | None]:
         platform="reddit",
         post_id=post_id,
         author_id=str(p.get("author") or "unknown"),
-        kind="comment" if p.get("parent_id", "").startswith("t1_") else "post",
+        kind="comment" if (p.get("parent_id") or "").startswith("t1_") else "post",
         text=text,
         created_at=created_at,
         collected_at=raw.collected_at,
-        parent_post_id=p.get("parent_id"),
+        parent_post_id=(p.get("parent_id") or "")[3:] or None,
         channel_or_community=str(p.get("subreddit") or ""),
         hashtags=_extract_hashtags(text),
         urls=_extract_urls(text),
@@ -150,10 +170,11 @@ def normalize_youtube(raw: RawRecord) -> tuple[Post, Account | None]:
         platform="youtube",
         post_id=post_id,
         author_id=str(p.get("author") or "unknown"),
-        kind="comment",
+        kind="reply" if p.get("parent_id") else "comment",
         text=text,
         created_at=created_at,
         collected_at=raw.collected_at,
+        parent_post_id=p.get("parent_id"),
         channel_or_community=str(p.get("video_id") or ""),
         metrics={"likes": p.get("likes") or 0},
         synthetic=p.get("synthetic", False),
@@ -166,38 +187,52 @@ def normalize_youtube(raw: RawRecord) -> tuple[Post, Account | None]:
     return post, acc
 
 
+_POST_PLATFORMS = {"x", "telegram", "reddit", "youtube", "instagram", "facebook", "synthetic"}
+_POST_KINDS = {"post", "reply", "repost", "quote", "forward", "comment"}
+
+
+def is_canonical_payload(p: dict) -> bool:
+    """Scenario / replay records already use canonical field names."""
+    return "post_id" in p and "author_id" in p
+
+
 def normalize_synthetic(raw: RawRecord) -> tuple[Post, Account | None]:
+    """Normalise a record that is already in canonical shape (scenario / replay).
+
+    Replay records carry their original platform (x, telegram, ...) but use
+    canonical field names (post_id, author_id, created_at), so they must not
+    be routed through the platform-native normalisers.
+    """
     p = raw.payload
     platform = p.get("platform", "synthetic")
-    if platform == "x":
-        return normalize_x(raw)
-    if platform == "telegram":
-        return normalize_telegram(raw)
-    if platform == "reddit":
-        return normalize_reddit(raw)
-    if platform == "youtube":
-        return normalize_youtube(raw)
+    if platform not in _POST_PLATFORMS:
+        platform = "synthetic"
+    kind = p.get("kind", "post")
+    if kind not in _POST_KINDS:
+        kind = "post"
     text = p.get("text") or ""
     post = Post(
-        platform="synthetic",
+        platform=platform,
         post_id=str(p.get("post_id") or p.get("id") or "syn_unknown"),
         author_id=str(p.get("author_id") or "unknown"),
-        kind=p.get("kind", "post"),
+        kind=kind,
         text=text,
         created_at=datetime.fromisoformat(p["created_at"].replace("Z", "+00:00")) if p.get("created_at") else _now(),
         collected_at=raw.collected_at,
         parent_post_id=p.get("parent_post_id"),
         origin_post_id=p.get("origin_post_id"),
         channel_or_community=p.get("channel_or_community"),
-        hashtags=p.get("hashtags") or _extract_hashtags(text),
+        lang=p.get("lang"),
+        hashtags=[h.lstrip("#") for h in (p.get("hashtags") or [])] or _extract_hashtags(text),
         mentions=p.get("mentions") or _extract_mentions(text),
         urls=p.get("urls") or _extract_urls(text),
         metrics=p.get("metrics") or {},
-        synthetic=True,
+        synthetic=bool(p.get("synthetic", True)),
     )
     acc = None
-    if p.get("account"):
-        a = p["account"]
+    a = p.get("account") or p.get("_account")
+    if a:
+        created = a.get("created_at")
         acc = Account(
             platform=platform,
             account_id=str(a.get("account_id") or p.get("author_id") or "unknown"),
@@ -205,9 +240,11 @@ def normalize_synthetic(raw: RawRecord) -> tuple[Post, Account | None]:
             display_name=a.get("display_name"),
             bio=a.get("bio"),
             location_text=a.get("location_text"),
+            created_at=datetime.fromisoformat(str(created).replace("Z", "+00:00")) if created else None,
             followers=a.get("followers"),
             following=a.get("following"),
-            synthetic=True,
+            verified=a.get("verified"),
+            synthetic=bool(a.get("synthetic", True)),
         )
     return post, acc
 
@@ -222,5 +259,7 @@ NORMALIZERS = {
 
 
 def normalize(raw: RawRecord) -> tuple[Post, Account | None]:
+    if raw.collector_id == "replay" or is_canonical_payload(raw.payload):
+        return normalize_synthetic(raw)
     fn = NORMALIZERS.get(raw.platform) or normalize_synthetic
     return fn(raw)

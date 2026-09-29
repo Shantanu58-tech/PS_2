@@ -4,7 +4,7 @@ import re
 
 VARIANT_MAP: dict[str, str] = {
     "nahi": "nahi", "nahin": "nahi", "nhi": "nahi", "nai": "nahi",
-    "nahi": "nahi", "nahii": "nahi",
+    "nahii": "nahi",
     "kya": "kya", "kyaa": "kya", "kia": "kya",
     "hai": "hai", "hain": "hai", "he": "hai",
     "bahut": "bahut", "bohot": "bahut", "bhot": "bahut",
@@ -58,3 +58,12 @@ def canonicalize_hinglish(text: str) -> str:
         else:
             result.append(token)
     return " ".join(result)
+
+
+_MODEL_STRIP = re.compile(r"(@\w+|https?://\S+)")
+
+
+def normalize_for_model(text: str) -> str:
+    """Text as the models should see it: mentions and URLs removed (they carry
+    no affect/topic signal and would defeat de-duplication), whitespace folded."""
+    return re.sub(r"\s+", " ", _MODEL_STRIP.sub(" ", text)).strip()

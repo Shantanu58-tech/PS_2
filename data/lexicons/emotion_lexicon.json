@@ -1,0 +1,29 @@
+{
+  "_about": "Cue words per affect dimension (English + romanised Hindi/Hinglish). Used by app/nlp/emotion.py as the fallback scorer and blended in for Hinglish text. Multi-word entries are matched as phrases.",
+  "anxiety": [
+    "evacuate", "evacuation", "run", "danger", "dangerous", "scared", "afraid", "fear", "worried", "worry",
+    "panic", "urgent", "alert", "emergency", "warning", "crack", "cracked", "cracking", "breach", "flood",
+    "flooding", "collapse", "serious", "help", "please share", "is this real", "verify", "trying to reach",
+    "oh god", "calling them",
+    "dar", "darr", "dar lag", "bhago", "bachao", "nikal jao", "turant", "khatra", "ghabrahat", "sach hai kya",
+    "toot", "toot raha"
+  ],
+  "excitement": [
+    "won", "win", "amazing", "great", "awesome", "six", "goat", "best", "celebrate", "celebrations",
+    "happy", "fever", "love", "fantastic", "superb", "mania",
+    "maza", "maza aaya", "wah", "kya baat", "zabardast", "jeet", "badhai"
+  ],
+  "supportive": [
+    "support", "agree", "proud", "thank", "thanks", "good", "well done", "best of luck", "right",
+    "sahi", "bilkul", "acha", "accha", "achha", "shabash", "haan bhai", "bilkul sahi"
+  ],
+  "against": [
+    "fake", "fake news", "stop", "wrong", "expensive", "bad", "reduce taxes", "angry", "shame",
+    "rumour", "rumor", "lies", "false", "debunked", "stop spreading",
+    "galat", "jhooth", "bakwas", "mat karo", "bekaar"
+  ],
+  "sarcasm": [
+    "oh sure", "yeah right", "classic", "wow great", "another whatsapp forward", "as if", "what a surprise",
+    "haan haan", "bilkul bilkul"
+  ]
+}

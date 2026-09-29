@@ -1,6 +1,5 @@
 from __future__ import annotations
 from typing import Protocol, AsyncIterator
-from datetime import datetime
 from app.models.canonical import RawRecord
 
 

@@ -40,6 +40,7 @@ class LedgerWriter:
         collector_id: str,
         collected_at: datetime,
         payload: dict,
+        commit: bool = True,
     ) -> int:
         payload_bytes = canonical_json(payload)
         record_hash = sha256hex(payload_bytes)
@@ -70,7 +71,8 @@ class LedgerWriter:
                 record_hash, entry_hash, self._prev_hash,
             ),
         )
-        db.commit()
+        if commit:
+            db.commit()
         self._prev_hash = entry_hash
         self._batch.append(entry_hash)
         if self._batch_first_seq is None:

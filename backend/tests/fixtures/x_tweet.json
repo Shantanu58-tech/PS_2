@@ -1,0 +1,10 @@
+{"id": 1854123456789012345, "id_str": "1854123456789012345", "url": "https://x.com/civicwatch/status/1854123456789012345",
+ "date": "2024-11-07T16:52:08+00:00", "lang": "en",
+ "rawContent": "RT this: Varunapur dam update #VarunapurDam @cityalerts",
+ "replyCount": 3, "retweetCount": 41, "likeCount": 120, "quoteCount": 2, "conversationId": 1854123456789012345,
+ "hashtags": ["VarunapurDam"], "mentionedUsers": [{"id": 42, "username": "cityalerts", "displayname": "City Alerts"}],
+ "user": {"id": 99887766, "id_str": "99887766", "username": "civicwatch", "displayname": "Civic Watch",
+          "rawDescription": "Journalist covering civic news in Pune", "created": "2019-03-02T10:00:00+00:00",
+          "followersCount": 5400, "friendsCount": 310, "location": "Pune, India", "verified": false},
+ "inReplyToTweetId": null, "retweetedTweet": null,
+ "quotedTweet": {"id": 1854120000000000000, "rawContent": "original claim"}, "_type": "snscrape.modules.twitter.Tweet"}

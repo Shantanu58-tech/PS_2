@@ -1,0 +1,536 @@
+{
+  "generated_at": "2026-09-29T20:28:59.866927+00:00",
+  "scenario": {
+    "validation_seed": 7,
+    "heldout_seed": 11,
+    "records_validation": 37353,
+    "records_heldout": 37784,
+    "synthetic": true
+  },
+  "coordination": {
+    "precision": 0.7059,
+    "recall": 1.0,
+    "f1": 0.8276,
+    "heldout_seed": 11,
+    "validation_f1": 1.0,
+    "baseline_age_ratio_f1": 0.01,
+    "baseline_exact_duplicate_f1": 0.2083,
+    "decoy_accounts_flagged": 25,
+    "fan_club_flagged": 25,
+    "ablation": [
+      {
+        "variant": "full model",
+        "precision": 0.7059,
+        "recall": 1.0,
+        "f1": 0.8276,
+        "tp": 60,
+        "fp": 25,
+        "fn": 0
+      },
+      {
+        "variant": "cluster -sync",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 60,
+        "fp": 0,
+        "fn": 0
+      },
+      {
+        "variant": "cluster -1-Hn",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 60,
+        "fp": 0,
+        "fn": 0
+      },
+      {
+        "variant": "cluster -max(0,-B)",
+        "precision": 0.7059,
+        "recall": 1.0,
+        "f1": 0.8276,
+        "tp": 60,
+        "fp": 25,
+        "fn": 0
+      },
+      {
+        "variant": "cluster -cross_account_dup",
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 60,
+        "fp": 0,
+        "fn": 0
+      },
+      {
+        "variant": "cluster -regular_share",
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 60
+      },
+      {
+        "variant": "account -co_sync",
+        "precision": 1.0,
+        "recall": 0.8167,
+        "f1": 0.8991,
+        "tp": 49,
+        "fp": 0,
+        "fn": 11
+      },
+      {
+        "variant": "account -regularity",
+        "precision": 0.7143,
+        "recall": 1.0,
+        "f1": 0.8333,
+        "tp": 60,
+        "fp": 24,
+        "fn": 0
+      },
+      {
+        "variant": "account -repetition",
+        "precision": 0.7407,
+        "recall": 1.0,
+        "f1": 0.8511,
+        "tp": 60,
+        "fp": 21,
+        "fn": 0
+      },
+      {
+        "variant": "account -cluster_dup",
+        "precision": 0.7059,
+        "recall": 1.0,
+        "f1": 0.8276,
+        "tp": 60,
+        "fp": 25,
+        "fn": 0
+      }
+    ],
+    "detail": {
+      "validation_seed": {
+        "seed": 7,
+        "ours": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "tp": 60,
+          "fp": 0,
+          "fn": 0
+        },
+        "baseline_age_ratio": {
+          "precision": 0.0273,
+          "recall": 0.1333,
+          "f1": 0.0453,
+          "tp": 8,
+          "fp": 285,
+          "fn": 52
+        },
+        "baseline_exact_duplicate": {
+          "precision": 0.1105,
+          "recall": 1.0,
+          "f1": 0.199,
+          "tp": 60,
+          "fp": 483,
+          "fn": 0
+        },
+        "decoy_accounts_flagged": 0,
+        "fan_club_flagged": 0,
+        "population_accounts": 3108
+      },
+      "heldout_seed": {
+        "seed": 11,
+        "ours": {
+          "precision": 0.7059,
+          "recall": 1.0,
+          "f1": 0.8276,
+          "tp": 60,
+          "fp": 25,
+          "fn": 0
+        },
+        "baseline_age_ratio": {
+          "precision": 0.0059,
+          "recall": 0.0333,
+          "f1": 0.01,
+          "tp": 2,
+          "fp": 337,
+          "fn": 58
+        },
+        "baseline_exact_duplicate": {
+          "precision": 0.1163,
+          "recall": 1.0,
+          "f1": 0.2083,
+          "tp": 60,
+          "fp": 456,
+          "fn": 0
+        },
+        "decoy_accounts_flagged": 25,
+        "fan_club_flagged": 25,
+        "population_accounts": 3108
+      }
+    }
+  },
+  "burst": {
+    "high_priority_threshold": 70.0,
+    "alerts_total": 74,
+    "alerts_per_day": 10.58,
+    "high_priority_alerts_per_day": 0.14,
+    "naive_alerts_per_day": 35.04,
+    "injected_event_recall": 1.0,
+    "rumour_alert_priority": 72.895478965073,
+    "decoy_high_priority_alerts": 0,
+    "decoy_max_priority": 61.689929195744064,
+    "naive_decoy_alerts": 4,
+    "t0_origin": "2024-11-07T16:40:00+00:00",
+    "ours_first_flag": "2024-11-07T16:55:00+00:00",
+    "naive_first_flag": "2024-11-07T17:00:00+00:00",
+    "lead_time_minutes": 5.0,
+    "minutes_from_origin_to_our_flag": 15.0,
+    "gamma_sensitivity": [
+      {
+        "gamma": 0.5,
+        "bursts_level>=1": 421
+      },
+      {
+        "gamma": 1.0,
+        "bursts_level>=1": 258
+      },
+      {
+        "gamma": 2.0,
+        "bursts_level>=1": 75
+      },
+      {
+        "gamma": 4.0,
+        "bursts_level>=1": 13
+      }
+    ]
+  },
+  "emotion": {
+    "evaluated_seed": 11,
+    "thresholds": {
+      "anxiety": 0.42,
+      "sarcasm": 0.86,
+      "excitement": 0.5
+    },
+    "label_source": "synthetic scenario template labels (NOT a human-audited gold set)",
+    "macro_f1": 0.6308,
+    "baseline_lexicon_macro_f1": 0.7568,
+    "baseline_lexicon_is_leaky": true,
+    "baseline_zero_shot_nli_macro_f1": 0.5721,
+    "hinglish_subset_macro_f1": 0.6229,
+    "hinglish_subset_posts": 160,
+    "n_labelled_posts": 1200,
+    "model_versions": [
+      "zeroshot-mdeberta-xnli+xlmr-sentiment-v2"
+    ],
+    "per_label": [
+      {
+        "label": "anxiety",
+        "model": "pre-trained pipeline (ours)",
+        "precision": 0.8604,
+        "recall": 0.7461,
+        "f1": 0.7992,
+        "tp": 191,
+        "fp": 31,
+        "fn": 65
+      },
+      {
+        "label": "anxiety",
+        "model": "zero-shot mDeBERTa NLI (baseline c)",
+        "precision": 0.8315,
+        "recall": 0.5977,
+        "f1": 0.6955,
+        "tp": 153,
+        "fp": 31,
+        "fn": 103
+      },
+      {
+        "label": "anxiety",
+        "model": "lexicon (LEAKY: written with the templates)",
+        "precision": 0.8604,
+        "recall": 0.7461,
+        "f1": 0.7992,
+        "tp": 191,
+        "fp": 31,
+        "fn": 65
+      },
+      {
+        "label": "sarcasm",
+        "model": "pre-trained pipeline (ours)",
+        "precision": 0.1842,
+        "recall": 0.1591,
+        "f1": 0.1707,
+        "tp": 7,
+        "fp": 31,
+        "fn": 37
+      },
+      {
+        "label": "sarcasm",
+        "model": "zero-shot mDeBERTa NLI (baseline c)",
+        "precision": 0.0516,
+        "recall": 1.0,
+        "f1": 0.0981,
+        "tp": 44,
+        "fp": 809,
+        "fn": 0
+      },
+      {
+        "label": "sarcasm",
+        "model": "lexicon (LEAKY: written with the templates)",
+        "precision": 1.0,
+        "recall": 0.5455,
+        "f1": 0.7059,
+        "tp": 24,
+        "fp": 0,
+        "fn": 20
+      },
+      {
+        "label": "excitement",
+        "model": "pre-trained pipeline (ours)",
+        "precision": 0.8563,
+        "recall": 1.0,
+        "f1": 0.9226,
+        "tp": 900,
+        "fp": 151,
+        "fn": 0
+      },
+      {
+        "label": "excitement",
+        "model": "zero-shot mDeBERTa NLI (baseline c)",
+        "precision": 0.8563,
+        "recall": 1.0,
+        "f1": 0.9226,
+        "tp": 900,
+        "fp": 151,
+        "fn": 0
+      },
+      {
+        "label": "excitement",
+        "model": "lexicon (LEAKY: written with the templates)",
+        "precision": 1.0,
+        "recall": 0.62,
+        "f1": 0.7654,
+        "tp": 558,
+        "fp": 0,
+        "fn": 342
+      }
+    ],
+    "gold_set": "not yet measured",
+    "distortion": {
+      "window": "2024-11-07T16:40:00+00:00 + 3h (posts mentioning the dam)",
+      "raw_anxiety_share": 0.4196,
+      "raw_posts": 367,
+      "organic_anxiety_share": 0.6078,
+      "organic_posts": 51,
+      "distortion_ratio": 0.69
+    }
+  },
+  "phash": {
+    "n_base_images": 200,
+    "n_positive_pairs": 1200,
+    "n_negative_pairs": 2000,
+    "chosen_threshold": 20,
+    "recall_at_chosen": 0.9825,
+    "fpr_at_chosen": 0.0085,
+    "recall_at_10": 0.9042,
+    "fpr_at_10": 0.0,
+    "recall_by_transform": {
+      "blur": 1.0,
+      "crop": 0.895,
+      "jpeg": 1.0,
+      "resize": 1.0,
+      "screenshot": 1.0,
+      "watermark": 1.0
+    },
+    "roc": [
+      {
+        "T": 0,
+        "recall": 0.5433,
+        "fpr": 0.0
+      },
+      {
+        "T": 2,
+        "recall": 0.7675,
+        "fpr": 0.0
+      },
+      {
+        "T": 4,
+        "recall": 0.8317,
+        "fpr": 0.0
+      },
+      {
+        "T": 6,
+        "recall": 0.8567,
+        "fpr": 0.0
+      },
+      {
+        "T": 8,
+        "recall": 0.8825,
+        "fpr": 0.0
+      },
+      {
+        "T": 10,
+        "recall": 0.9042,
+        "fpr": 0.0
+      },
+      {
+        "T": 12,
+        "recall": 0.9283,
+        "fpr": 0.0
+      },
+      {
+        "T": 14,
+        "recall": 0.9483,
+        "fpr": 0.0015
+      },
+      {
+        "T": 16,
+        "recall": 0.9667,
+        "fpr": 0.0015
+      },
+      {
+        "T": 18,
+        "recall": 0.9758,
+        "fpr": 0.0045
+      },
+      {
+        "T": 20,
+        "recall": 0.9825,
+        "fpr": 0.0085
+      },
+      {
+        "T": 22,
+        "recall": 0.9908,
+        "fpr": 0.022
+      },
+      {
+        "T": 24,
+        "recall": 0.995,
+        "fpr": 0.0605
+      },
+      {
+        "T": 26,
+        "recall": 0.9983,
+        "fpr": 0.142
+      },
+      {
+        "T": 28,
+        "recall": 1.0,
+        "fpr": 0.28
+      },
+      {
+        "T": 30,
+        "recall": 1.0,
+        "fpr": 0.4515
+      },
+      {
+        "T": 32,
+        "recall": 1.0,
+        "fpr": 0.6445
+      }
+    ]
+  },
+  "ledger": {
+    "tamper_detection_rate": 1.0,
+    "tamper_trials": 1000,
+    "tamper_localized_rate": 1.0,
+    "tamper_by_field": {
+      "payload_canonical": "184/184",
+      "record_hash": "170/170",
+      "entry_hash": "147/147",
+      "prev_entry_hash": "175/175",
+      "collected_at": "160/160",
+      "collector_id": "164/164"
+    },
+    "verify_timing": [
+      {
+        "records": 10000,
+        "write_seconds": 0.29,
+        "verify_seconds": 0.09,
+        "status": "PASS"
+      },
+      {
+        "records": 100000,
+        "write_seconds": 3.26,
+        "verify_seconds": 1.33,
+        "status": "PASS"
+      }
+    ],
+    "verify_100k_seconds": 1.33
+  },
+  "pipeline": {
+    "records": 37353,
+    "ingest_seconds": 68.7,
+    "records_per_second": 543.7,
+    "analytics_seconds": 323.0,
+    "end_to_end_seconds": 391.7,
+    "stage_seconds": {
+      "emotions": 133.44,
+      "edges": 0.06,
+      "topics": 71.28,
+      "coordination": 101.93,
+      "trends": 3.22,
+      "classify": 0.53,
+      "demographics": 1.12,
+      "behaviour": 0.51,
+      "forecast": 10.18,
+      "signals": 0.73,
+      "ots": 0.0
+    }
+  },
+  "demographics": {
+    "geo_accuracy": 1.0,
+    "geo_coverage": 0.8642,
+    "age_coverage": 0.2081,
+    "released_buckets": 32,
+    "suppressed_buckets": 5,
+    "released_buckets_below_k": 0
+  },
+  "graph": {
+    "nodes": 3275,
+    "edges": 12144,
+    "bridge_rank": 1,
+    "coordinated_in_top20_raw": 0,
+    "coordinated_in_top20_organic": 0
+  },
+  "lineage": {
+    "earliest_platform": "telegram",
+    "origin_found": true,
+    "telegram_to_x_minutes": 12.1,
+    "image_variants_linked": "4/4"
+  },
+  "forecast": {
+    "horizon_hours": 6,
+    "n_points": 396,
+    "mae_naive": 3.513,
+    "mae_gbr": 1.414,
+    "mae_hawkes": 1.826
+  },
+  "runtime_seconds": 2119.4,
+  "partial_updates": [
+    {
+      "sections": [
+        "burst",
+        "components",
+        "emotion"
+      ],
+      "at": "2026-09-29T19:17:01.073166+00:00"
+    },
+    {
+      "sections": [
+        "burst",
+        "emotion"
+      ],
+      "at": "2026-09-29T19:53:44.467214+00:00"
+    },
+    {
+      "sections": [
+        "burst",
+        "emotion"
+      ],
+      "at": "2026-09-29T20:28:59.866927+00:00"
+    }
+  ]
+}

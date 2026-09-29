@@ -19,3 +19,10 @@ Turning Smart App Control off is a one-way switch on Windows 11: it can't be re-
 ## Consequences
 - The newest security fixes arrive with up to about three months' delay locally. Before the hosted build, the Docker image (Linux, no Smart App Control) is audited with `pip-audit`, and the cutoff can be lifted for the image if an audit finding requires it.
 - The Docker images stay reproducible because the same lock file is used.
+
+## Update (2026-09-30)
+The `[tool.uv] exclude-newer` cutoff described above was never present in
+`pyproject.toml`, and uv is not installed on the dev machine. The blocks
+actually observed, and the version pins that fix them (ruff 0.12.0,
+pandas < 3, scikit-learn < 1.7), are recorded in docs/DECISIONS.md D-25.
+The import smoke test is `tests/test_imports_smoke.py`.

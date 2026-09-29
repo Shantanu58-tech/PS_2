@@ -1,16 +1,31 @@
-﻿from fastapi import APIRouter
+import asyncio
+import json
+
+from fastapi import APIRouter, Request
 from sse_starlette.sse import EventSourceResponse
-import asyncio, json
-from datetime import datetime, timezone
+
+from app.pipeline import events
 
 router = APIRouter()
 
 
 @router.get("/stream")
-async def stream():
+async def stream(request: Request):
+    """SSE: replay/analytics progress, stage completions, alert updates, heartbeats."""
+    queue = events.subscribe()
+
     async def generator():
-        while True:
-            data = {"ts": datetime.now(timezone.utc).isoformat(), "type": "heartbeat"}
-            yield {"event": "heartbeat", "data": json.dumps(data)}
-            await asyncio.sleep(5)
+        try:
+            yield {"event": "status", "data": json.dumps(events.status)}
+            while True:
+                if await request.is_disconnected():
+                    break
+                try:
+                    event = await asyncio.wait_for(queue.get(), timeout=15)
+                    yield {"event": event["type"], "data": json.dumps(event, default=str)}
+                except asyncio.TimeoutError:
+                    yield {"event": "heartbeat", "data": "{}"}
+        finally:
+            events.unsubscribe(queue)
+
     return EventSourceResponse(generator())

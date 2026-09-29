@@ -2,12 +2,9 @@
 import hashlib
 import sqlite3
 import base64
-from pathlib import Path
-from app.ledger.canonical import canonical_json
 from app.ledger.merkle import build_merkle_root
 from app.ledger.sign import PUBLIC_KEY_PATH
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
-from cryptography.hazmat.primitives import serialization
 
 
 def sha256hex(data: bytes) -> str:
@@ -31,8 +28,7 @@ def verify_chain(db_path: str) -> dict:
             return {"status": "PASS", "records": 0, "message": "Empty ledger"}
 
         prev_hash = "0" * 64
-        batch_hashes: list[str] = []
-        batch_first = rows[0]["seq"]
+        entry_by_seq: dict[int, str] = {}
 
         for row in rows:
             payload_bytes = row["payload_canonical"].encode("utf-8")
@@ -66,14 +62,30 @@ def verify_chain(db_path: str) -> dict:
                 }
 
             prev_hash = row["entry_hash"]
-            batch_hashes.append(row["entry_hash"])
+            entry_by_seq[row["seq"]] = row["entry_hash"]
 
         checkpoints = conn.execute(
-            "SELECT first_seq, last_seq, merkle_root, signature, pubkey_id FROM ledger_checkpoints ORDER BY first_seq"
+            "SELECT first_seq, last_seq, merkle_root, signature, pubkey_id "
+            "FROM ledger_checkpoints ORDER BY first_seq"
         ).fetchall()
 
-        pubkey = load_public_key()
+        pubkey = load_public_key() if checkpoints else None
         for cp in checkpoints:
+            # The signed root must be the Merkle root of the entries it covers.
+            covered = [
+                entry_by_seq.get(s) for s in range(cp["first_seq"], cp["last_seq"] + 1)
+            ]
+            if any(h is None for h in covered):
+                return {
+                    "status": "FAIL",
+                    "reason": f"Checkpoint {cp['first_seq']}-{cp['last_seq']} covers missing records",
+                }
+            if build_merkle_root([h for h in covered if h]) != cp["merkle_root"]:
+                return {
+                    "status": "FAIL",
+                    "reason": f"Merkle root mismatch for seq {cp['first_seq']}-{cp['last_seq']}",
+                }
+            assert pubkey is not None
             try:
                 sig = base64.b64decode(cp["signature"])
                 pubkey.verify(sig, cp["merkle_root"].encode())

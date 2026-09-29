@@ -100,8 +100,7 @@ def burstiness(gaps: list[float]) -> float:
         return 0.0
     m = float(np.mean(arr))
     s = float(np.std(arr))
-    if s == 0:
-        return 0.0
+    # Goh-Barabasi: sigma = 0 (perfectly periodic) gives B = -1, not 0.
     denom = s + m
     return (s - m) / denom if denom > 0 else 0.0
 

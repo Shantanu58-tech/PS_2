@@ -26,7 +26,9 @@ CREATE TABLE IF NOT EXISTS ledger_checkpoints (
     signature TEXT NOT NULL,
     pubkey_id TEXT NOT NULL,
     created_at TEXT NOT NULL,
-    ots_proof BLOB
+    ots_proof BLOB,
+    ots_status TEXT,
+    ots_block INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS accounts (
@@ -137,7 +139,9 @@ CREATE TABLE IF NOT EXISTS topics (
     centroid BLOB,
     first_seen TEXT NOT NULL,
     last_seen TEXT NOT NULL,
-    status TEXT DEFAULT 'active'
+    status TEXT DEFAULT 'active',
+    nature TEXT DEFAULT 'organic',
+    coordinated_share REAL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS topic_assign (
@@ -171,7 +175,9 @@ CREATE TABLE IF NOT EXISTS coord_clusters (
     burstiness REAL,
     sync REAL,
     dup_ratio REAL,
+    regular_share REAL,
     score REAL NOT NULL,
+    basis TEXT,
     created_at TEXT NOT NULL
 );
 
@@ -220,6 +226,43 @@ CREATE TABLE IF NOT EXISTS certificates (
     first_seq INTEGER NOT NULL,
     last_seq INTEGER NOT NULL,
     merkle_root TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS forecasts (
+    topic_id INTEGER NOT NULL,
+    model TEXT NOT NULL,
+    bucket_start TEXT NOT NULL,
+    predicted REAL NOT NULL,
+    lower REAL,
+    upper REAL,
+    created_at TEXT NOT NULL
+);
+
+-- Experimental behaviour likelihood (timing/co-posting features only; never
+-- demographic, never labelled "bot" in the UI).
+CREATE TABLE IF NOT EXISTS account_behaviour (
+    platform TEXT NOT NULL,
+    account_id TEXT NOT NULL,
+    likelihood REAL NOT NULL,
+    features_json TEXT NOT NULL,
+    computed_at TEXT NOT NULL,
+    PRIMARY KEY (platform, account_id)
+);
+
+CREATE TABLE IF NOT EXISTS summaries (
+    scope TEXT NOT NULL,
+    scope_id TEXT NOT NULL,
+    model TEXT NOT NULL,
+    summary TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    PRIMARY KEY (scope, scope_id)
+);
+
+CREATE TABLE IF NOT EXISTS collector_targets (
+    collector TEXT NOT NULL,
+    target TEXT NOT NULL,
+    added_at TEXT NOT NULL,
+    PRIMARY KEY (collector, target)
 );
 
 CREATE TABLE IF NOT EXISTS audit_log (

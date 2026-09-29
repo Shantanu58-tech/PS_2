@@ -1,54 +1,67 @@
 from __future__ import annotations
+
 import asyncio
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
-from app.config import settings
-from app.db.session import init_db_sync
 from app.api.routers import (
-    health, posts, timeline, topics, graph, coordination,
-    lineage, demographics, alerts, cases, ledger_router,
-    stream, collectors, search, eval_router, replay_router, traceability,
+    alerts, cases, collectors, coordination, demographics, eval_router, graph, health, ledger_router,
+    lineage, posts, replay_router, search, stream, timeline, topics, traceability,
 )
+from app.config import ROOT, settings
+from app.db.session import init_db_sync
+from app.pipeline import events
+from app.version import VERSION
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db_sync()
+    events.bind_loop(asyncio.get_running_loop())
+    stop = asyncio.Event()
+    task = None
+    if settings.mode == "live":
+        from app.pipeline.scheduler import live_loop
+
+        task = asyncio.create_task(live_loop(stop))
     yield
+    stop.set()
+    if task:
+        await asyncio.gather(task, return_exceptions=True)
 
 
-app = FastAPI(title="SATYA-NET", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="SATYA-NET", version=VERSION, lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    # Replay/demo is public read-only; live mode should be served same-origin (B5).
+    allow_origins=["*"] if settings.mode == "replay" else ["http://localhost:3000"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 app.include_router(health.router)
-app.include_router(posts.router, prefix="/api")
-app.include_router(timeline.router, prefix="/api")
-app.include_router(topics.router, prefix="/api")
-app.include_router(graph.router, prefix="/api")
-app.include_router(coordination.router, prefix="/api")
-app.include_router(lineage.router, prefix="/api")
-app.include_router(demographics.router, prefix="/api")
-app.include_router(alerts.router, prefix="/api")
-app.include_router(cases.router, prefix="/api")
-app.include_router(ledger_router.router, prefix="/api")
-app.include_router(stream.router, prefix="/api")
-app.include_router(collectors.router, prefix="/api")
-app.include_router(search.router, prefix="/api")
-app.include_router(eval_router.router, prefix="/api")
-app.include_router(replay_router.router, prefix="/api")
-app.include_router(traceability.router, prefix="/api")
+app.include_router(health.router, prefix="/api")
+for r in (posts, timeline, topics, graph, coordination, lineage, demographics, alerts, cases,
+          ledger_router, stream, collectors, search, eval_router, replay_router, traceability):
+    app.include_router(r.router, prefix="/api")
 
-frontend_dist = Path("../frontend/dist")
-if frontend_dist.exists():
-    app.mount("/", StaticFiles(directory=str(frontend_dist), html=True), name="static")
+
+# B5: serve the built console from the same origin (single URL, no CORS).
+_dist = Path(settings.frontend_dist) if settings.frontend_dist else ROOT / "frontend" / "dist"
+
+
+@app.get("/{full_path:path}", include_in_schema=False)
+async def spa(full_path: str):
+    if full_path.startswith(("api/", "healthz")):
+        raise HTTPException(404)
+    if not _dist.exists():
+        raise HTTPException(404, "frontend not built: run `npm run build` in frontend/")
+    candidate = (_dist / full_path).resolve()
+    if full_path and candidate.is_file() and _dist.resolve() in candidate.parents:
+        return FileResponse(candidate)
+    return FileResponse(_dist / "index.html")  # client-side routes (/timeline, /ledger, ...)

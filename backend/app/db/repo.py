@@ -77,8 +77,10 @@ async def get_posts(
         clauses.append("p.created_at < ?")
         params.append(cursor)
     if q:
-        clauses.append("p.post_id IN (SELECT rowid FROM posts_fts WHERE posts_fts MATCH ?)")
-        params.append(q)
+        from app.api.deps import fts_query
+
+        clauses.append("p.rowid IN (SELECT rowid FROM posts_fts WHERE posts_fts MATCH ?)")
+        params.append(fts_query(q))
     if organic_only:
         clauses.append(
             "NOT EXISTS (SELECT 1 FROM coord_accounts ca WHERE ca.platform=p.platform "

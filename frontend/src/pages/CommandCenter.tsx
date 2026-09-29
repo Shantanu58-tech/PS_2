@@ -36,7 +36,7 @@ export default function CommandCenter() {
   const startReplay = async () => {
     const res = await fetch('/api/replay/start', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({speed:60}) })
     const j = await res.json()
-    setReplayMsg(j.ok ? 'Replay started — scenario is loading (~40k posts)' : 'Error starting replay')
+    setReplayMsg(j.ok ? 'Replay started - ingesting the scenario through the ledger, then running analytics' : (j.detail || 'Error starting replay'))
   }
 
   return (
@@ -58,7 +58,7 @@ export default function CommandCenter() {
           { label:'Records Ingested', value: (ledger?.record_count||0).toLocaleString() },
           { label:'Active Alerts', value: alerts.filter((a:any)=>a.status==='new').length, color:'#ef4444' },
           { label:'Topics Tracked', value: topics.length },
-          { label:'Ledger', value: ledger?.last_checkpoint ? 'VERIFIED ✓' : 'EMPTY', color:'#22c55e' },
+          { label:'Signed Checkpoints', value: ledger?.checkpoint_count ?? 0, color:'#22c55e' },
         ].map(m => (
           <div key={m.label} style={{background:'#0d1326',border:'1px solid #1e2740',borderRadius:12,padding:16}}>
             <div style={{color:'#6b7280',fontSize:11,marginBottom:4}}>{m.label}</div>
@@ -82,7 +82,7 @@ export default function CommandCenter() {
           ) : topics.slice(0,8).map((t:any) => (
             <div key={t.topic_id} style={{background:'#0d1326',border:'1px solid #1e2740',borderRadius:10,padding:12,marginBottom:8}}>
               <div style={{color:'white',fontSize:13,fontWeight:500}}>{t.label}</div>
-              <div style={{color:'#6b7280',fontSize:11,marginTop:2}}>{t.keywords}</div>
+              <div style={{color:'#6b7280',fontSize:11,marginTop:2}}>{(t.keywords||[]).join(' · ')} · {t.n_posts} posts{t.nature==='manufactured'?' · MANUFACTURED':''}</div>
             </div>
           ))}
         </div>

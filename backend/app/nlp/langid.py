@@ -1,10 +1,13 @@
 from __future__ import annotations
 import re
+from functools import lru_cache
 from pathlib import Path
+
+from app.config import settings
 
 
 _HINGLISH_LEXICON: set[str] = set()
-_LEXICON_PATH = Path("data/lexicons/hinglish_words.txt")
+_LEXICON_PATH = Path(settings.data_dir) / "lexicons" / "hinglish_words.txt"
 
 
 def _load_lexicon() -> None:
@@ -51,6 +54,7 @@ def is_hinglish(text: str, threshold: float = 0.25) -> bool:
     return hits / len(tokens) >= threshold
 
 
+@lru_cache(maxsize=65536)
 def detect_lang(text: str) -> str:
     if not text or not text.strip():
         return "unknown"
@@ -60,7 +64,8 @@ def detect_lang(text: str) -> str:
     if is_hinglish(text):
         return "hi-Latn"
     try:
-        from langdetect import detect
+        from langdetect import DetectorFactory, detect
+        DetectorFactory.seed = 0  # langdetect is random unless seeded
         return detect(text)
     except Exception:
         return "en"

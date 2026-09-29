@@ -47,13 +47,13 @@ function MissionBriefing() {
 function GuidedTour() {
   const { tourStep, setTourStep, setTourActive } = useAppStore()
   const STEPS = [
-    { title: 'Signal Card Fired', desc: 'A manufactured surge detected — 87% coordinated accounts amplifying a false dam-scare on Telegram → X. Priority 87/100.' },
-    { title: 'Raw vs Organic Toggle', desc: 'Enable "Organic only" in the sidebar. Emotion timeline flips: 68% panic → 29% panic once coordinated accounts are excluded.' },
-    { title: 'Narrative Lineage', desc: 'Dam-scare meme first seen on Telegram (T0), then on X (+12 min). Image variants detected by perceptual hash (Hamming ≤ 10).' },
-    { title: 'Network & KOLs', desc: 'Bridge account connects two communities. Coordinated accounts have red rings. Organic-only recompute demotes bot amplifiers.' },
-    { title: 'Tamper-Proof Ledger', desc: 'Click Verify — all records pass. Tamper Simulation: mutate one byte → fails at exact seq. 100% detection rate.' },
+    { title: 'Signal Card Fired', desc: 'A manufactured surge is detected: coordinated accounts amplifying a false dam-scare that moved from Telegram to X. The card shows its priority score and why it fired.' },
+    { title: 'Raw vs Organic Toggle', desc: 'Enable "Organic only" in the sidebar to exclude coordinated accounts and see how much they distorted the emotion timeline (measured in the eval report).' },
+    { title: 'Narrative Lineage', desc: 'The dam-scare meme is traced to its earliest observed post and platform, with the migration time to X and image variants matched by perceptual hash.' },
+    { title: 'Network & KOLs', desc: 'A bridge account connects two communities. Coordinated accounts are marked. The organic-only recompute shows who really influences versus who is being amplified.' },
+    { title: 'Tamper-Proof Ledger', desc: 'Click Verify to re-check every hash and signature. Tamper Simulation mutates one record in a scratch copy and verification fails at that exact sequence number.' },
     { title: 'Case & §63 Draft', desc: 'Create a case from any alert. Auto-assembles brief with Merkle root. §63 draft certificate generated (DRAFT label, needs counsel review).' },
-    { title: 'PS 26152 Compliance', desc: 'Every requirement A–E + Blockchain theme with measured metrics. Limitations stated openly.' },
+    { title: 'PS 26152 Compliance', desc: 'Every requirement A–E plus the Blockchain theme, with metrics read from eval/reports/summary.json (or "not yet measured"). Limitations stated openly.' },
   ]
   const step = STEPS[tourStep]
   if (!step) return null

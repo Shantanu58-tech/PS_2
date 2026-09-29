@@ -12,16 +12,17 @@ export default function Network() {
             <table style={{width:'100%',borderCollapse:'collapse',fontSize:12}}>
               <thead><tr style={{background:'#111827'}}>
                 <th style={{color:'#6b7280',textAlign:'left',padding:'10px 14px'}}>Account</th>
-                <th style={{color:'#6b7280',textAlign:'right',padding:'10px 14px'}}>Edges</th>
+                <th style={{color:'#6b7280',textAlign:'right',padding:'10px 14px'}}>Cascade</th><th style={{color:'#6b7280',textAlign:'right',padding:'10px 14px'}}>Influence</th>
               </tr></thead>
               <tbody>
                 {(kols?.influencers||[]).map((k:any,i:number) => (
                   <tr key={i} style={{borderTop:'1px solid #1e2740'}}>
-                    <td style={{padding:'9px 14px',color:'#9ca3af',fontFamily:'monospace'}}>{k.src_account?.slice(0,18)}...</td>
-                    <td style={{padding:'9px 14px',color:'white',textAlign:'right'}}>{k.edge_count}</td>
+                    <td style={{padding:'9px 14px',color:k.coordinated?'#f87171':'#9ca3af',fontFamily:'monospace'}}>{k.account_id}{k.coordinated?' (coordinated)':''}</td>
+                    <td style={{padding:'9px 14px',color:'white',textAlign:'right'}}>{k.cascade_size}</td>
+                    <td style={{padding:'9px 14px',color:'white',textAlign:'right'}}>{(k.influence??0).toFixed(2)}</td>
                   </tr>
                 ))}
-                {!kols?.influencers?.length && <tr><td colSpan={2} style={{padding:'24px',textAlign:'center',color:'#4b5563'}}>No data</td></tr>}
+                {!kols?.influencers?.length && <tr><td colSpan={3} style={{padding:'24px',textAlign:'center',color:'#4b5563'}}>No data</td></tr>}
               </tbody>
             </table>
           </div>

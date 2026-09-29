@@ -7,7 +7,7 @@ export default function CaseFile() {
   const createCase = async (alertId: number, headline: string) => {
     const res = await fetch('/api/cases', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ alert_id: alertId, title: headline.slice(0,80) }) })
     const j = await res.json()
-    setMsg('Case #' + j.case_id + ' created - Brief and section 63 draft certificate auto-assembled')
+    setMsg(j.case_id ? 'Case #' + j.case_id + ' created: ' + j.brief_url + ' | ' + j.certificate_url : (j.detail || 'Error creating case'))
   }
   return (
     <div>
