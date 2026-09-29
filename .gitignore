@@ -45,3 +45,4 @@ frontend/playwright-report/
 # stale pre-v0.2 output location
 backend/replay/
 backend/.render_*
+**/.wrangler/
