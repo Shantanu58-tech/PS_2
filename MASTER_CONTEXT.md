@@ -265,18 +265,28 @@ k-anonymity (Sweeney 2002); differential privacy (Dwork 2006).
 ---
 
 ## 9. Demo script (about 3.5 min)
-1. **(0:00)** Mission Briefing. Say the problem in one sentence. Open the PS 26152 Compliance page for 3 s.
-2. **(0:20)** Command Center → **Start Replay**; progress streams live; analytics run.
-3. **(0:50)** The top Signal Card, "Manufactured surge: Varunapur dam…". Open it: burst level,
-   coordinated share, platforms. Point out the cricket surge is bigger but stays low priority.
-4. **(1:20)** Trends: "Manufactured trend" vs "Organic" badges. Network: the bridge account,
-   coordinated accounts marked, organic-only rank changes.
-5. **(2:00)** Lineage: Telegram origin at 22:10 IST → X at +12 min; image variants with Hamming distances.
-6. **(2:30)** Ledger: **Verify** passes (37k records, 374 signed checkpoints) → **Tamper
-   Simulation** fails at the exact sequence number, on a copy.
-7. **(3:00)** Case: create from the alert → brief (evidence index with ledger seqs and
-   hashes) → **§63 DRAFT** certificate.
-8. **(3:20)** Eval scoreboard, limitations, links.
+The console opens with a Mission Briefing. **Start the 3-minute guided investigation** walks
+the same path automatically (9 steps; its numbers are read from the eval summary). On the
+public read-only demo the data is pre-loaded; locally, Command Center has **Start replay**.
+
+1. **(0:00)** Mission Briefing: state the problem in one sentence.
+2. **(0:20)** Command Center: KPIs, then the top Signal Card "Manufactured surge: dam varunapur
+   evacuate". Open **Why it fired** to show the priority formula. The cricket surge is bigger but organic.
+3. **(0:50)** Trends: the "Manufactured trend" vs "Organic" badges, burst bands, the forecast band.
+4. **(1:10)** Coordination: why the cluster was flagged (synchrony, entropy, burstiness,
+   duplicates, cadence), flagged vs other timing, per-account scores.
+5. **(1:40)** Flip **Raw / Organic only** in the top bar: Timeline & Emotions and Network change.
+   Network marks coordinated accounts with a red ring and shows the KOL rank changes.
+6. **(2:00)** Lineage: Telegram origin at 22:10 IST → X at +12 min; image variants by pHash.
+7. **(2:30)** Ledger: **Verify integrity** passes → **Run tamper simulation** is detected at the
+   exact record, on a copy.
+8. **(3:00)** Cases: open a case from the signal → brief (evidence index with ledger seqs) →
+   **§63 DRAFT** certificate.
+9. **(3:20)** PS 26152 & Eval: traceability table, scoreboard, limitations.
+
+Console map: Monitor (Command Center, Timeline & Emotions, Trends) · Investigate (Coordination,
+Network, Lineage, Audience, Search) · Evidence (Cases, Ledger) · System (Sources, PS 26152 & Eval).
+Dark theme by default with a light toggle; every chart has a Table view.
 
 ---
 
