@@ -2,7 +2,7 @@ import asyncio
 
 from fastapi import APIRouter
 
-from app.analytics.graph import bridge_accounts, compute_kols, graph_payload, spread_frames
+from app.analytics.graph import graph_payload, spread_frames
 from app.analytics.graph_store import get_graph_store
 from app.api.deps import fetch_all
 from app.config import settings
@@ -26,23 +26,19 @@ async def get_graph(organic_only: bool = False, max_nodes: int = 250, since: str
 
 @router.get("/influencers")
 async def get_influencers(limit: int = 20, organic_only: bool = False):
-    def work() -> dict:
-        G = _graph(organic_only)
-        kols = compute_kols(G, top_n=limit)
-        # rank in the other view: "who actually influences vs who is pumped"
-        other = {k["account_id"]: i + 1 for i, k in enumerate(compute_kols(_graph(not organic_only), top_n=500))}
-        for i, k in enumerate(kols):
-            k["rank"] = i + 1
-            k["rank_other_view"] = other.get(k["account_id"])
-        return {"influencers": kols, "bridges": bridge_accounts(G, top_n=8), "organic_only": organic_only}
+    """KOLs + bridges, precomputed by the analytics `influence` stage."""
+    import json
 
-    result = await asyncio.to_thread(work)
-    coord = {r["account_id"]: r["score"] for r in await fetch_all(
-        "SELECT account_id, MAX(score) AS score FROM coord_accounts GROUP BY account_id")}
-    for k in result["influencers"]:
-        k["coord_score"] = round(coord.get(k["account_id"], 0.0), 3)
-        k["coordinated"] = coord.get(k["account_id"], 0.0) >= 0.7
-    return result
+    from app.analytics.graph import compute_influence
+
+    view = "organic" if organic_only else "raw"
+    row = await fetch_all("SELECT payload_json FROM influence_cache WHERE view=?", (view,))
+    if not row:
+        await asyncio.to_thread(compute_influence, settings.db_path)
+        row = await fetch_all("SELECT payload_json FROM influence_cache WHERE view=?", (view,))
+    payload = json.loads(row[0]["payload_json"]) if row else {"influencers": [], "bridges": []}
+    payload["influencers"] = payload["influencers"][:limit]
+    return payload
 
 
 @router.get("/graph/spread")

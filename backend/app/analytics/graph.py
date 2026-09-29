@@ -145,3 +145,29 @@ def spread_frames(db_path: str, topic_id: int, max_frames: int = 48) -> list[dic
         else:
             frames.append({"hour": h, "posts": n, "accounts": len(accounts), "platforms": dict(platforms)})
     return frames[-max_frames:]
+
+
+def compute_influence(db_path: str, top_n: int = 50) -> dict:
+    """Precompute KOL and bridge rankings for the raw and organic-only views,
+    each with the account's rank in the other view."""
+    import json
+    from datetime import datetime, timezone
+
+    views = {v: build_graph(db_path, organic_only=(v == "organic")) for v in ("raw", "organic")}
+    kols = {v: compute_kols(G, top_n=max(top_n, 500)) for v, G in views.items()}
+    rank = {v: {k["account_id"]: i + 1 for i, k in enumerate(ks)} for v, ks in kols.items()}
+    now = datetime.now(timezone.utc).isoformat()
+    with sqlite3.connect(db_path) as conn:
+        coord = dict(conn.execute("SELECT account_id, MAX(score) FROM coord_accounts GROUP BY account_id").fetchall())
+        for v, G in views.items():
+            other = "organic" if v == "raw" else "raw"
+            top = []
+            for i, k in enumerate(kols[v][:top_n]):
+                score = coord.get(k["account_id"]) or 0.0
+                top.append({**k, "rank": i + 1, "rank_other_view": rank[other].get(k["account_id"]),
+                            "coord_score": round(score, 3), "coordinated": score >= 0.7})
+            payload = {"influencers": top, "bridges": bridge_accounts(G, top_n=8), "organic_only": v == "organic"}
+            conn.execute("INSERT OR REPLACE INTO influence_cache (view, payload_json, computed_at) VALUES (?,?,?)",
+                         (v, json.dumps(payload), now))
+        conn.commit()
+    return {v: G.number_of_nodes() for v, G in views.items()}

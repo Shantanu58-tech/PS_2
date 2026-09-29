@@ -249,6 +249,14 @@ CREATE TABLE IF NOT EXISTS account_behaviour (
     PRIMARY KEY (platform, account_id)
 );
 
+-- Precomputed KOL / bridge rankings per view (raw | organic); centrality over
+-- thousands of accounts is too slow to compute per request on small servers.
+CREATE TABLE IF NOT EXISTS influence_cache (
+    view TEXT PRIMARY KEY,
+    payload_json TEXT NOT NULL,
+    computed_at TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS summaries (
     scope TEXT NOT NULL,
     scope_id TEXT NOT NULL,

@@ -50,6 +50,7 @@ def _stages() -> list[tuple[str, Callable[[str], Any]]]:
     from app.analytics.coordination import run_coordination
     from app.analytics.demographics import compute_demographics
     from app.analytics.forecast import compute_forecasts
+    from app.analytics.graph import compute_influence
     from app.analytics.signals import generate_signals
     from app.analytics.topics import run_topics
     from app.analytics.trends import classify_topics, compute_series_and_bursts
@@ -68,6 +69,7 @@ def _stages() -> list[tuple[str, Callable[[str], Any]]]:
             "organic": compute_demographics(db, organic_only=True),
         }),
         ("behaviour", compute_behaviour),
+        ("influence", compute_influence),
         ("forecast", compute_forecasts),
         ("signals", generate_signals),
         ("ots", anchor_pending_checkpoints),
