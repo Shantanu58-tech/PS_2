@@ -248,21 +248,28 @@ Sarcasm remains weak for every pre-trained option (see eval/reports/emotion.md).
 
 ## 5. Hosting
 
-### D-33 Public demo on Hugging Face Spaces, kept awake by a Cloudflare cron
-Same pattern as the team's TRIVENI deployment (D:\SIH): a Docker service whose
-image carries no private data; a private Hugging Face dataset repo
-(`ZOROxJODD/prahari-bundle`) supplies the analysed demo database and the
-ledger signing key at start-up via the `HF_TOKEN` Space secret; a Cloudflare
-Worker (`deploy/keepalive`) pings `/healthz` every 10 minutes. Render's free
-plan (512 MB, 0.1 CPU) was rejected because the models need ~3 GB, but the
-hosted demo needs no models at all: every analytic is precomputed in the
-bundled DB, so the image installs only `deploy/huggingface/requirements-runtime.txt`
-(no torch). The Space clones the public GitHub repo at build time, so each
-push updates the site after a Space rebuild.
-`DEMO_READONLY=true` blocks every write except verify, the tamper simulation,
-case/brief generation and LLM summaries (PRD 12 public read-only demo).
-Container storage is ephemeral: cases and audit entries created by visitors
-disappear on restart, and the ledger returns to the bundled state.
+### D-33 Public demo on Render (free), kept awake by a Cloudflare cron Worker
+Live: https://prahari-h849.onrender.com. Same pattern as the team's TRIVENI deployment, replicated
+without touching it: a Docker web service whose image carries no private
+data; a private Hugging Face dataset repo (`ZOROxJODD/prahari-bundle`) supplies
+the analysed demo database and ledger signing key at start-up (`HF_TOKEN`
+secret); the Cloudflare Worker `prahari-keepalive` pings `/healthz` every 10
+minutes.
+- Hugging Face Docker Spaces now need PRO on free CPU (HTTP 402), so Render is used.
+- The service runs in a **separate Render account/workspace**: free web services
+  share 750 instance-hours per workspace, and TRIVENI (kept awake 24/7) already
+  uses ~744 h in its workspace, so a second always-on service there would get
+  every free service in it (including TRIVENI) suspended.
+- The hosted demo needs no ML models (analytics precomputed in the bundled DB):
+  runtime requirements only, peak memory 251 MB (512 MB limit). KOL/bridge
+  rankings are precomputed (`influence_cache`) because centrality took ~30 s per
+  request locally and timed out on 0.1 CPU. Bundles are packed from a
+  WAL-checkpointed, DELETE-journal copy (a WAL database loses uncheckpointed rows).
+- `DEMO_READONLY=true` blocks every write except verify, the tamper simulation,
+  case/brief generation and LLM summaries (PRD 12). Container storage is
+  ephemeral: visitor-created cases vanish on restart.
+- Render builds from a private deployment mirror that the local repo updates in
+  the same push as the canonical repository (see deploy/render/README.md).
 
 ### D-34 Gemini model alias with fallback
 `gemini-2.5-flash` is retired for new keys. The default is the

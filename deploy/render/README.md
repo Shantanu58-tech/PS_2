@@ -1,5 +1,7 @@
 # PRAHARI on Render (free)
 
+Live: https://prahari-h849.onrender.com · keepalive: https://prahari-keepalive.triveni-moggers.workers.dev
+
 Docker web service built from this repo (`render.yaml` blueprint,
 `deploy/render/Dockerfile`, context = repo root). At start-up `start.sh`
 downloads the private demo bundle from the Hugging Face dataset

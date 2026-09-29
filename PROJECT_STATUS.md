@@ -12,6 +12,8 @@ _Last verified: 2026-09-30. Every claim below was checked by running the code. M
 
 ---
 
+**Live demo:** https://prahari-h849.onrender.com · **Code:** https://github.com/Shantanu58-tech/PS_2
+
 ## 1. Verified health
 
 | Check | Result |
@@ -22,6 +24,7 @@ _Last verified: 2026-09-30. Every claim below was checked by running the code. M
 | Browser smoke (Playwright, single-URL server) | **11/11** routes and ledger flow pass |
 | Full eval (`make eval`) | complete; about 35 min on CPU; reports in `eval/reports/` |
 | Replay of the demo scenario | 37,353 records → ledger → analytics |
+| Hosted demo | https://prahari-h849.onrender.com: live smoke test passes (all pages, APIs, verify, tamper-sim, case brief, Gemini, read-only guard) |
 
 ## 2. What the previous status report got wrong (corrected)
 - "25/26 tests pass": no Python environment had the dependencies, so **no tests could run**.
@@ -54,11 +57,11 @@ Every fix is recorded in `docs/DECISIONS.md` (D-01 … D-32).
 ### Needs a human (ask-when-needed)
 | # | Item | Notes |
 |---|---|---|
-| H1 | X cookies (`X_AUTH_TOKEN`, `X_CT0`, `X_ACCOUNT_USER`) | burner account; then `python scripts/check_collectors.py x --target <handle>` |
-| H2 | Telegram `TG_API_ID`, `TG_API_HASH` + one-time phone login | run interactively: `python scripts/check_collectors.py telegram` |
+| H1 | ~~X cookies~~ | done: live pull verified |
+| H2 | Telegram one-time phone login | api_id/hash stored; run `scripts/telegram_login.py` interactively to create TG_SESSION_STRING |
 | H3 | Reddit script-app id/secret | optional (appreciable) |
-| H4 | YouTube Data API key | optional (appreciable) |
-| H5 | `GEMINI_API_KEY` | enables B4 summaries |
+| H4 | ~~YouTube Data API key~~ | done: live pull verified |
+| H5 | ~~`GEMINI_API_KEY`~~ | done: summaries live |
 | H6 | Decide: rewrite repo history to purge the leaked ledger key | see §6 |
 | H7 | Approve deletion of the Next.js scaffold leftovers | `frontend/src/app/`, `Sidebar.tsx`, `EngineStatus.tsx`, `SectionPlaceholder.tsx`, `ProvenanceBadge.tsx`, `lib/api.ts`, `lib/nav.ts`, `frontend/AGENTS.md`, `frontend/CLAUDE.md`, `next.config.ts`, `postcss.config.mjs`, top-level `scenario/` (duplicate) |
 | H8 | Emotion gold set + MuRIL fine-tune (PRD §11) | needs a GPU and 400 human-audited items; this is the fix for B's weaknesses |

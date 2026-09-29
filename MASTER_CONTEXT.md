@@ -3,6 +3,8 @@
 **Team MOGGERS · VIT Pune · Smart India Hackathon 2026**
 **Problem Statement 26152 "Social Media Analytics" · NTRO · Category: Software · Theme: Blockchain & Cybersecurity**
 
+**Live demo:** https://prahari-h849.onrender.com · **Code:** https://github.com/Shantanu58-tech/PS_2
+
 > The single reference for the team: what we built, how it works, what we measured,
 > how to demo it and how to pitch it. **Every number here comes from
 > `eval/reports/summary.json` (generated 2026-09-30).** Never put a number on a
@@ -236,7 +238,7 @@ co-posting for synchronized but genuine groups.
 **Slide 1: Title and hook.** PS 26152 · NTRO · Team MOGGERS · members. Headline: *"From
 noisy streams to evidence-grade intelligence, and who's really behind the noise."* Chips:
 "5/5 PS components live" · "Coordination-adjusted analytics" · "Every record
-hash-chained". Buttons: live prototype · demo video · GitHub. Screenshot: Command Center
+hash-chained". Buttons: live prototype (https://prahari-h849.onrender.com) · demo video · GitHub (https://github.com/Shantanu58-tech/PS_2). Screenshot: Command Center
 with the "Manufactured surge" Signal Card.
 
 **Slide 2: Solution in one picture.** Left: A→E + ledger strip. Middle: the traceability
@@ -334,6 +336,8 @@ scripts/                  fetch_models, check_collectors, update_readme_metrics,
 ```
 
 ## 13. How to run
+Hosted demo (no install): https://prahari-h849.onrender.com. The first visit after a restart can take about 30 s while the demo database downloads.
+
 ```bash
 make setup && cp .env.example backend/.env
 make models        # ~3 GB of pre-trained models into ./models

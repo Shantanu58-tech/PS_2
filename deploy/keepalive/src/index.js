@@ -1,6 +1,6 @@
 // PRAHARI keep-alive: Render free web services sleep after ~15 idle minutes.
 // A Cloudflare cron trigger pings the health endpoint every 10 minutes.
-const TARGET = "https://prahari.onrender.com/healthz"; // updated after the first Render deploy
+const TARGET = "https://prahari-h849.onrender.com/healthz";
 
 async function ping() {
   const started = Date.now();
