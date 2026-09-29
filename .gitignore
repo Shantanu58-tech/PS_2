@@ -29,7 +29,7 @@ build/
 **/data/cases/
 **/data/eval/
 **/keys/ledger_ed25519
-models/
+/models/
 
 # Generated scenarios (regenerate with `make scenario`; truth.json is kept)
 **/replay/*.jsonl
