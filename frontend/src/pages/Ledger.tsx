@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { Bitcoin, Bomb, KeyRound, Lock, Search as SearchIcon, ShieldCheck, Stamp } from 'lucide-react'
 import { getJSON, postJSON, useAudit, useCheckpoints, useLedgerStatus } from '../hooks/useApi'
-import { Card, InfoPop, Kpi, PageHead, StatusBadge } from '../components/ui'
+import { Card, InfoPop, Kpi, NextStep, PageHead, StatusBadge } from '../components/ui'
 import { ist, num } from '../lib/fmt'
 
 const short = (h?: string) => (h ? `${h.slice(0, 10)}…${h.slice(-6)}` : '—')
@@ -116,6 +116,7 @@ export default function Ledger() {
           </table>
         )}
       </Card>
+      <NextStep />
     </div>
   )
 }

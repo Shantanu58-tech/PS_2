@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Gauge, MessageSquare, Users } from 'lucide-react'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { useCluster, useClusters } from '../hooks/useApi'
-import { Card, ChartOrTable, ChartTip, Empty, InfoPop, Kpi, Legend, Meter, PageHead, StatusBadge } from '../components/ui'
+import { Card, ChartOrTable, ChartTip, Empty, InfoPop, Kpi, Legend, Meter, NextStep, PageHead, StatusBadge } from '../components/ui'
 import { AXIS_TICK, PLATFORM_LABEL, RAW } from '../lib/viz'
 import { ist, istShort, num, pct } from '../lib/fmt'
 
@@ -20,8 +21,15 @@ const SIGNALS: { key: string; label: string; strength: (v: number) => number; he
 export default function Coordination() {
   const { data } = useClusters()
   const clusters: any[] = data?.clusters ?? []
+  const [params] = useSearchParams()
   const [sel, setSel] = useState<number | undefined>()
-  useEffect(() => { if (sel == null && clusters.length) setSel(clusters[0].cluster_id) }, [clusters, sel])
+  useEffect(() => {
+    if (!clusters.length) return
+    const t = params.get('topic')
+    const byTopic = t ? clusters.find(c => String(c.topic_id) === t) : undefined
+    if (byTopic) setSel(byTopic.cluster_id)
+    else if (sel == null) setSel(clusters[0].cluster_id)
+  }, [clusters, params]) // eslint-disable-line react-hooks/exhaustive-deps
   const { data: detail } = useCluster(sel)
   const c = detail?.cluster
   const accounts: any[] = detail?.accounts ?? []
@@ -116,6 +124,7 @@ export default function Coordination() {
         </>
       )}
 
+      <NextStep />
     </div>
   )
 }

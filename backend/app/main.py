@@ -10,7 +10,7 @@ from fastapi.responses import FileResponse, JSONResponse
 
 from app.api.routers import (
     alerts, cases, collectors, coordination, demographics, eval_router, graph, health, ledger_router,
-    lineage, platforms, posts, replay_router, search, stream, timeline, topics, traceability,
+    lineage, platforms, posts, replay_router, search, situation, stream, timeline, topics, traceability,
 )
 from app.config import ROOT, settings
 from app.db.session import init_db_sync
@@ -28,7 +28,18 @@ async def lifespan(app: FastAPI):
         from app.pipeline.scheduler import live_loop
 
         task = asyncio.create_task(live_loop(stop))
+
+    async def _warm() -> None:  # the first page's aggregate is cached; build it before the first visitor
+        from app.analytics.situation import situation
+
+        try:
+            await asyncio.to_thread(situation, settings.db_path)
+        except Exception:  # an empty database has nothing to warm
+            pass
+
+    warm = asyncio.create_task(_warm())
     yield
+    warm.cancel()
     stop.set()
     if task:
         await asyncio.gather(task, return_exceptions=True)
@@ -45,8 +56,8 @@ app.add_middleware(
 )
 
 # Allowed in the public read-only demo: verification, the tamper simulation (scratch
-# copy), case/brief generation and LLM summaries. Everything else that writes is blocked.
-_DEMO_ALLOWED_WRITES = ("/api/ledger/verify", "/api/ledger/tamper-sim", "/api/cases", "/api/summaries/")
+# copy), case/brief generation, LLM summaries and signal review. Everything else that writes is blocked.
+_DEMO_ALLOWED_WRITES = ("/api/ledger/verify", "/api/ledger/tamper-sim", "/api/cases", "/api/summaries/", "/api/alerts/")
 
 
 @app.middleware("http")
@@ -60,7 +71,7 @@ async def demo_readonly_guard(request: Request, call_next):
 app.include_router(health.router)
 app.include_router(health.router, prefix="/api")
 for r in (posts, timeline, topics, graph, coordination, lineage, demographics, alerts, cases,
-          ledger_router, stream, collectors, search, eval_router, replay_router, traceability, platforms):
+          ledger_router, stream, collectors, search, eval_router, replay_router, traceability, platforms, situation):
     app.include_router(r.router, prefix="/api")
 
 

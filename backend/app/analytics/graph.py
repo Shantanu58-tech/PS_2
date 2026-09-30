@@ -91,14 +91,23 @@ def graph_payload(G: nx.DiGraph, db_path: str, max_nodes: int = 250) -> dict:
         behaviour = dict(conn.execute(
             "SELECT account_id, MAX(likelihood) FROM account_behaviour GROUP BY account_id"
         ).fetchall())
+        keep_set = set(H.nodes)
+        home: dict[str, tuple[str, int]] = {}
+        for acc, plat, n in conn.execute("SELECT author_id, platform, COUNT(*) FROM posts GROUP BY 1, 2"):
+            if acc in keep_set and n > home.get(acc, ("", 0))[1]:
+                home[acc] = (plat, n)
+        followers = {a: f for a, f in conn.execute("SELECT account_id, MAX(followers) FROM accounts GROUP BY 1")
+                     if a in keep_set}
     nodes = [
         {"id": n, "degree": round(deg[n], 2), "community": community.get(n, 0),
          "pagerank": round(pr.get(n, 0.0), 5), "coord_score": round(coord.get(n, 0.0) or 0.0, 3),
          "coordinated": (coord.get(n) or 0.0) >= 0.7,
-         "behaviour_likelihood": round(behaviour.get(n, 0.0) or 0.0, 3)}
+         "behaviour_likelihood": round(behaviour.get(n, 0.0) or 0.0, 3),
+         "platform": home.get(n, ("unknown", 0))[0], "followers": followers.get(n)}
         for n in H.nodes
     ]
-    edges = [{"source": u, "target": v, "weight": round(d.get("weight", 1.0), 2), "kind": d.get("kind")}
+    edges = [{"source": u, "target": v, "weight": round(d.get("weight", 1.0), 2), "kind": d.get("kind"),
+              "ts": d.get("ts")}
              for u, v, d in H.edges(data=True)]
     return {"nodes": nodes, "edges": edges, "communities": len(comms),
             "total_nodes": G.number_of_nodes(), "total_edges": G.number_of_edges()}
@@ -252,3 +261,48 @@ def segment_spread(db_path: str, topic_id: int) -> dict:
     out_summary.sort(key=lambda r: r["first_seen"])
     return {"topic_id": topic_id, "bucket": "10m" if span_h < 12 else "1h", "segments": segments,
             "frames": list(frames.values()), "summary": out_summary}
+
+
+def node_detail(db_path: str, account_id: str) -> dict | None:
+    """Public profile fields, activity and network position of one account, plus
+    the accounts it is connected to on every platform. No inferred demographics."""
+    with sqlite3.connect(db_path) as conn:
+        conn.row_factory = sqlite3.Row
+        posts = conn.execute(
+            "SELECT platform, COUNT(*) AS n, MIN(created_at) AS first, MAX(created_at) AS last, "
+            "SUM(kind IN ('reply','comment')) AS comments FROM posts WHERE author_id=? GROUP BY platform "
+            "ORDER BY n DESC", (account_id,)).fetchall()
+        if not posts:
+            return None
+        profile = conn.execute(
+            "SELECT platform, handle, display_name, followers, following, created_at, verified FROM accounts "
+            "WHERE account_id=? ORDER BY followers DESC LIMIT 1", (account_id,)).fetchone()
+        topics = conn.execute(
+            "SELECT t.topic_id, t.label, t.nature, COUNT(*) AS n FROM posts p JOIN topic_assign ta "
+            "ON ta.platform=p.platform AND ta.post_id=p.post_id JOIN topics t ON t.topic_id=ta.topic_id "
+            "WHERE p.author_id=? GROUP BY t.topic_id ORDER BY n DESC LIMIT 4", (account_id,)).fetchall()
+        coord = conn.execute("SELECT MAX(score) FROM coord_accounts WHERE account_id=?", (account_id,)).fetchone()[0]
+        seg = conn.execute("SELECT l.label FROM account_segments s JOIN segment_labels l ON l.segment=s.segment "
+                           "WHERE s.account_id=?", (account_id,)).fetchone()             if conn.execute("SELECT name FROM sqlite_master WHERE name='account_segments'").fetchone() else None
+        out_e = conn.execute(
+            "SELECT dst_account AS account, dst_platform AS platform, kind, COUNT(*) AS n, MIN(ts) AS first FROM edges "
+            "WHERE src_account=? AND dst_account NOT LIKE 'post:%' GROUP BY 1, 2, 3 ORDER BY n DESC LIMIT 12",
+            (account_id,)).fetchall()
+        in_e = conn.execute(
+            "SELECT src_account AS account, src_platform AS platform, kind, COUNT(*) AS n, MIN(ts) AS first FROM edges "
+            "WHERE dst_account=? GROUP BY 1, 2, 3 ORDER BY n DESC LIMIT 12", (account_id,)).fetchall()
+        n_in, n_out = conn.execute(
+            "SELECT (SELECT COUNT(DISTINCT src_account) FROM edges WHERE dst_account=?), "
+            "(SELECT COUNT(DISTINCT dst_account) FROM edges WHERE src_account=? AND dst_account NOT LIKE 'post:%')",
+            (account_id, account_id)).fetchone()
+    return {
+        "account_id": account_id,
+        "profile": dict(profile) if profile else None,
+        "platforms": [dict(r) for r in posts],
+        "topics": [dict(r) for r in topics],
+        "coord_score": round(coord, 3) if coord is not None else None,
+        "segment": seg[0] if seg else None,
+        "engaged_by": n_in, "engages_with": n_out,
+        "followers_interacting": [dict(r) for r in in_e],
+        "interacts_with": [dict(r) for r in out_e],
+    }

@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { Database, FileUp, MessageSquare, MessagesSquare, Repeat2, Users } from 'lucide-react'
 import { usePlatform, usePlatforms, useVolume } from '../hooks/useApi'
-import { Card, ChartOrTable, ChartTip, Empty, InfoPop, Kpi, Legend, PageHead, StatusBadge } from '../components/ui'
+import { Card, ChartOrTable, ChartTip, Empty, InfoPop, Kpi, Legend, NextStep, PageHead, StatusBadge } from '../components/ui'
 import { AXIS_TICK, EMOTIONS, EMOTION_LABEL, EMOTION_SLOT, ORGANIC, PLATFORMS, PLATFORM_LABEL, PLATFORM_SLOT, RAW } from '../lib/viz'
 import { ist, istDay, istShort, num, pct } from '../lib/fmt'
 
@@ -196,6 +196,7 @@ export default function Platforms() {
         actions={row && <Connection c={row.connection} />} />
       <PlatformPicker value={sel} onChange={p => setParams(p === 'all' ? {} : { p })} counts={counts} />
       {rows.length === 0 ? <Empty>No data yet.</Empty> : sel === 'all' ? <AllPlatforms rows={rows} /> : <OnePlatform p={sel} row={row} />}
+      <NextStep />
     </div>
   )
 }

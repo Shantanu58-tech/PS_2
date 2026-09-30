@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { ArrowRight, ImageIcon } from 'lucide-react'
 import { useLineage } from '../hooks/useApi'
-import { Card, Empty, InfoPop, PageHead, Seg, StatusBadge } from '../components/ui'
+import { Card, Empty, InfoPop, NextStep, PageHead, Seg, StatusBadge } from '../components/ui'
 import { PLATFORM_LABEL, PLATFORM_SLOT } from '../lib/viz'
 import { ist, minutesBetween, num, pct } from '../lib/fmt'
 
@@ -37,9 +38,12 @@ export default function Lineage() {
   const { data } = useLineage()
   const topics: any[] = data?.topics ?? []
   const images: any[] = data?.image_matches ?? []
-  const [sel, setSel] = useState<string>('')
-  useEffect(() => { if (!sel && topics.length) setSel(String(topics[0].topic_id)) }, [topics, sel])
+  const [params] = useSearchParams()
+  const [sel, setSel] = useState<string>(params.get('topic') ?? '')
+  useEffect(() => { const t = params.get('topic'); if (t) setSel(t) }, [params])
+  useEffect(() => { if (topics.length && !topics.some(t => String(t.topic_id) === sel)) setSel(String(topics[0].topic_id)) }, [topics, sel])
   const lin = topics.find(t => String(t.topic_id) === sel)
+  const shown = [...topics.slice(0, 4), ...topics.filter((t, i) => i >= 4 && String(t.topic_id) === sel)]
 
   return (
     <div>
@@ -48,7 +52,7 @@ export default function Lineage() {
         <div className="stack">
           <div className="row-wrap">
             <Seg label="Narrative" value={sel} onChange={setSel}
-              options={topics.slice(0, 4).map(t => ({ value: String(t.topic_id), label: <span style={{ textTransform: 'capitalize' }}>{t.label}</span> }))} />
+              options={shown.map(t => ({ value: String(t.topic_id), label: <span style={{ textTransform: 'capitalize' }}>{t.label}</span> }))} />
           </div>
           {lin && (
             <div className="grid g-main">
@@ -95,6 +99,7 @@ export default function Lineage() {
           </Card>
         </div>
       )}
+      <NextStep />
     </div>
   )
 }

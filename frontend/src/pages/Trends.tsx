@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { Area, CartesianGrid, ComposedChart, Line, ReferenceArea, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { Sparkles } from 'lucide-react'
-import { useKeywords, useSummarize, useSummary, useTopic, useTopicSeries, useTopics } from '../hooks/useApi'
-import { Card, ChartOrTable, ChartTip, Empty, Legend, PageHead, Seg, StatusBadge } from '../components/ui'
+import { useKeywords, useSituation, useSummarize, useSummary, useTopic, useTopicSeries, useTopics } from '../hooks/useApi'
+import { Card, ChartOrTable, ChartTip, Empty, Legend, NextStep, PageHead, Seg, StatusBadge } from '../components/ui'
 import { AXIS_TICK, ORGANIC, PLATFORM_LABEL, PLATFORM_SLOT, RAW } from '../lib/viz'
 import { ist, istShort, num, pct } from '../lib/fmt'
 
@@ -61,11 +62,16 @@ function Keywords() {
 }
 
 export default function Trends() {
-  const [sort, setSort] = useState<'rising' | 'volume' | 'coordinated'>('rising')
-  const { data } = useTopics(sort, 40)
-  const topics: any[] = data?.topics ?? []
-  const [sel, setSel] = useState<number | undefined>()
+  const [params, setParams] = useSearchParams()
+  const sector = params.get('sector') ?? ''
+  const [sort, setSort] = useState<'rising' | 'volume' | 'coordinated'>((params.get('sort') as any) || 'rising')
+  const { data } = useTopics(sort, sector ? 200 : 40)
+  const { data: sit } = useSituation()
+  const topics: any[] = (data?.topics ?? []).filter((t: any) => !sector || sit?.topic_sectors?.[String(t.topic_id)] === sector)
+  const [sel, setSel] = useState<number | undefined>(params.get('topic') ? Number(params.get('topic')) : undefined)
+  useEffect(() => { const t = params.get('topic'); if (t) setSel(Number(t)) }, [params])
   useEffect(() => { if (sel == null && topics.length) setSel(topics[0].topic_id) }, [topics, sel])
+  const clearSector = () => { const p = new URLSearchParams(params); p.delete('sector'); setParams(p); setSel(undefined) }
   const { data: topic } = useTopic(sel)
   const { data: s } = useTopicSeries(sel)
 
@@ -93,7 +99,9 @@ export default function Trends() {
 
   return (
     <div>
-      <PageHead title="Trends" sub="Every topic people are talking about, and whether its growth is genuine." />
+      <PageHead title="Trends" sub="Every topic people are talking about, and whether its growth is genuine."
+        actions={sector && <span className="badge" style={{ fontSize: 13, padding: '6px 10px' }}>Sector: {sit?.sector_names?.[sector] ?? sector}
+          <button className="btn btn-ghost btn-sm" style={{ padding: '0 4px' }} aria-label="Clear sector filter" onClick={clearSector}>✕</button></span>} />
       <div className="grid" style={{ gridTemplateColumns: 'minmax(260px, 360px) minmax(0, 1fr)' }}>
         <Card title="Topics" actions={<Seg label="Sort" value={sort} onChange={v => { setSort(v); setSel(undefined) }} options={[
           { value: 'rising', label: 'Rising' }, { value: 'volume', label: 'Volume' }, { value: 'coordinated', label: 'Coordinated' }]} />}>
@@ -165,6 +173,7 @@ export default function Trends() {
         ) : <Empty>Select a topic.</Empty>}
       </div>
       <Keywords />
+      <NextStep />
     </div>
   )
 }

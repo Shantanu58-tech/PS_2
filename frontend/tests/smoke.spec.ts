@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test'
 // Clicks through every console route over the single-URL server (API + built UI)
 // and fails on uncaught page errors or failed API calls.
 const ROUTES: [string, RegExp][] = [
-  ['/', /Overview/],
+  ['/', /National Situation Room/],
   ['/timeline', /Emotions/],
   ['/platforms', /Platforms/],
   ['/trends', /Trends/],
@@ -38,4 +38,17 @@ test('ledger verify passes and tamper simulation is detected', async ({ page }) 
   await expect(page.getByText('VERIFICATION PASSED')).toBeVisible({ timeout: 90_000 })
   await page.getByRole('button', { name: /Run tamper simulation/ }).click()
   await expect(page.getByText(/Detected:/)).toBeVisible({ timeout: 90_000 })
+})
+
+test('situation room drills down in one click', async ({ page }) => {
+  await page.goto('/')
+  const skip = page.getByText('Explore on my own')
+  if (await skip.isVisible().catch(() => false)) await skip.click()
+  await expect(page.getByText('Situation report · India')).toBeVisible()
+  await page.getByRole('button', { name: /Investigate the group/ }).click()
+  await expect(page.locator('h1').first()).toHaveText(/Coordination/)
+  await page.goto('/')
+  await page.locator('.sector').first().click()
+  await expect(page.locator('h1').first()).toHaveText(/Trends/)
+  await expect(page.getByText(/Sector:/)).toBeVisible()
 })

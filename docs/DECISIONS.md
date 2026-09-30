@@ -311,3 +311,39 @@ team's request.
   column so sample rows stay labelled; real exports default to `synthetic=false`.
 - **UI**: hamburger (☰) toggle collapses the sidebar to icons on desktop and opens a drawer on mobile; the
   logo was simplified to a flat shield with a single eye.
+
+### D-37 National Situation Room and one connected flow
+The team asked for a first page that works as a national situation room and for a visible flow.
+- **`/api/situation`** (`app/analytics/situation.py`) builds one cached aggregate: a plain-language
+  situation report, KPIs, sectors, states, narratives being pushed, and hot topics.
+  - **Sectors.** Each topic is assigned to one of nine sectors by transparent keyword evidence in its
+    label, keywords and sample posts. Levels: critical = a manufactured topic with a high-priority
+    signal; elevated = manufactured or ≥10% coordinated; watch = ≥2% coordinated or burst level ≥3;
+    quiet = no posts.
+  - **States.** A state is inferred only from the public profile location. A state is released only
+    when ≥ K_ANON distinct accounts back it. Its impact counts posts in a manufactured narrative *or
+    replies to one*: the coordinated accounts have no locations, and the real public reacts through
+    replies.
+  - **Hot topics.** Ranked by the busiest hour against the topic's usual hourly rate over the whole
+    window.
+  - **Caching.** The result is cached per data version and warmed at start-up; it takes about 0.3 s
+    on 39k posts.
+- **Analyst review** (`POST /api/alerts/{id}/review`): approve (opens a case), watchlist or dismiss.
+  Every decision goes into the audit trail, and so into the hash chain. This makes the architecture
+  diagram's Analyst Review, Watchlist and Case File branches real. It is allowed in the read-only
+  demo, and is reset on restart.
+- **Network nodes** now carry platform and followers. Edges carry their time. `/api/graph/node/{id}`
+  returns public profile fields, activity per platform, topics, and connected accounts in both
+  directions. It returns no inferred demographics.
+- **UI.**
+  - Uses the team's reference palette (sih30): espresso masthead with a tricolour strip, sand
+    canvas, copper accent.
+  - A numbered flow bar (1 Situation Room → 2 Detect → 3 Investigate → 4 Evidence) sits under the
+    masthead. The same stages group the sidebar, head every page, and drive a "Next in the flow"
+    card on each page.
+  - Deep links (`?topic=`, `?sector=`, `?account=`, `?case=`) make every first-page element one
+    click from its detail.
+- **India map.** It is an equal-area tile grid, not a geographic outline. The `@svg-maps/india`
+  outline that another tool added to the working tree predates the 2019 J&K/Ladakh reorganisation
+  and may not follow the official boundary, which would be a problem on an NTRO demo. The tile grid
+  sidesteps that and keeps small states clickable.

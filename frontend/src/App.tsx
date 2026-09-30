@@ -3,7 +3,7 @@ import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, PlayCircle, X } from 'lucide-react'
 import Layout from './components/Layout'
 import { Loading } from './components/ui'
-import CommandCenter from './pages/CommandCenter'
+import SituationRoom from './pages/SituationRoom'
 
 // Route-level code splitting: only the landing page ships in the first bundle.
 const TimelineEmotions = lazy(() => import('./pages/TimelineEmotions'))
@@ -26,9 +26,9 @@ function MissionBriefing() {
       <div className="card" style={{ maxWidth: 520, width: '100%', padding: 32, textAlign: 'center' }}>
         <div style={{ display: 'flex', justifyContent: 'center' }}><PrahariMark size={64} /></div>
         <h1 id="briefing-title" style={{ fontSize: 30, fontWeight: 800, margin: '14px 0 2px', letterSpacing: '0.06em' }}>PRAHARI</h1>
-        <div className="muted" style={{ marginBottom: 18 }}>प्रहरी · the sentinel for social media narratives</div>
+        <div className="muted" style={{ marginBottom: 18 }}>प्रहरी · National Narrative Situation Room</div>
         <p className="secondary" style={{ margin: '0 auto', fontSize: 15, maxWidth: 420 }}>
-          See what is trending, tell genuine buzz from coordinated campaigns, trace where a story started, and keep every post as tamper-proof evidence.
+          One national picture of what is happening on social media: which narratives are being pushed, by which coordinated groups, and where the impact lands. From that overview, investigate, then secure the evidence.
         </p>
         <div className="row" style={{ marginTop: 26, flexWrap: 'wrap', justifyContent: 'center' }}>
           <button className="btn btn-primary" onClick={() => { setShowBriefing(false); setTourActive(true) }}>
@@ -45,24 +45,24 @@ function GuidedTour() {
   const { tourStep, setTourStep, setTourActive, setOrganicOnly } = useAppStore()
   const navigate = useNavigate()
   const STEPS = [
-    { route: '/', organic: false, title: 'A signal fires',
-      body: 'The top signal is a manufactured surge: a dam-crack rumour pushed by accounts acting in sync. Open "Why it fired" to see what drove its priority.' },
-    { route: '/platforms', organic: false, title: 'Six platforms, one view',
-      body: 'X and Telegram, Instagram and Facebook, Reddit and YouTube. Pick any platform to see its activity, mood, top topics and most active accounts.' },
+    { route: '/', organic: false, title: 'Step 1 · The national picture',
+      body: 'The Situation Room answers three questions at a glance: what is being pushed (Dam Varunapur Evacuate, 93% coordinated), by whom (a group of 72 accounts in sync) and where it lands (by sector and by state). Every tile opens the detail.' },
+    { route: '/platforms', organic: false, title: 'Step 2 · Detect across platforms',
+      body: 'X and Telegram, Instagram and Facebook, Reddit and YouTube in one place, each with its own activity, mood, topics and most active accounts.' },
     { route: '/trends', organic: false, title: 'Manufactured vs organic',
-      body: 'The rumour is marked Manufactured, while the bigger cricket buzz stays Organic. Shaded bands are bursts, the dashed line is the forecast, and trending hashtags sit at the bottom.' },
-    { route: '/coordination', organic: false, title: 'Accounts acting in sync',
-      body: 'This group posts copy-paste text within seconds of each other, on a clock-like rhythm. PRAHARI flags the pattern for review; it never calls anyone a bot.' },
+      body: 'The rumour is marked Manufactured; the bigger cricket buzz stays Organic. Bands are bursts, the dashed line is the forecast, viral hashtags sit at the bottom.' },
     { route: '/timeline', organic: true, title: 'Organic only',
       body: 'The switch in the top bar is now on Organic only. Gray is all activity; colour is what real users feel once coordinated accounts are removed.' },
+    { route: '/coordination', organic: false, title: 'Step 3 · Investigate who is behind it',
+      body: 'This group posts copy-paste text within seconds of each other, on a clock-like rhythm. PRAHARI flags the pattern for review; it never calls anyone a bot.' },
+    { route: '/network', organic: false, title: 'The network, across apps',
+      body: 'Nodes are coloured by platform; press Play to watch the network form over time. Click any account for its followers, connections and activity on every platform.' },
     { route: '/lineage', organic: false, title: 'Where it started',
-      body: 'The rumour first appeared on Telegram and jumped to X minutes later. Cropped and re-compressed copies of its image are matched automatically.' },
-    { route: '/network', organic: false, title: 'Who spreads it',
-      body: 'Accounts acting in sync carry a red ring. Scroll down to see the rumour hop from the coordinated group into other communities, getting more anxious as it goes.' },
-    { route: '/ledger', organic: false, title: 'Tamper-proof evidence',
-      body: 'Click Verify integrity, then run the Tamper test: changing a single character in a copy is caught at that exact post.' },
-    { route: '/cases', organic: false, title: 'Build a case',
-      body: 'Start a case from any signal to get a ready-to-share evidence pack, with a draft legal certificate.' },
+      body: 'First seen on Telegram, then X twelve minutes later, then YouTube, Facebook, Reddit and Instagram. Edited copies of the image are matched automatically.' },
+    { route: '/cases', organic: false, title: 'Step 4 · Evidence',
+      body: 'Approving a signal opens a case: a ready-to-share evidence pack with ledger references and a draft legal certificate.' },
+    { route: '/ledger', organic: false, title: 'Tamper-proof',
+      body: 'Verify integrity, then run the tamper test: one changed character in a copy is caught at that exact post.' },
   ]
   const step = STEPS[tourStep]
   useEffect(() => {
@@ -102,7 +102,7 @@ export default function App() {
       <Layout>
         <Suspense fallback={<Loading label="Loading view" />}>
         <Routes>
-          <Route path="/" element={<CommandCenter />} />
+          <Route path="/" element={<SituationRoom />} />
           <Route path="/timeline" element={<TimelineEmotions />} />
           <Route path="/trends" element={<Trends />} />
           <Route path="/platforms" element={<Platforms />} />

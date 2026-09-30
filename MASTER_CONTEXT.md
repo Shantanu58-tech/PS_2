@@ -266,25 +266,29 @@ k-anonymity (Sweeney 2002); differential privacy (Dwork 2006).
 
 ## 9. Demo script (about 3 min)
 The full click-by-click walkthrough and the video script are in the shared doc
-"PRAHARI — Demo Walkthrough & Video Script". Short version:
+"PRAHARI — Demo Walkthrough & Video Script". The console follows one numbered flow, shown in the
+bar under the masthead: **1 Situation Room → 2 Detect → 3 Investigate → 4 Evidence**. Every page
+ends with a "Next in the flow" card, and every tile on the first page opens its detail in one click.
 
-1. **About PRAHARI** pop-up → **Take the guided tour** (9 steps), or explore on your own.
-2. **Overview**: the top signal "Dam Varunapur Evacuate" is a *Manufactured surge*; open **Why it fired**.
-   The cricket buzz is bigger but *Organic*.
-3. **Platforms**: all six sources side by side; open Telegram, then Facebook (official export).
-4. **Trends**: Manufactured vs Organic badges, burst band, dashed forecast; **Viral hashtags** at the bottom.
-5. **Coordination**: why the group was flagged (posting in sync, copy-paste text, robotic cadence).
-6. Flip **All activity / Organic only** in the top bar: Emotions and Network change. On Emotions, filter
-   by platform and switch to **Comments**.
-7. **Network**: red rings, then **How it spread between groups** (anxiety rises as it spreads).
-8. **Lineage**: Telegram → X (+12 min) → YouTube → Facebook → Reddit → Instagram; image copies matched.
-9. **Evidence ledger**: **Verify integrity** passes → **Run tamper simulation** is caught at the exact post.
-10. **Cases**: start a case → evidence pack + draft certificate.
+1. **Situation Room** (first page): the auto-written situation report says what is being pushed
+   ("Dam Varunapur Evacuate", 93% coordinated), by whom (72 accounts in sync), where it travelled
+   (Telegram → X +12 min → YouTube → Facebook → Reddit → Instagram) and who reacted (223 users,
+   59% anxiety, Maharashtra and Telangana). Below: four KPIs, the India state map (exposure,
+   anxiety or posts; click a state), "Narratives being pushed" with the group and amplifiers, the
+   sector-wise impact matrix (Critical Infrastructure = CRITICAL), signals for analyst review
+   (Approve → case, Watchlist, Dismiss), hot topics and the amplification gap.
+2. **Detect**: Platforms (six sources), Trends (Manufactured vs Organic, bursts, forecast, viral
+   hashtags; opened from a sector it is filtered to that sector), Emotions (platform and comment filters).
+3. **Investigate**: Coordination (why the group was flagged), Network (colour by platform, **Play the
+   week** to watch it form, click any account for followers and cross-platform connections), Lineage,
+   Audience.
+4. **Evidence**: approve a signal → case with evidence pack and draft certificate; Evidence ledger
+   **Verify integrity** → **Run tamper simulation** is caught at the exact post.
 
-Console map: Monitor (Overview, Platforms, Trends, Emotions) · Investigate (Coordination, Network,
-Lineage, Audience) · Evidence (Cases, Evidence ledger). The ☰ button collapses the sidebar to icons.
-Search sits in the top bar. Light theme by default, dark toggle top right. Problem-statement mapping
-and evaluation numbers live in the PPT, not the site.
+Console map: 1 · Situation (Situation Room) · 2 · Detect (Platforms, Trends, Emotions) · 3 · Investigate
+(Coordination, Network, Lineage, Audience) · 4 · Evidence (Cases, Evidence ledger). ☰ collapses the
+sidebar. Colours follow the team reference build (espresso masthead, sand canvas, copper accent) with a
+tricolour strip; light by default, dark toggle top right.
 
 ---
 

@@ -1,16 +1,36 @@
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import { AlertTriangle, CheckCircle2, Info, ShieldAlert, BarChart3, Table2, Loader2 } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import { ArrowRight } from 'lucide-react'
+import { NEXT, stageOf } from '../lib/flow'
 import { useHealth } from '../hooks/useApi'
 
 export function PageHead({ title, sub, actions }: { title: string; sub?: ReactNode; actions?: ReactNode; code?: string }) {
+  const { pathname } = useLocation()
+  const stage = stageOf(pathname)
   return (
     <div className="page-head">
       <div>
+        <div className="page-stage">Step {stage.n} · {stage.label}</div>
         <h1 className="page-title">{title}</h1>
         {sub && <p className="page-sub">{sub}</p>}
       </div>
       {actions && <div className="row-wrap">{actions}</div>}
+    </div>
+  )
+}
+
+/** The next move in the overview -> investigation -> evidence flow, shown at the end of every page. */
+export function NextStep() {
+  const { pathname } = useLocation()
+  const n = NEXT[pathname]
+  if (!n) return null
+  const stage = stageOf(n.to)
+  return (
+    <div className="next-step">
+      <span className="n">{stage.n}</span>
+      <span className="txt"><b>Next in the flow:</b> {n.why}</span>
+      <Link className="btn btn-primary btn-sm" to={n.to}>{n.label}<ArrowRight size={14} /></Link>
     </div>
   )
 }

@@ -32,6 +32,8 @@ export const useEmotions = (organic: boolean, bucket = '1h', topicId?: number, p
   q<any>(['emotions', organic, bucket, topicId, platform, kind],
     `${API}/timeline/emotions?bucket=${bucket}&organic_only=${organic}&kind=${kind}${topicId != null ? `&topic_id=${topicId}` : ''}${platform ? `&platform=${platform}` : ''}`)
 export const useVolume = (bucket = '1h', platform = '') => q<any>(['volume', bucket, platform], `${API}/timeline/volume?bucket=${bucket}${platform ? `&platform=${platform}` : ''}`)
+export const useSituation = () => q<any>(['situation'], `${API}/situation`, { refetchInterval: 60000 })
+export const useNode = (id?: string | null) => useQuery<any>({ queryKey: ['node', id], queryFn: () => getJSON(`${API}/graph/node/${encodeURIComponent(id!)}`), enabled: !!id })
 export const usePlatforms = () => q<any>(['platforms'], `${API}/platforms`, { refetchInterval: 60000 })
 export const usePlatform = (p?: string) => useQuery<any>({ queryKey: ['platform', p], queryFn: () => getJSON(`${API}/platforms/${p}`), enabled: !!p, placeholderData: keepPreviousData })
 export const useKeywords = () => q<any>(['keywords'], `${API}/keywords/trending?limit=10`)
@@ -68,5 +70,19 @@ export function useSummarize(topicId?: number) {
   return useMutation({
     mutationFn: () => postJSON(`${API}/summaries/topic/${topicId}`),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['summary', topicId] }),
+  })
+}
+
+export function useReview() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ alertId, action }: { alertId: number; action: 'approve' | 'watchlist' | 'dismiss' }) =>
+      postJSON(`${API}/alerts/${alertId}/review`, { action }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['alerts'] })
+      qc.invalidateQueries({ queryKey: ['situation'] })
+      qc.invalidateQueries({ queryKey: ['cases'] })
+      qc.invalidateQueries({ queryKey: ['audit'] })
+    },
   })
 }

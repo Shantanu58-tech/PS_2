@@ -40,6 +40,7 @@ GET_ENDPOINTS = [
     "/api/ledger/status", "/api/collectors", "/api/search?q=dam", "/api/traceability", "/api/pipeline/status",
     "/api/platforms", "/api/platforms/x", "/api/keywords/trending", "/api/graph/segment-spread",
     "/api/timeline/emotions?kind=comments", "/api/timeline/emotions?kind=posts&platform=x",
+    "/api/situation",
 ]
 
 
@@ -148,3 +149,38 @@ def test_segment_spread_after_segments_stage(client, analysed_db):
     j = client.get("/api/graph/segment-spread").json()
     assert j["segments"][0]["label"] == "Coordinated group"
     assert j["summary"] == sorted(j["summary"], key=lambda r: r["first_seen"])
+
+
+def test_situation_is_aggregate_and_k_anonymous(client):
+    j = client.get("/api/situation").json()
+    assert {"sitrep", "kpis", "sectors", "states", "narratives", "hot_topics"} <= set(j)
+    assert j["kpis"]["posts_secured"] > 0 and j["kpis"]["platforms"] >= 1
+    levels = {"critical", "elevated", "watch", "normal", "quiet"}
+    assert all(s["level"] in levels for s in j["sectors"])
+    for st in j["states"]:  # a state is released only when enough distinct accounts back it
+        assert st["released"] == (st["posts"] is not None)
+        assert set(st) >= {"state", "released"} and "account_id" not in st
+    for n in j["narratives"]:
+        assert 0 <= n["coordinated_share"] <= 1
+
+
+def test_signal_review_is_audited_and_approve_opens_a_case(client):
+    alert = client.get("/api/alerts").json()["alerts"][0]
+    r = client.post(f"/api/alerts/{alert['alert_id']}/review", json={"action": "watchlist"})
+    assert r.status_code == 200 and r.json()["status"] == "watchlist" and r.json()["ledger_seq"] > 0
+    audit = client.get("/api/audit").json()["entries"]
+    assert any(e["action"] == "signal_watchlist" for e in audit)
+    r = client.post(f"/api/alerts/{alert['alert_id']}/review", json={"action": "approve"})
+    assert r.json()["case"]["case_id"] > 0
+    assert client.post("/api/alerts/999999/review", json={"action": "dismiss"}).status_code == 404
+    assert client.post(f"/api/alerts/{alert['alert_id']}/review", json={"action": "delete"}).status_code == 422
+
+
+def test_network_nodes_carry_platform_and_details(client):
+    g = client.get("/api/graph?max_nodes=40").json()
+    assert all("platform" in n and "followers" in n for n in g["nodes"])
+    node = g["nodes"][0]["id"]
+    d = client.get(f"/api/graph/node/{node}").json()
+    assert d["account_id"] == node and d["platforms"]
+    assert not {"state", "age", "location_text", "inferred_state"} & set(d)
+    assert client.get("/api/graph/node/does-not-exist").status_code == 404

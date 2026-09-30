@@ -2,7 +2,7 @@ import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxi
 import { Lock } from 'lucide-react'
 import { useDemographics } from '../hooks/useApi'
 import { useAppStore } from '../store/app'
-import { Card, ChartOrTable, ChartTip, Empty, InfoPop, PageHead } from '../components/ui'
+import { Card, ChartOrTable, ChartTip, Empty, InfoPop, NextStep, PageHead } from '../components/ui'
 import { AXIS_TICK } from '../lib/viz'
 import { num, titleCase } from '../lib/fmt'
 
@@ -65,6 +65,7 @@ export default function Audience() {
           })}
         </div>
       )}
+      <NextStep />
     </div>
   )
 }

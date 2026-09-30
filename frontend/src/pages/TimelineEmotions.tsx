@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { useCompare, useEmotions, useTopics } from '../hooks/useApi'
-import { Card, ChartTip, Empty, InfoPop, Legend, PageHead, Seg } from '../components/ui'
+import { Card, ChartTip, Empty, InfoPop, Legend, NextStep, PageHead, Seg } from '../components/ui'
 import { AXIS_TICK, EMOTIONS, EMOTION_LABEL, EMOTION_SLOT, PLATFORMS, PLATFORM_LABEL, RAW, type Emotion } from '../lib/viz'
 import { ist, istDay, istShort, pct } from '../lib/fmt'
 
@@ -109,6 +109,7 @@ export default function TimelineEmotions() {
           </details>
         </>
       )}
+      <NextStep />
     </div>
   )
 }

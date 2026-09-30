@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { ExternalLink, FilePlus2, Scale } from 'lucide-react'
 import { useAlerts, useCases, useCreateCase } from '../hooks/useApi'
-import { Card, Empty, PageHead } from '../components/ui'
+import { Card, Empty, NextStep, PageHead } from '../components/ui'
 import { ist } from '../lib/fmt'
 
 export default function CaseFile() {
@@ -10,7 +11,9 @@ export default function CaseFile() {
   const createCase = useCreateCase()
   const cases: any[] = casesData?.cases ?? []
   const alerts: any[] = alertsData?.alerts ?? []
-  const [sel, setSel] = useState<number | undefined>()
+  const [params] = useSearchParams()
+  const [sel, setSel] = useState<number | undefined>(params.get('case') ? Number(params.get('case')) : undefined)
+  useEffect(() => { const c = params.get('case'); if (c) setSel(Number(c)) }, [params])
   useEffect(() => { if (sel == null && cases.length) setSel(cases[0].case_id) }, [cases, sel])
 
   return (
@@ -61,6 +64,7 @@ export default function CaseFile() {
           </Card>
         ) : <Empty>Start a case to see its evidence pack.</Empty>}
       </div>
+      <NextStep />
     </div>
   )
 }

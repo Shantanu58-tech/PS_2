@@ -2,7 +2,7 @@ import asyncio
 
 from fastapi import APIRouter
 
-from app.analytics.graph import graph_payload, segment_spread, spread_frames
+from app.analytics.graph import graph_payload, node_detail, segment_spread, spread_frames
 from app.analytics.graph_store import get_graph_store
 from app.api.deps import fetch_all
 from app.config import settings
@@ -70,3 +70,14 @@ async def get_segment_spread(topic_id: int | None = None):
             return {"topic_id": None, "segments": [], "frames": [], "summary": []}
         topic_id = top[0]["topic_id"]
     return await asyncio.to_thread(segment_spread, settings.db_path, topic_id)
+
+
+@router.get("/graph/node/{account_id}")
+async def get_node(account_id: str):
+    """Details for one account in the network view: profile, activity per platform, and connections."""
+    from fastapi import HTTPException
+
+    d = await asyncio.to_thread(node_detail, settings.db_path, account_id)
+    if d is None:
+        raise HTTPException(404, "account not found")
+    return d

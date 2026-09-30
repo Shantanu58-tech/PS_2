@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { Search as SearchIcon } from 'lucide-react'
 import { getJSON } from '../hooks/useApi'
-import { Card, PageHead } from '../components/ui'
+import { Card, NextStep, PageHead } from '../components/ui'
 import { PLATFORM_LABEL, PLATFORM_SLOT } from '../lib/viz'
 import { ist } from '../lib/fmt'
 
@@ -49,6 +49,7 @@ export default function Search() {
           )}
         </Card>
       )}
+      <NextStep />
     </div>
   )
 }
