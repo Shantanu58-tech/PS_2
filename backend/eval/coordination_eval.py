@@ -73,7 +73,7 @@ def ablation(db: str, truth: set[str]) -> list[dict]:
     import app.analytics.coordination as co
 
     rows = []
-    tmp = Path(tempfile.mkdtemp(prefix="prahari_abl_"))
+    tmp = Path(tempfile.mkdtemp(prefix="deepastambha_abl_"))
     try:
         scratch = str(tmp / "abl.db")
         with sqlite3.connect(db) as src, sqlite3.connect(scratch) as dst:

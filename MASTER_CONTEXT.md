@@ -4,7 +4,7 @@
 **Team MOGGERS · VIT Pune · Smart India Hackathon 2026**
 **Problem Statement 26152 "Social Media Analytics" · NTRO · Category: Software · Theme: Blockchain & Cybersecurity**
 
-- **Live demo:** https://prahari-h849.onrender.com (the URL keeps the old project name; see §13)
+- **Live demo:** https://deepastambha.onrender.com (the URL keeps the old project name; see §13)
 - **Code:** https://github.com/Shantanu58-tech/PS_2
 - **Walkthrough and video script:** shared doc "DEEPASTAMBHA — Demo Walkthrough & Video Script"
 - **Screen-recorded demo:** `demo_video/deepastambha_demo.mp4` (captioned, about 3 min; not in git)
@@ -37,8 +37,8 @@ emblem is a lamp tower inside a round seal:
 - the **saffron flame** with listening arcs is the watch;
 - a **green base line** completes the tricolour.
 
-We moved away from the earlier name "Prahari" because BSF, RPF and UP Police apps already use it,
-and so do several SIH 2026 teams. A search found no product named Deepastambha.
+We chose a name no one else uses: common "guard/sentinel" names are taken by several government apps
+and by other SIH 2026 teams. A search found no product named Deepastambha.
 
 **Thesis: coordination-adjusted analytics.** Every team will build the five PS components. We tie
 them together with one idea: **every view can be shown as all activity or organic only**, with
@@ -426,8 +426,8 @@ voice-over are in the shared doc.
     start-up.
   - A Cloudflare cron Worker keeps it awake 24/7.
   - Telegram, Gemini and HF credentials are Render secrets.
-  - Infrastructure names keep the old name so nothing breaks: `prahari-h849.onrender.com`,
-    `prahari-keepalive`, `ZOROxJODD/prahari-bundle`, `data/prahari.db`.
+  - Infrastructure names keep the old name so nothing breaks: `deepastambha.onrender.com`,
+    `deepastambha-keepalive`, `ZOROxJODD/deepastambha-bundle`, `data/deepastambha.db`.
   - TRIVENI runs on a separate account and is untouched.
 - **Repositories.** `Shantanu58-tech/PS_2` is canonical. `OMEExZORO/PS_2` is the deploy mirror. Both
   always get the same commits.

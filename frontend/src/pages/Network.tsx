@@ -159,6 +159,9 @@ export default function Network() {
   const [hidden, setHidden] = useState<Set<string>>(new Set())
   const [cursor, setCursor] = useState<number | null>(null)  // time-lapse position (ms); null = everything
   const [playing, setPlaying] = useState(false)
+  const fg = useRef<any>(null)
+  const fitted = useRef(false)
+  const mapH = width < 560 ? 360 : 470
 
   const colors = useMemo(() => ({
     comm: COMMUNITY_TOKENS.map(cssVar), other: cssVar('--neutral-series'), ring: cssVar('--critical'),
@@ -206,6 +209,16 @@ export default function Network() {
 
   const present = PLATFORMS.filter(p => base.nodes.some((n: any) => n.platform === p))
   const maxPr = Math.max(0.0001, ...base.nodes.map((n: any) => n.pagerank))
+  // the dozen most central accounts always carry a name tag, so the map reads without hovering
+  const labelled = useMemo(() => new Set([...base.nodes].sort((a: any, b: any) => b.pagerank - a.pagerank).slice(0, 8).map((n: any) => n.id)), [base])
+  useEffect(() => { fitted.current = false }, [g, hidden])
+  // keep stray components close so zoom-to-fit frames the network, not the empty space around it
+  useEffect(() => {
+    const f = fg.current
+    if (!f) return
+    f.d3Force('charge')?.strength(-28).distanceMax(260)
+    f.d3Force('center')?.strength?.(0.9)
+  }, [base])
   const fill = (n: any) => colorBy === 'platform' ? (colors.plat[n.platform] ?? colors.other) : (n.slot >= 0 ? colors.comm[n.slot] : colors.other)
   const toggle = (p: string) => setHidden(h => { const x = new Set(h); if (x.has(p)) x.delete(p); else x.add(p); return x })
 
@@ -232,16 +245,17 @@ export default function Network() {
               onChange={e => { setPlaying(false); const v = Number(e.target.value); setCursor(v >= base.t1 ? null : v) }} style={{ flex: 1, accentColor: 'var(--accent)' }} />
             <span className="muted tnum" style={{ fontSize: 12, minWidth: 110, textAlign: 'right' }}>{cursor == null ? 'whole week' : istShort(new Date(cursor).toISOString())}</span>
           </div>
-          <div ref={box} className={isFetching ? 'loading-hold' : ''} style={{ height: 470, borderRadius: 8, overflow: 'hidden', background: 'var(--surface-1)', position: 'relative', border: '1px solid var(--hairline)' }}>
+          <div ref={box} className={isFetching ? 'loading-hold' : ''} style={{ height: mapH, borderRadius: 8, overflow: 'hidden', background: 'var(--surface-1)', position: 'relative', border: '1px solid var(--hairline)' }}>
             {base.nodes.length === 0 ? <Empty>No interactions yet.</Empty> : (
               <ForceGraph2D
-                width={width} height={470} graphData={data} backgroundColor={colors.bg}
+                ref={fg} width={width} height={mapH} graphData={data} backgroundColor={colors.bg}
                 nodeId="id" cooldownTicks={120} d3VelocityDecay={0.35}
+                onEngineStop={() => { if (!fitted.current && fg.current) { fitted.current = true; fg.current.zoomToFit(500, 36) } }}
                 linkColor={() => colors.link} linkWidth={(l: any) => Math.min(3, 0.5 + l.weight / 4)}
                 linkDirectionalArrowLength={2.5} linkDirectionalArrowRelPos={1}
                 linkDirectionalParticles={(l: any) => (playing && cursor != null && cursor - l.t < (base.t1 - base.t0) / 40 ? 2 : 0)}
                 linkDirectionalParticleWidth={2.5} linkDirectionalParticleColor={() => colors.ring}
-                nodeLabel={(n: any) => `@${n.id} · ${PLATFORM_LABEL[n.platform] ?? n.platform}${n.followers != null ? ` · ${num(n.followers)} followers` : ''}${n.coordinated ? ' · in sync' : ''}`}
+                nodeLabel={(n: any) => `@${n.handle ?? n.id} · ${PLATFORM_LABEL[n.platform] ?? n.platform}${n.followers != null ? ` · ${num(n.followers)} followers` : ''}${n.coordinated ? ' · in sync' : ''}`}
                 onNodeHover={(n: any) => setHover(n)}
                 onNodeClick={(n: any) => openNode(n.id)}
                 nodeCanvasObject={(n: any, ctx, scale) => {
@@ -251,14 +265,21 @@ export default function Network() {
                   ctx.lineWidth = 2 / scale; ctx.strokeStyle = colors.bg; ctx.stroke()
                   if (n.coordinated) { ctx.beginPath(); ctx.arc(n.x, n.y, r + 2.5, 0, 2 * Math.PI); ctx.lineWidth = 2; ctx.strokeStyle = colors.ring; ctx.stroke() }
                   if (n.id === selected) { ctx.beginPath(); ctx.arc(n.x, n.y, r + 5, 0, 2 * Math.PI); ctx.lineWidth = 2.5; ctx.strokeStyle = colors.label; ctx.stroke() }
-                  if (r > 9 && scale > 0.8) { ctx.font = `${11 / scale}px system-ui`; ctx.fillStyle = colors.label; ctx.fillText(n.id, n.x + r + 3, n.y + 3) }
+                  if (labelled.has(n.id) || n.id === selected) {
+                    const fs = 11 / scale, text = `@${n.handle ?? n.id}`
+                    ctx.font = `600 ${fs}px system-ui`
+                    const w = ctx.measureText(text).width, x = n.x + r + 3 / scale, y = n.y
+                    ctx.globalAlpha = 0.85; ctx.fillStyle = colors.bg
+                    ctx.fillRect(x - 2 / scale, y - fs * 0.7, w + 4 / scale, fs * 1.4); ctx.globalAlpha = 1
+                    ctx.fillStyle = colors.label; ctx.textBaseline = 'middle'; ctx.fillText(text, x, y)
+                  }
                 }}
                 nodePointerAreaPaint={(n: any, color, ctx) => { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(n.x, n.y, 12, 0, 2 * Math.PI); ctx.fill() }}
               />
             )}
             {hover && (
               <div className="chart-tip" style={{ position: 'absolute', top: 10, left: 10 }}>
-                <div className="t">@{hover.id}</div>
+                <div className="t">@{hover.handle ?? hover.id}</div>
                 <div className="r"><span>Platform</span><span>{PLATFORM_LABEL[hover.platform] ?? hover.platform}</span></div>
                 <div className="r"><span>Followers</span><span className="tnum">{hover.followers != null ? num(hover.followers) : '—'}</span></div>
                 <div className="r"><span>Interactions</span><span className="tnum">{hover.degree}</span></div>
@@ -273,11 +294,11 @@ export default function Network() {
           <Card title="Top influencers" sub={organicOnly ? 'organic accounts only' : 'all activity'}
             actions={<InfoPop>Influence combines how far an account's posts travel (replies, reposts and forwards, direct or indirect) with its position in the network. The arrow shows how its rank changes when you flip the All activity / Organic only switch.</InfoPop>}>
             <table className="tbl">
-              <thead><tr><th>#</th><th>Account</th><th className="num">Reach</th><th className="num">Change</th></tr></thead>
+              <thead><tr><th>#</th><th>Account</th><th className="num">Reach <InfoPop>Accounts that replied to, reposted or forwarded it, directly or one step removed.</InfoPop></th><th className="num">Change</th></tr></thead>
               <tbody>{(inf?.influencers ?? []).map((k: any) => (
                 <tr key={k.account_id}>
                   <td className="tnum">{k.rank}</td>
-                  <td style={{ cursor: 'pointer' }} onClick={() => openNode(k.account_id)}>@{k.account_id}
+                  <td style={{ cursor: 'pointer' }} onClick={() => openNode(k.account_id)}>@{k.handle ?? k.account_id}
                     {k.coordinated && <div style={{ marginTop: 3 }}><StatusBadge status="critical">In sync</StatusBadge></div>}
                   </td>
                   <td className="num">{num(k.cascade_size)}</td>
@@ -286,11 +307,13 @@ export default function Network() {
               ))}</tbody>
             </table>
           </Card>
-          <Card title="Bridges" sub="accounts linking otherwise separate groups">
-            <table className="tbl"><tbody>{(inf?.bridges ?? []).slice(0, 5).map((b: any) => (
-              <tr key={b.account_id} style={{ cursor: 'pointer' }} onClick={() => openNode(b.account_id)}><td>@{b.account_id}</td><td className="num muted">{b.communities_touched} groups</td></tr>
-            ))}</tbody></table>
-          </Card>
+          {(inf?.bridges ?? []).length > 0 && (
+            <Card title="Bridges" sub="accounts linking otherwise separate groups">
+              <table className="tbl"><tbody>{(inf?.bridges ?? []).slice(0, 5).map((b: any) => (
+                <tr key={b.account_id} style={{ cursor: 'pointer' }} onClick={() => openNode(b.account_id)}><td>@{b.handle ?? b.account_id}</td><td className="num muted">{b.communities_touched} groups</td></tr>
+              ))}</tbody></table>
+            </Card>
+          )}
         </div>
       </div>
 
@@ -305,7 +328,7 @@ export default function Network() {
                 <ResponsiveContainer>
                   <LineChart data={spread.frames} margin={{ top: 6, right: 8, left: -16, bottom: 0 }}>
                     <CartesianGrid stroke="var(--hairline)" vertical={false} />
-                    <XAxis dataKey="hour" tick={AXIS_TICK} tickFormatter={v => istShort(v)} minTickGap={70} axisLine={{ stroke: 'var(--axis)' }} tickLine={false} />
+                    <XAxis dataKey="hour" tick={AXIS_TICK} tickFormatter={v => istShort(v)} minTickGap={100} axisLine={{ stroke: 'var(--axis)' }} tickLine={false} />
                     <YAxis tick={AXIS_TICK} axisLine={false} tickLine={false} width={44} />
                     <Tooltip content={<ChartTip fmtLabel={(l: string) => ist(l)} />} />
                     <Line type="stepAfter" dataKey="posts" name="Posts" stroke="var(--s1)" strokeWidth={2} dot={false} isAnimationActive={false} />

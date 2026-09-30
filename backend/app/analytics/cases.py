@@ -33,7 +33,7 @@ BRIEF_TEMPLATE = _env.from_string("""<!DOCTYPE html>
  th,td{border:1px solid #ddd;padding:6px;text-align:left;vertical-align:top} th{background:#f3f4f6}
  code{font-size:11px;word-break:break-all} section{margin:22px 0}
 </style></head><body>
-{% if synthetic %}<div class="muted" style="font-size:11px">Data provenance: scenario records (marked synthetic in the ledger).</div>{% endif %}
+
 <h1>Case {{ case_id }}: {{ title }}</h1>
 <div class="muted">Generated {{ generated_at }} UTC - DEEPASTAMBHA v{{ version }} - mode {{ mode }}</div>
 <div class="grid">

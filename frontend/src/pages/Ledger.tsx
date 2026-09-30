@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { Bitcoin, Bomb, KeyRound, Lock, Search as SearchIcon, ShieldCheck, Stamp } from 'lucide-react'
+import { Bitcoin, Bomb, Dices, KeyRound, Lock, Search as SearchIcon, ShieldCheck, Stamp } from 'lucide-react'
 import { getJSON, postJSON, useAudit, useCheckpoints, useLedgerStatus } from '../hooks/useApi'
 import { Card, InfoPop, Kpi, NextStep, PageHead, StatusBadge } from '../components/ui'
 import { ist, num } from '../lib/fmt'
@@ -16,7 +16,7 @@ export default function Ledger() {
   const [tamper, setTamper] = useState<any>(null)
   const [busy, setBusy] = useState<'' | 'verify' | 'tamper' | 'proof'>('')
   const [err, setErr] = useState('')
-  const [seq, setSeq] = useState('150')
+  const [seq, setSeq] = useState('')
   const [proof, setProof] = useState<any>(null)
 
   const run = async (kind: 'verify' | 'tamper') => {
@@ -88,8 +88,13 @@ export default function Ledger() {
           </table>
         </Card>
         <Card title="Proof of inclusion" sub="prove a single post is part of a signed seal">
-          <div className="row">
-            <input className="input" style={{ width: 140 }} inputMode="numeric" value={seq} onChange={e => setSeq(e.target.value.replace(/\D/g, ''))} aria-label="Record sequence number" />
+          <p className="muted" style={{ fontSize: 13, margin: '0 0 10px' }}>
+            Every collected post gets a running number in the evidence chain, from 1 to {num(status?.last_seq)}. Enter one (a case file lists the numbers of its posts) or pick one at random.
+          </p>
+          <div className="row-wrap">
+            <label className="row" style={{ gap: 6 }}><span className="muted" style={{ fontSize: 13 }}>Post #</span>
+              <input className="input" style={{ width: 120 }} inputMode="numeric" placeholder="e.g. 1024" value={seq} onChange={e => setSeq(e.target.value.replace(/\D/g, ''))} aria-label="Post number in the evidence chain" /></label>
+            <button className="btn btn-sm" disabled={!status?.last_seq} onClick={() => setSeq(String(1 + Math.floor(Math.random() * (status?.last_seq ?? 1))))}><Dices size={14} />Random post</button>
             <button className="btn" disabled={!seq || !!busy} onClick={lookup}><SearchIcon size={14} />Get proof</button>
             <InfoPop>Anyone can check this proof with just the post, this short path and our public key.</InfoPop>
           </div>

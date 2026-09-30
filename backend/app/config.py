@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=(ROOT / ".env", BACKEND_DIR / ".env"), extra="ignore")
 
     mode: str = "replay"
-    db_path: str = "data/prahari.db"
+    db_path: str = "data/deepastambha.db"
     hmac_secret: str = "change-me-32-chars-minimum-secret"
     jwt_secret: str = "change-me-jwt-secret"
     k_anon: int = 10
@@ -33,7 +33,7 @@ class Settings(BaseSettings):
 
     reddit_client_id: str = ""
     reddit_client_secret: str = ""
-    reddit_user_agent: str = "prahari/0.1"
+    reddit_user_agent: str = "deepastambha/0.1"
 
     yt_api_key: str = ""
     hf_token: str = ""

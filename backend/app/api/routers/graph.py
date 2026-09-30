@@ -16,12 +16,14 @@ def _graph(organic_only: bool, since: str | None = None):
 
 @router.get("/graph")
 async def get_graph(organic_only: bool = False, max_nodes: int = 250, since: str | None = None):
+    from app.api.cache import cached
+
     def work() -> dict:
         G = _graph(organic_only, since)
         return {**graph_payload(G, settings.db_path, max_nodes=min(max_nodes, 600)),
                 "organic_only": organic_only, "store": get_graph_store().name}
 
-    return await asyncio.to_thread(work)
+    return await cached(f"graph:{organic_only}:{max_nodes}:{since}", lambda: asyncio.to_thread(work))
 
 
 @router.get("/influencers")
@@ -38,6 +40,13 @@ async def get_influencers(limit: int = 20, organic_only: bool = False):
         row = await fetch_all("SELECT payload_json FROM influence_cache WHERE view=?", (view,))
     payload = json.loads(row[0]["payload_json"]) if row else {"influencers": [], "bridges": []}
     payload["influencers"] = payload["influencers"][:limit]
+    ids = [x["account_id"] for x in payload["influencers"] + payload.get("bridges", [])]
+    if ids:
+        marks = ",".join("?" * len(ids))
+        handles = {r["account_id"]: r["h"] for r in await fetch_all(
+            f"SELECT account_id, MAX(handle) AS h FROM accounts WHERE account_id IN ({marks}) GROUP BY 1", ids)}
+        for x in payload["influencers"] + payload.get("bridges", []):
+            x["handle"] = handles.get(x["account_id"]) or x["account_id"]
     return payload
 
 
@@ -50,7 +59,9 @@ async def get_spread(topic_id: int | None = None):
         if not top:
             return {"topic_id": None, "frames": []}
         topic_id = top[0]["topic_id"]
-    frames = await asyncio.to_thread(spread_frames, settings.db_path, topic_id)
+    from app.api.cache import cached
+
+    frames = await cached(f"spread:{topic_id}", lambda: asyncio.to_thread(spread_frames, settings.db_path, topic_id))
     return {"topic_id": topic_id, "frames": frames}
 
 
@@ -69,7 +80,9 @@ async def get_segment_spread(topic_id: int | None = None):
         if not top:
             return {"topic_id": None, "segments": [], "frames": [], "summary": []}
         topic_id = top[0]["topic_id"]
-    return await asyncio.to_thread(segment_spread, settings.db_path, topic_id)
+    from app.api.cache import cached
+
+    return await cached(f"segspread:{topic_id}", lambda: asyncio.to_thread(segment_spread, settings.db_path, topic_id))
 
 
 @router.get("/graph/node/{account_id}")

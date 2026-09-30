@@ -19,6 +19,24 @@ from pathlib import Path
 BASE = datetime(2024, 11, 4, tzinfo=timezone.utc)
 RUMOUR = datetime(2024, 11, 7, 16, 40, tzinfo=timezone.utc)
 
+
+def set_anchor(anchor: datetime) -> None:
+    """Align with the main scenario generated with --anchor: 7-day window ending at `anchor`."""
+    global BASE, RUMOUR
+    base = anchor.astimezone(timezone.utc).replace(minute=0, second=0, microsecond=0) - timedelta(days=7)
+    BASE, RUMOUR = base, base + timedelta(days=3, hours=16, minutes=40)
+
+
+_used: set[int] = set()
+
+
+def _pid(rng: random.Random, prefix: str) -> str:
+    while True:
+        n = rng.randint(10**9, 10**10 - 1)
+        if n not in _used:
+            _used.add(n)
+            return f"{prefix}_{n}"
+
 IG_POSTS = {
     "cricket": ["What a catch!! #INDvsAUS #TeamIndia", "Stadium vibes tonight #Cricket", "Kohli fans assemble #TeamIndia",
                 "Match day outfit ready #INDvsAUS", "Yeh six dekha kya? #Cricket"],
@@ -67,58 +85,60 @@ def _row(pid: str, author: str, kind: str, text: str, dt: datetime, parent: str 
 
 def instagram(rng: random.Random) -> list[dict]:
     rows: list[dict] = []
-    users = [f"ig_{rng.choice(['priya', 'rahul', 'aditi', 'arjun', 'neha', 'vikram', 'sneha', 'karan'])}_{i}"
+    users = [f"{rng.choice(['priya', 'rahul', 'aditi', 'arjun', 'neha', 'vikram', 'sneha', 'karan'])}_{i}"
              for i in range(320)]
     for day in range(7):
         for _ in range(55):
             topic = rng.choice(list(IG_POSTS))
             dt = BASE + timedelta(days=day, hours=rng.uniform(3, 18))
-            pid = f"ig_{day}_{len(rows)}"
+            pid = _pid(rng, "ig")
             rows.append(_row(pid, rng.choice(users), "reel" if rng.random() < 0.4 else "photo",
                              rng.choice(IG_POSTS[topic]), dt, likes=rng.randint(20, 4000),
                              comments=rng.randint(0, 60), shares=rng.randint(0, 40)))
             for _ in range(rng.randint(0, 3)):
-                rows.append(_row(f"{pid}_c{len(rows)}", rng.choice(users), "comment", rng.choice(IG_COMMENTS),
+                rows.append(_row(_pid(rng, "ig"), rng.choice(users), "comment", rng.choice(IG_COMMENTS),
                                  dt + timedelta(minutes=rng.uniform(2, 240)), parent=pid, likes=rng.randint(0, 30)))
     for i in range(14):  # the rumour arrives as Telegram screenshots
         dt = RUMOUR + timedelta(minutes=35 + rng.uniform(0, 150))
-        pid = f"ig_rumour_{i}"
+        pid = _pid(rng, "ig")
         rows.append(_row(pid, rng.choice(users), "photo", rng.choice(IG_RUMOUR), dt, likes=rng.randint(50, 900),
                          comments=rng.randint(5, 40), shares=rng.randint(10, 200)))
         for _ in range(rng.randint(2, 6)):
-            rows.append(_row(f"{pid}_c{len(rows)}", rng.choice(users), "comment", rng.choice(IG_RUMOUR_COMMENTS),
+            rows.append(_row(_pid(rng, "ig"), rng.choice(users), "comment", rng.choice(IG_RUMOUR_COMMENTS),
                              dt + timedelta(minutes=rng.uniform(1, 90)), parent=pid))
     return rows
 
 
 def facebook(rng: random.Random) -> list[dict]:
     rows: list[dict] = []
-    users = [f"fb_{rng.choice(['sunita', 'rajesh', 'meena', 'anil', 'kavita', 'suresh', 'pooja', 'deepak'])}_{i}"
+    users = [f"{rng.choice(['sunita', 'rajesh', 'meena', 'anil', 'kavita', 'suresh', 'pooja', 'deepak'])}_{i}"
              for i in range(300)]
     for day in range(7):
         for _ in range(45):
             topic = rng.choice(list(FB_POSTS))
             dt = BASE + timedelta(days=day, hours=rng.uniform(1, 17))
-            pid = f"fb_{day}_{len(rows)}"
+            pid = _pid(rng, "fb")
             rows.append(_row(pid, rng.choice(users), "status", rng.choice(FB_POSTS[topic]), dt,
                              likes=rng.randint(2, 600), comments=rng.randint(0, 40), shares=rng.randint(0, 30)))
             for _ in range(rng.randint(0, 4)):
-                rows.append(_row(f"{pid}_c{len(rows)}", rng.choice(users), "comment", rng.choice(FB_COMMENTS),
+                rows.append(_row(_pid(rng, "fb"), rng.choice(users), "comment", rng.choice(FB_COMMENTS),
                                  dt + timedelta(minutes=rng.uniform(2, 300)), parent=pid, likes=rng.randint(0, 20)))
     share_dt = RUMOUR + timedelta(minutes=27)  # forwarded into a residents' group
-    rows.append(_row("fb_rumour_share", "fb_varunapur_residents_group", "share", FB_RUMOUR_SHARE, share_dt,
+    share_id = _pid(rng, "fb")
+    rows.append(_row(share_id, "varunapur_residents_group", "share", FB_RUMOUR_SHARE, share_dt,
                      likes=410, comments=180, shares=950))
     for i in range(90):
-        rows.append(_row(f"fb_rumour_c{i}", rng.choice(users), "comment", rng.choice(FB_RUMOUR_COMMENTS),
-                         share_dt + timedelta(minutes=rng.expovariate(1 / 40)), parent="fb_rumour_share"))
+        rows.append(_row(_pid(rng, "fb"), rng.choice(users), "comment", rng.choice(FB_RUMOUR_COMMENTS),
+                         share_dt + timedelta(minutes=rng.expovariate(1 / 40)), parent=share_id))
     debunk_dt = RUMOUR + timedelta(hours=2, minutes=50)
-    rows.append(_row("fb_debunk", "fb_district_admin_varunapur", "status", FB_DEBUNK, debunk_dt,
+    debunk_id = _pid(rng, "fb")
+    rows.append(_row(debunk_id, "varunapur_district_admin", "status", FB_DEBUNK, debunk_dt,
                      likes=2300, comments=240, shares=3100))
     for i in range(25):
-        rows.append(_row(f"fb_debunk_c{i}", rng.choice(users), "comment",
+        rows.append(_row(_pid(rng, "fb"), rng.choice(users), "comment",
                          rng.choice(["Thank you for clarifying", "Relief!", "People should stop forwarding",
                                      "Thank god it's fake"]),
-                         debunk_dt + timedelta(minutes=rng.uniform(1, 120)), parent="fb_debunk"))
+                         debunk_dt + timedelta(minutes=rng.uniform(1, 120)), parent=debunk_id))
     return rows
 
 
@@ -136,7 +156,10 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="data/samples")
     ap.add_argument("--seed", type=int, default=7)
+    ap.add_argument("--anchor", default="", help="'now' or ISO datetime; match the main scenario's --anchor")
     a = ap.parse_args()
+    if a.anchor:
+        set_anchor(datetime.now(timezone.utc) if a.anchor == "now" else datetime.fromisoformat(a.anchor))
     rng = random.Random(a.seed)
     write(instagram(rng), Path(a.out) / "instagram_export_sample.csv")
     write(facebook(rng), Path(a.out) / "facebook_export_sample.csv")

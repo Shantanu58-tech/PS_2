@@ -6,13 +6,13 @@ import fs from 'fs'
 const base = process.argv[2] || 'http://127.0.0.1:8000'
 const out = process.argv[3] || 'screens'
 fs.mkdirSync(out, { recursive: true })
-const routes = ['/', '/platforms', '/platforms?p=telegram', '/timeline', '/trends', '/coordination', '/network', '/lineage', '/audience', '/cases', '/ledger', '/search?q=dam']
+const routes = ['/', '/situation', '/platforms', '/platforms?p=telegram', '/timeline', '/trends', '/coordination', '/network', '/lineage', '/audience', '/cases', '/ledger', '/search?q=dam']
 const browser = await chromium.launch()
 for (const theme of ['dark', 'light']) {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 })
   await ctx.addInitScript(t => {
-    localStorage.setItem('prahari.theme', JSON.stringify(t))
-    localStorage.setItem('prahari.briefingSeen', 'true')
+    localStorage.setItem('deepastambha.theme', JSON.stringify(t))
+    localStorage.setItem('deepastambha.briefingSeen', 'true')
   }, theme)
   const page = await ctx.newPage()
   const errors = []
@@ -21,7 +21,7 @@ for (const theme of ['dark', 'light']) {
   for (const r of routes) {
     await page.goto(base + r, { waitUntil: 'networkidle' })
     await page.waitForTimeout(r === '/network' ? 4000 : 1200)
-    const name = `${theme}_${r === '/' ? 'home' : r.slice(1).replace(/[?=]/g, '_')}.png`
+    const name = `${theme}_${r === '/' ? 'landing' : r.slice(1).replace(/[?=]/g, '_')}.png`
     await page.screenshot({ path: `${out}/${name}`, fullPage: false })
   }
   if (theme === 'dark') { // also a mobile view and the briefing

@@ -1,7 +1,7 @@
 # Render Blueprint: free Docker web service for the public read-only demo.
 services:
   - type: web
-    name: prahari
+    name: deepastambha
     runtime: docker
     plan: free
     region: singapore

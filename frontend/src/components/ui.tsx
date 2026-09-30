@@ -165,7 +165,20 @@ export function Meter({ value, color = 'var(--accent)', label }: { value: number
 }
 
 export function Loading({ label = 'Loading' }: { label?: string }) {
-  return <div className="row muted" style={{ padding: 16 }}><Loader2 size={14} className="spin" style={{ animation: 'spin 1s linear infinite' }} />{label}…</div>
+  return (
+    <div className="lamp-loader" role="status" aria-live="polite">
+      <svg width="46" height="46" viewBox="0 0 64 64" aria-hidden="true">
+        <path className="flame" d="M32 6.2 C35.9 10.8 36.3 14.1 34.5 16.8 C33.7 18 32.8 18.6 32 18.8 C31.2 18.6 30.3 18 29.5 16.8 C27.7 14.1 28.1 10.8 32 6.2 Z" fill="#FF9933" />
+        <rect x="29" y="19.4" width="6" height="2.2" rx=".6" fill="#3E342F" />
+        <polygon points="28.2,50 35.8,50 34.2,21.4 29.8,21.4" fill="#3E342F" />
+        <g stroke="#3E342F" strokeWidth="2.3" strokeLinecap="round"><line x1="22" y1="44" x2="42" y2="44" /><line x1="24" y1="36.5" x2="40" y2="36.5" /><line x1="26" y1="29" x2="38" y2="29" /></g>
+        <g fill="#FF9933"><circle cx="22" cy="41.7" r="2.1" /><circle cx="42" cy="41.7" r="2.1" /><circle cx="24" cy="34.2" r="2.1" /><circle cx="40" cy="34.2" r="2.1" /><circle cx="26" cy="26.7" r="2.1" /><circle cx="38" cy="26.7" r="2.1" /></g>
+        <rect x="22" y="50" width="20" height="3.6" rx=".8" fill="#3E342F" />
+      </svg>
+      <div className="bar" />
+      <span>{label}…</span>
+    </div>
+  )
 }
 
 /** Empty states never dead-end: they point to the replay (or explain read-only mode). */
@@ -174,7 +187,7 @@ export function Empty({ children }: { children?: ReactNode }) {
   return (
     <div className="empty">
       {children ?? 'No data yet.'}
-      {health && !health.demo_readonly && <div style={{ marginTop: 8 }}><Link to="/">Load data from the Overview →</Link></div>}
+      {health && !health.demo_readonly && <div style={{ marginTop: 8 }}><Link to="/situation">Load data from the Overview →</Link></div>}
     </div>
   )
 }

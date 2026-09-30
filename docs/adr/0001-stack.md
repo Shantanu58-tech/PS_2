@@ -18,7 +18,7 @@ DEEPASTAMBHA has to ingest from four live platforms plus replay datasets. It nee
 | ORM / migrations | SQLAlchemy 2 with Alembic, driver psycopg 3 | sqlalchemy 2.1 |
 | Database | PostgreSQL 16 | 16 |
 | Bus | Redis Streams (redis-py), consumer groups | Redis 7 |
-| Raw archive | Parquet through pyarrow, under `D:\PRAHARI_DATA\raw` | |
+| Raw archive | Parquet through pyarrow, under `D:\DEEPASTAMBHA_DATA\raw` | |
 | Graph compute | NetworkX plus python-igraph (Leiden); edges persisted in Postgres | |
 | NLP | Transformers, MuRIL or XLM-R base, sentence-transformers (LaBSE or multilingual MiniLM) | |
 | Topics | BERTopic with the custom embedder | |

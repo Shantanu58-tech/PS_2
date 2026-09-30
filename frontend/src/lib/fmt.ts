@@ -11,12 +11,13 @@ export function ist(ts?: string | null, opts: Intl.DateTimeFormatOptions = { dat
 export function istShort(ts?: string | null): string {
   if (!ts) return ''
   const d = new Date(ts)
-  return d.toLocaleString('en-IN', { timeZone: IST, day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false })
+  // always with the year, so dates never look undated or backdated
+  return d.toLocaleString('en-IN', { timeZone: IST, day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false })
 }
 
 export function istDay(ts?: string | null): string {
   if (!ts) return ''
-  return new Date(ts).toLocaleDateString('en-IN', { timeZone: IST, day: '2-digit', month: 'short' })
+  return new Date(ts).toLocaleDateString('en-IN', { timeZone: IST, day: '2-digit', month: 'short', year: 'numeric' })
 }
 
 export const num = (v?: number | null, digits = 0) =>

@@ -1,6 +1,10 @@
 """
 DEEPASTAMBHA scenario generator v2 (PRD section 10.1). Fully fictional; every
-object carries synthetic=true and the UI shows a SIMULATED banner.
+object carries synthetic=true. Account and post IDs are neutral random numbers and
+handles look like ordinary users, so nothing in an ID gives the ground truth away.
+With --anchor now (or an ISO date) the 7-day window ends at that moment, so the
+incident lands in the most recent week; without it the fixed Nov 2024 window is
+used (evaluation seeds).
 
 7 days, ~40k posts:
   * Organic background: 3,000 accounts, IST diurnal activity, gamma-distributed
@@ -148,6 +152,12 @@ BIOS = [
     "Cricket fan", "Business owner, investor", "B.Tech 2nd yr student", "Professor of economics",
     "Class 12 student", "Born 1990, marketing professional", "Army veteran", "Film buff",
 ]
+FIRST = ["Aarav", "Priya", "Rohan", "Ananya", "Vikram", "Sneha", "Arjun", "Kavya", "Rahul", "Neha", "Karan",
+         "Isha", "Aditya", "Pooja", "Siddharth", "Meera", "Nikhil", "Riya", "Varun", "Shreya", "Manish", "Divya",
+         "Harsh", "Tanvi", "Kunal", "Aditi", "Imran", "Sana", "Joseph", "Anjali", "Deepak", "Lakshmi", "Ravi",
+         "Fatima", "Sandeep", "Gayatri", "Amit", "Nisha", "Suresh", "Bhavna"]
+LAST = ["Sharma", "Iyer", "Patil", "Reddy", "Nair", "Gupta", "Khan", "Das", "Mehta", "Joshi", "Singh", "Kulkarni",
+        "Menon", "Bose", "Chopra", "Rao", "Verma", "Pillai", "Shaikh", "Bhat", "Mishra", "Ghosh", "Desai", "Kapoor"]
 LOCATIONS = ["Delhi", "Mumbai", "Bangalore", "Pune", "Hyderabad", "Chennai", "Kolkata", "Jaipur",
              "Lucknow", "Ahmedabad", "Patna", "Bhopal", "Kochi", "Guwahati", "Chandigarh", "", ""]
 
@@ -164,13 +174,18 @@ def diurnal_weight(utc_hour: int) -> float:
 
 
 def make_account(i: int, rng: random.Random, prefix: str = "acc", aged: bool = False) -> dict:
+    """An ordinary-looking account. `i` only seeds uniqueness; the caller assigns a neutral ID."""
     platform = rng.choices(["x", "telegram", "reddit", "youtube"], weights=[0.45, 0.25, 0.15, 0.15])[0]
     created_year = rng.randint(2014, 2020) if aged else rng.randint(2017, 2024)
+    first, last = rng.choice(FIRST), rng.choice(LAST)
+    style = rng.randrange(4)
+    handle = [f"{first.lower()}{last.lower()[:1]}{rng.randint(10, 9999)}", f"{first.lower()}_{last.lower()}{rng.randint(1, 99)}",
+              f"the{first.lower()}{rng.randint(100, 999)}", f"{first.lower()}.{last.lower()}"][style]
     return {
         "account_id": f"{prefix}_{i}",
         "platform": platform,
-        "handle": f"{prefix}{i}_{rng.randint(100, 999)}",
-        "display_name": f"{prefix.title()} {i}",
+        "handle": handle,
+        "display_name": f"{first} {last}",
         "bio": rng.choice(BIOS),
         "location_text": rng.choice(LOCATIONS),
         "followers": rng.randint(1000, 20000) if aged else int(rng.lognormvariate(5, 1.2)),
@@ -215,16 +230,33 @@ def make_images(media_dir: Path, seed: int) -> dict[str, str]:
 
 
 def generate_scenario(seed: int, output_path: str, media_dir: str | None = None,
-                      organic_target: int = TARGET_ORGANIC) -> dict:
+                      organic_target: int = TARGET_ORGANIC, anchor: datetime | None = None) -> dict:
     rng = random.Random(seed)
+    # 7-day window: fixed Nov 2024 for evaluation seeds, or ending at `anchor` for a current demo
+    base = BASE_TIME if anchor is None else (
+        anchor.astimezone(timezone.utc).replace(minute=0, second=0, microsecond=0) - timedelta(days=7))
+    t0 = base + (T0 - BASE_TIME)
+    id_pool = rng.sample(range(10000, 99999), N_ACCOUNTS + 200)  # neutral account IDs, shared by everyone
+    used_post_ids: set[int] = set()
+
+    def new_account_id() -> str:
+        return f"acc_{id_pool.pop()}"
+
+    def nid(platform: str) -> str:  # neutral post ID
+        while True:
+            n = rng.randint(10**9, 10**10 - 1)
+            if n not in used_post_ids:
+                used_post_ids.add(n)
+                return f"{platform}_{n}"
+
     out_path = Path(output_path)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     posts: list[dict] = []
     truth: dict = {
-        "scenario_seed": seed, "t0": T0.isoformat(),
+        "scenario_seed": seed, "t0": t0.isoformat(), "window_start": base.isoformat(),
         "coordinated_account_ids": [], "rumour_post_ids": [], "origin_post_id": None,
         "origin_platform": "telegram", "decoy_topic": "cricket", "decoy_post_ids": [],
-        "fan_club_account_ids": [], "bridge_account_id": "acc_bridge_1",
+        "fan_club_account_ids": [], "bridge_account_id": None,
         "image_variant_media_ids": {}, "labels": {
             "anxious_post_ids": [], "sarcasm_post_ids": [], "excitement_post_ids": []},
     }
@@ -235,6 +267,8 @@ def generate_scenario(seed: int, output_path: str, media_dir: str | None = None,
         return [{"media_id": mid, "kind": "image", "local_path": media[mid]}] if mid in media else []
 
     accounts = [make_account(i, rng) for i in range(N_ACCOUNTS)]
+    for a in accounts:
+        a["account_id"] = new_account_id()
     by_id = {a["account_id"]: a for a in accounts}
     langs, lw = zip(*LANG_WEIGHTS)
 
@@ -254,7 +288,7 @@ def generate_scenario(seed: int, output_path: str, media_dir: str | None = None,
         # gamma-distributed (bursty) gaps within the hour
         gaps = [rng.gammavariate(0.6, 1.0) for _ in range(n)]
         total = sum(gaps)
-        t = BASE_TIME + timedelta(hours=h)
+        t = base + timedelta(hours=h)
         acc_time = 0.0
         for g in gaps:
             acc_time += g / total * 3600
@@ -264,7 +298,7 @@ def generate_scenario(seed: int, output_path: str, media_dir: str | None = None,
             tags, pools = TOPICS[topic]
             lang = rng.choices(langs, weights=lw)[0]
             text = rng.choice(pools[lang])
-            post = {"platform": acc["platform"], "post_id": f"org_{len(posts)}", "author_id": acc["account_id"],
+            post = {"platform": acc["platform"], "post_id": nid(acc["platform"]), "author_id": acc["account_id"],
                     "kind": "post", "created_at": ts.isoformat(), "hashtags": [], "account": acc,
                     "lang": lang if lang in ("hi", "ta", "bn") else None, "topic_hint": topic}
             parent = None
@@ -289,37 +323,40 @@ def generate_scenario(seed: int, output_path: str, media_dir: str | None = None,
     coord = []
     for i in range(60):
         a = make_account(10000 + i, rng, prefix="acc", aged=i < 10)
-        a.update(account_id=f"acc_coord_{i}", platform="x", location_text="", bio=rng.choice(["", "News", "Updates"]))
+        a.update(account_id=new_account_id(), platform="x", location_text="", bio=rng.choice(["", "News", "Updates"]))
         coord.append(a)
         by_id[a["account_id"]] = a
     truth["coordinated_account_ids"] = [a["account_id"] for a in coord]
 
-    channel = {"account_id": "acc_tgchannel_1", "platform": "telegram", "handle": "varunapur_updates",
+    channel = {"account_id": new_account_id(), "platform": "telegram", "handle": "varunapur_updates",
                "display_name": "Varunapur Updates", "bio": "Local updates", "location_text": "",
                "followers": 12000, "following": 0, "synthetic": True}
     by_id[channel["account_id"]] = channel
-    origin_id = "rumour_origin_telegram_001"
-    add({"platform": "telegram", "post_id": origin_id, "author_id": "acc_tgchannel_1", "kind": "post",
-         "text": f"{RUMOUR_TEMPLATES[0]} [image: {MEME_OVERLAY}]", "created_at": T0.isoformat(),
+    origin_id = nid("telegram")
+    add({"platform": "telegram", "post_id": origin_id, "author_id": channel["account_id"], "kind": "post",
+         "text": RUMOUR_TEMPLATES[0], "created_at": t0.isoformat(),
          "hashtags": ["#VarunapurDam", "#Emergency"], "account": channel, "media": mref("img_dam_original")})
     truth["origin_post_id"] = origin_id
     truth["rumour_post_ids"].append(origin_id)
     # Telegram forwards by other channels (fwd_from lineage, no ML needed)
     for k in range(6):
-        fch = dict(make_account(30000 + k, rng), account_id=f"acc_tgfwd_{k}", platform="telegram")
-        pid = f"rumour_tg_fwd_{k}"
+        fch = dict(make_account(30000 + k, rng), account_id=new_account_id(), platform="telegram")
+        pid = nid("telegram")
         add({"platform": "telegram", "post_id": pid, "author_id": fch["account_id"], "kind": "forward",
-             "text": RUMOUR_TEMPLATES[0], "created_at": (T0 + timedelta(minutes=2 + 1.5 * k)).isoformat(),
+             "text": RUMOUR_TEMPLATES[0], "created_at": (t0 + timedelta(minutes=2 + 1.5 * k)).isoformat(),
              "origin_post_id": origin_id, "account": fch,
              "media": mref(["img_dam_resize60", "img_dam_watermark"][k % 2]) if k < 2 else []})
         truth["rumour_post_ids"].append(pid)
 
-    amp_start = T0 + timedelta(minutes=12)
+    amp_start = t0 + timedelta(minutes=12)
+    rumour_x_first: list[str] = []
     for i, a in enumerate(coord):
         prev = origin_id
         for j in range(rng.randint(3, 8)):
             ts = amp_start + timedelta(seconds=90 * j + rng.gauss(0, 5) + i * 2)
-            pid = f"rumour_x_{i}_{j}"
+            pid = nid("x")
+            if j == 0:
+                rumour_x_first.append(pid)
             m = mref(["img_dam_q30", "img_dam_crop10"][i % 2]) if (j == 0 and i < 20) else []
             add({"platform": "x", "post_id": pid, "author_id": a["account_id"],
                  "kind": "repost" if j else "post", "text": rng.choice(RUMOUR_TEMPLATES),
@@ -329,30 +366,33 @@ def generate_scenario(seed: int, output_path: str, media_dir: str | None = None,
             prev = pid
 
     # 3. Organic pickup ------------------------------------------------------------
-    rumour_x_first = [p for p in truth["rumour_post_ids"] if p.endswith("_0")]
     for i in range(300):
         a = rng.choice(accounts)
         ts = amp_start + timedelta(seconds=rng.expovariate(1 / 1800) + 120)
-        pid = f"organic_react_{i}"
+        platform = rng.choice(["x", "reddit", "youtube"])
+        pid = nid(platform)
         if rng.random() < 0.15:
             text = rng.choice(SARCASM_DEBUNK)
             truth["labels"]["sarcasm_post_ids"].append(pid)
         else:
             text = rng.choice(ANXIOUS_REPLIES)
             truth["labels"]["anxious_post_ids"].append(pid)
-        add({"platform": rng.choice(["x", "reddit", "youtube"]), "post_id": pid, "author_id": a["account_id"],
+        add({"platform": platform, "post_id": pid, "author_id": a["account_id"],
              "kind": "reply", "text": text, "created_at": ts.isoformat(),
              "parent_post_id": rng.choice(rumour_x_first[:20]), "account": a})
 
     # 4. Organic decoy: cricket-win surge + legitimate fan-club swarm ----------------
-    win = BASE_TIME + timedelta(days=4, hours=14)
-    fans = [dict(make_account(20000 + i, rng), account_id=f"acc_fan_{i}", platform="x") for i in range(40)]
+    win = base + timedelta(days=4, hours=14)
+    fans = [dict(make_account(20000 + i, rng), platform="x") for i in range(40)]
+    for f in fans:
+        f["account_id"] = new_account_id()
     truth["fan_club_account_ids"] = [f["account_id"] for f in fans]
     for i in range(900):
         a = rng.choice(accounts)
         ts = win + timedelta(seconds=rng.expovariate(1 / 1500))
-        pid = f"cricket_{i}"
-        add({"platform": rng.choice(["x", "reddit", "youtube"]), "post_id": pid, "author_id": a["account_id"],
+        platform = rng.choice(["x", "reddit", "youtube"])
+        pid = nid(platform)
+        add({"platform": platform, "post_id": pid, "author_id": a["account_id"],
              "kind": "post", "text": rng.choice(CRICKET_WIN), "created_at": ts.isoformat(),
              "hashtags": ["#INDvsAUS"], "account": a})
         truth["decoy_post_ids"].append(pid)
@@ -360,23 +400,26 @@ def generate_scenario(seed: int, output_path: str, media_dir: str | None = None,
     moments = [win + timedelta(minutes=m) for m in (0, 7, 19, 31)]  # six, wicket, win, trophy
     for f in fans:
         for m in rng.sample(moments, rng.randint(2, 4)):
-            pid = f"fanclub_{f['account_id']}_{int(m.timestamp())}"
+            pid = nid("x")
             add({"platform": "x", "post_id": pid, "author_id": f["account_id"], "kind": "post",
                  "text": rng.choice(FAN_CLUB + CRICKET_WIN), "created_at": (m + timedelta(seconds=rng.uniform(0, 40))).isoformat(),
                  "hashtags": ["#TeamIndia"], "account": f})
             truth["decoy_post_ids"].append(pid)
 
     # 5. Bridge account --------------------------------------------------------------
-    bridge = {"account_id": "acc_bridge_1", "platform": "x", "handle": "bridge_user_1", "display_name": "Bridge User",
+    bridge = {"account_id": new_account_id(), "platform": "x", "handle": "neha_reports", "display_name": "Neha Kulkarni",
               "bio": "Journalist covering sports and civic news", "location_text": "Pune", "followers": 5000,
               "following": 2000, "synthetic": True}
+    truth["bridge_account_id"] = bridge["account_id"]
     cricket_ids = truth["decoy_post_ids"][:400]
+    bridge_ids: list[str] = []
     for i in range(30):
         if i % 2:
             parent, ts = rng.choice(rumour_x_first), amp_start + timedelta(minutes=30 + i)
         else:
             parent, ts = rng.choice(cricket_ids), win + timedelta(minutes=45 + i)
-        add({"platform": "x", "post_id": f"bridge_{i}", "author_id": "acc_bridge_1", "kind": "reply",
+        bridge_ids.append(nid("x"))
+        add({"platform": "x", "post_id": bridge_ids[-1], "author_id": bridge["account_id"], "kind": "reply",
              "text": rng.choice(["Worth verifying before sharing", "Great match highlights", "Following this closely"]),
              "created_at": ts.isoformat(), "parent_post_id": parent, "account": bridge})
     # organic accounts from both communities reply to the bridge at unscripted times
@@ -384,11 +427,11 @@ def generate_scenario(seed: int, output_path: str, media_dir: str | None = None,
         bi = rng.randrange(30)
         a = rng.choice(accounts)
         base = amp_start if bi % 2 else win
-        add({"platform": "x", "post_id": f"bridge_reply_{i}", "author_id": a["account_id"], "kind": "reply",
-             "text": rng.choice(["@bridge_user_1 thanks for the update", "@bridge_user_1 good point",
-                                 "@bridge_user_1 any source for this?"]),
+        add({"platform": "x", "post_id": nid("x"), "author_id": a["account_id"], "kind": "reply",
+             "text": rng.choice([f"@{bridge['handle']} thanks for the update", f"@{bridge['handle']} good point",
+                                 f"@{bridge['handle']} any source for this?"]),
              "created_at": (base + timedelta(hours=1, seconds=rng.expovariate(1 / 3600))).isoformat(),
-             "parent_post_id": f"bridge_{bi}", "account": a})
+             "parent_post_id": bridge_ids[bi], "account": a})
 
     posts.sort(key=lambda p: p["created_at"])
     with open(out_path, "w", encoding="utf-8") as f:
@@ -411,8 +454,12 @@ def main() -> None:
     parser.add_argument("--media-dir", default=settings.media_dir,
                         help="Where synthetic meme images are written ('' to skip)")
     parser.add_argument("--organic", type=int, default=TARGET_ORGANIC, help="Organic background posts")
+    parser.add_argument("--anchor", default="", help="'now' or an ISO datetime: the 7-day window ends here")
     args = parser.parse_args()
-    generate_scenario(args.seed, args.output, args.media_dir or None, args.organic)
+    anchor = None
+    if args.anchor:
+        anchor = datetime.now(timezone.utc) if args.anchor == "now" else datetime.fromisoformat(args.anchor)
+    generate_scenario(args.seed, args.output, args.media_dir or None, args.organic, anchor)
 
 
 if __name__ == "__main__":

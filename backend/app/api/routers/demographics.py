@@ -8,6 +8,20 @@ router = APIRouter()
 
 @router.get("/demographics")
 async def get_demographics(scope: str = "global", organic_only: bool = False):
+    """scope=global (stored aggregates) or scope=topic:<id> (people posting in or replying to a topic)."""
+    if scope.startswith("topic:") or scope == "live":
+        import asyncio
+
+        from app.analytics.demographics import scoped_demographics
+        from app.api.cache import cached
+
+        tid = int(scope.split(":", 1)[1]) if scope.startswith("topic:") else None
+        return await cached(f"demo:{scope}:{organic_only}", lambda: asyncio.to_thread(
+            scoped_demographics, settings.db_path, tid, organic_only))
+    return await _stored(scope, organic_only)
+
+
+async def _stored(scope: str, organic_only: bool):
     """Aggregate-only cohort estimates. No per-account output exists anywhere
     in the API: buckets under K_ANON are withheld (only their number is
     reported) and released counts carry Laplace noise (DP_EPSILON)."""

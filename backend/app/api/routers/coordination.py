@@ -54,8 +54,62 @@ async def get_cluster(cluster_id: int):
         "WHERE ca.cluster_id=? AND ca.score >= 0.7 AND ta.topic_id=? ORDER BY p.created_at LIMIT 25",
         (cluster_id, cluster["topic_id"]),
     )
+    fingerprint = await _fingerprint(cluster_id, cluster["topic_id"])
     return {"cluster": cluster, "accounts": accounts, "timing": heat, "evidence_posts": evidence,
-            "disclaimer": DISCLAIMER}
+            "fingerprint": fingerprint, "disclaimer": DISCLAIMER}
+
+
+async def _fingerprint(cluster_id: int, topic_id: int | None) -> dict:
+    """Synchrony fingerprint: post times of the flagged accounts next to ordinary accounts
+    posting on the same topic in the same window, plus two plain comparisons."""
+    from datetime import datetime
+    from statistics import median
+
+    flagged = await fetch_all(
+        "SELECT p.author_id, p.created_at FROM posts p JOIN coord_accounts ca ON ca.platform=p.platform "
+        "AND ca.account_id=p.author_id JOIN topic_assign ta ON ta.platform=p.platform AND ta.post_id=p.post_id "
+        "WHERE ca.cluster_id=? AND ca.score >= 0.7 AND ta.topic_id=? ORDER BY p.created_at", (cluster_id, topic_id))
+    if not flagged:
+        return {"start": None, "end": None, "flagged": [], "organic": [], "compare": None}
+    start, end = flagged[0]["created_at"], flagged[-1]["created_at"]
+    organic = await fetch_all(
+        "SELECT p.author_id, p.created_at FROM posts p JOIN topic_assign ta ON ta.platform=p.platform "
+        "AND ta.post_id=p.post_id WHERE ta.topic_id=? AND p.created_at BETWEEN datetime(?, '-30 minutes') "
+        "AND datetime(?, '+60 minutes') AND NOT EXISTS (SELECT 1 FROM coord_accounts ca WHERE "
+        "ca.account_id=p.author_id AND ca.score >= 0.7) ORDER BY p.created_at", (topic_id, start, end))
+    if len(organic) < 10:  # a narrative with few ordinary posters: compare with the whole topic
+        organic = await fetch_all(
+            "SELECT p.author_id, p.created_at FROM posts p JOIN topic_assign ta ON ta.platform=p.platform "
+            "AND ta.post_id=p.post_id WHERE ta.topic_id=? AND NOT EXISTS (SELECT 1 FROM coord_accounts ca "
+            "WHERE ca.account_id=p.author_id AND ca.score >= 0.7) ORDER BY p.created_at LIMIT 400", (topic_id,))
+
+    def rows(posts: list[dict], n: int) -> list[dict]:
+        by: dict[str, list[str]] = {}
+        for p in posts:
+            by.setdefault(p["author_id"], []).append(p["created_at"])
+        top = sorted(by.items(), key=lambda kv: -len(kv[1]))[:n]
+        return [{"account_id": a, "times": t} for a, t in top]
+
+    def ts(x: str) -> float:
+        return datetime.fromisoformat(x.replace("Z", "+00:00")).timestamp()
+
+    def stats(posts: list[dict]) -> dict:
+        times = sorted(ts(p["created_at"]) for p in posts)
+        authors = [p["author_id"] for p in sorted(posts, key=lambda p: p["created_at"])]
+        gaps: list[float] = []
+        by: dict[str, list[float]] = {}
+        for p in posts:
+            by.setdefault(p["author_id"], []).append(ts(p["created_at"]))
+        for t in by.values():
+            t.sort()
+            gaps += [b - a for a, b in zip(t, t[1:])]
+        near = sum(1 for i in range(1, len(times)) if times[i] - times[i - 1] <= 60 and authors[i] != authors[i - 1])
+        return {"posts": len(posts), "accounts": len(by),
+                "median_gap_s": round(median(gaps)) if gaps else None,
+                "within_minute": round(near / max(1, len(times) - 1), 3)}
+
+    return {"start": start, "end": end, "flagged": rows(flagged, 24), "organic": rows(organic, 16),
+            "compare": {"flagged": stats(flagged), "organic": stats(organic)}}
 
 
 @router.get("/behaviour")

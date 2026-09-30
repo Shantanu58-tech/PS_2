@@ -1,4 +1,4 @@
-# PRAHARI public demo on Render (free web service: 512 MB RAM, 0.1 CPU).
+# DEEPASTAMBHA public demo on Render (free web service: 512 MB RAM, 0.1 CPU).
 # Build context = repo root. The image carries code and the built console but no
 # private data: start.sh downloads the analysed demo DB and ledger keys from a
 # private Hugging Face dataset (HF_TOKEN env var). No ML models are needed on the

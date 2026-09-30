@@ -12,7 +12,7 @@ _Last verified: 2026-09-30. Every claim below was checked by running the code. M
 
 ---
 
-**Live demo:** https://prahari-h849.onrender.com · **Code:** https://github.com/Shantanu58-tech/PS_2
+**Live demo:** https://deepastambha.onrender.com · **Code:** https://github.com/Shantanu58-tech/PS_2
 
 ## 1. Verified health
 
@@ -24,7 +24,7 @@ _Last verified: 2026-09-30. Every claim below was checked by running the code. M
 | Browser smoke (Playwright, single-URL server) | **11/11** routes and ledger flow pass |
 | Full eval (`make eval`) | complete; about 35 min on CPU; reports in `eval/reports/` |
 | Replay of the demo scenario | 37,353 records → ledger → analytics |
-| Hosted demo | https://prahari-h849.onrender.com: live smoke test passes (all pages, APIs, verify, tamper-sim, case brief, Gemini, read-only guard) |
+| Hosted demo | https://deepastambha.onrender.com: live smoke test passes (all pages, APIs, verify, tamper-sim, case brief, Gemini, read-only guard) |
 
 ## 2. What the previous status report got wrong (corrected)
 - "25/26 tests pass": no Python environment had the dependencies, so **no tests could run**.

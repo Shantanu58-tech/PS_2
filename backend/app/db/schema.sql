@@ -68,6 +68,7 @@ CREATE TABLE IF NOT EXISTS posts (
 CREATE INDEX IF NOT EXISTS idx_posts_time ON posts(created_at);
 CREATE INDEX IF NOT EXISTS idx_posts_platform ON posts(platform);
 CREATE INDEX IF NOT EXISTS idx_posts_author ON posts(author_id);
+CREATE INDEX IF NOT EXISTS idx_posts_parent ON posts(platform, parent_post_id);
 
 CREATE VIRTUAL TABLE IF NOT EXISTS posts_fts USING fts5(
     text,
@@ -268,6 +269,12 @@ CREATE TABLE IF NOT EXISTS segment_labels (
     size INTEGER NOT NULL,
     computed_at TEXT NOT NULL
 );
+
+-- read-path indexes (topic counts, series and bursts per topic were full scans)
+CREATE INDEX IF NOT EXISTS idx_topic_assign_topic ON topic_assign(topic_id);
+CREATE INDEX IF NOT EXISTS idx_topic_series_topic ON topic_series(topic_id, bucket_start);
+CREATE INDEX IF NOT EXISTS idx_bursts_topic ON bursts(topic_id);
+CREATE INDEX IF NOT EXISTS idx_coord_accounts_acc ON coord_accounts(account_id);
 
 CREATE TABLE IF NOT EXISTS summaries (
     scope TEXT NOT NULL,

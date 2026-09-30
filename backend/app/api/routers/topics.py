@@ -17,6 +17,12 @@ def _topic(r: dict) -> dict:
 
 @router.get("/topics")
 async def list_topics(limit: int = 50, sort: str = "volume"):
+    from app.api.cache import cached
+
+    return await cached(f"topics:{sort}:{limit}", lambda: _list_topics(limit, sort))
+
+
+async def _list_topics(limit: int, sort: str):
     import asyncio
 
     from app.analytics.trends import rise_scores

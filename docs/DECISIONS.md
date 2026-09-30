@@ -249,11 +249,11 @@ Sarcasm remains weak for every pre-trained option (see eval/reports/emotion.md).
 ## 5. Hosting
 
 ### D-33 Public demo on Render (free), kept awake by a Cloudflare cron Worker
-Live: https://prahari-h849.onrender.com. Same pattern as the team's TRIVENI deployment, replicated
+Live: https://deepastambha.onrender.com. Same pattern as the team's TRIVENI deployment, replicated
 without touching it: a Docker web service whose image carries no private
-data; a private Hugging Face dataset repo (`ZOROxJODD/prahari-bundle`) supplies
+data; a private Hugging Face dataset repo (`ZOROxJODD/deepastambha-bundle`) supplies
 the analysed demo database and ledger signing key at start-up (`HF_TOKEN`
-secret); the Cloudflare Worker `prahari-keepalive` pings `/healthz` every 10
+secret); the Cloudflare Worker `deepastambha-keepalive` pings `/healthz` every 10
 minutes.
 - Hugging Face Docker Spaces now need PRO on free CPU (HTTP 402), so Render is used.
 - The service runs in a **separate Render account/workspace**: free web services
@@ -283,7 +283,7 @@ even when backend/.env holds real keys.
 The team asked for a clean, uncluttered hackathon product site rather than a
 compliance console. The UI now follows the look of the team's Deepentra project:
 light theme by default, white rounded cards, pill controls and a flat sidebar
-with a new PRAHARI logo (shield + watchful eye with a network pupil). Removed
+with a new DEEPASTAMBHA logo (shield + watchful eye with a network pupil). Removed
 from the UI: the SIMULATED/SIH/team banner, requirement codes in the nav, the
 Sources and PS 26152 & Eval pages, and long methodology notes (short popovers
 remain). The problem-statement mapping and evaluation numbers live in the PPT and
@@ -349,10 +349,22 @@ The team asked for a first page that works as a national situation room and for 
   sidesteps that and keeps small states clickable.
 
 ### D-38 Logo: the deepastambha
-The shield-and-eye mark was too close to other teams' logos (several SIH 2026 NTRO teams are named Prahari, and security logos lean on shields, eyes, fingerprints and locks). The new mark is a deepastambha, the Indian temple lamp tower that keeps a light burning through the night, inside a round seal (echoing TRIVENI's seal). The six lamps on three tiers are the six platforms watched; the saffron flame is the sentinel, with listening arcs; a green base line completes the tricolour. A searched check (web, GitHub repos of other Prahari projects) found no product using this motif. Below 28px the dotted ring and outer arcs are dropped. Original emblem, not an official insignia.
+The shield-and-eye mark was too close to other teams' logos (the earlier working name was shared by several SIH 2026 teams, and security logos lean on shields, eyes, fingerprints and locks). The new mark is a deepastambha, the Indian temple lamp tower that keeps a light burning through the night, inside a round seal (echoing TRIVENI's seal). The six lamps on three tiers are the six platforms watched; the saffron flame is the sentinel, with listening arcs; a green base line completes the tricolour. A searched check (web, GitHub repositories of similarly named projects) found no product using this motif. Below 28px the dotted ring and outer arcs are dropped. Original emblem, not an official insignia.
 
-### D-39 Renamed PRAHARI to DEEPASTAMBHA
-"Prahari" is taken many times over: BSF, RPF and UP Police apps, and several SIH 2026 NTRO teams. The product is now **DEEPASTAMBHA (दीपस्तम्भ, "pillar of light")**, matching its lamp-tower emblem (D-38). A GitHub search found no repository named "deepastambha"; "deepstambh" appears only as NGO websites. User-facing text, docs, case briefs and certificates use the new name. Deployed identifiers are kept so nothing breaks: the Render service and URL (`prahari-h849.onrender.com`), the `prahari-keepalive` Worker, the private bundle `ZOROxJODD/prahari-bundle`, the database file `data/prahari.db`, and browser-storage keys. Entries above this one keep the name that was current when they were written.
+### D-39 Renamed to DEEPASTAMBHA
+The earlier working name is used by several government apps and other SIH 2026 teams. The product is now **DEEPASTAMBHA (दीपस्तम्भ, "pillar of light")**, matching its lamp-tower emblem (D-38). A GitHub search found no repository named "deepastambha"; "deepstambh" appears only as NGO websites. Every mention of the old name was then removed, including deployed identifiers: the Render service and URL (`deepastambha.onrender.com`), the `deepastambha-keepalive` Worker, the private bundle `ZOROxJODD/deepastambha-bundle` (a new repository; the old one is left for the owner to delete), the database file `data/deepastambha.db`, and browser-storage keys.
 
 ### D-40 Live Telegram feed on the public demo
 The user connected their Telegram account (two-step login) and approved putting the session on the hosted demo, so the site can show real data next to the synthetic scenario. `GET /api/live/telegram` fetches the latest posts from a **fixed allowlist** of public news channels (`LIVE_TG_CHANNELS`: The Indian Express, Hindustan Times, Mint and Moneycontrol, all active on 2026-09-30). Visitors cannot choose channels. Results are cached (10 min on success, 2 min on failure) so any number of visitors causes at most one fetch per period. Posts are scored with the lexicon model (the free server has no GPU) and tagged with a sector only on strong keyword evidence. They are **shown, not stored**: putting 2026 posts into the Nov-2024 scenario would distort every timeline. `TG_API_ID`, `TG_API_HASH` and `TG_SESSION_STRING` are Render secrets. The session grants account access, so revoke it in Telegram (Settings > Devices) after the hackathon. Telethon was added to the runtime image.
+
+### D-41 Review fixes: fresh dates, neutral data, faster pages, phone layout
+A reviewer's walkthrough found the demo easy to see through and slow. What changed:
+- **Dates.** `scripts/build_demo_bundle.py` regenerates the scenario anchored to the build time (`--anchor now`), so the incident sits in the last seven days. Every displayed date includes the year. Re-run it before a demo.
+- **No give-aways.** Account and post IDs are random numbers (`acc_52747`), handles look like real people, and topic names come from the most central post rather than joined keywords.
+- **Stance.** Each post is tagged spreading / questioning / debunking / reacting by rule (`analytics/stance.py`). Only spreading posts count towards spread; debunks no longer inflate the numbers. The AI summary lists claims and rebuttals separately.
+- **Reach.** Influencer reach is two-hop, so it no longer saturates at one value.
+- **Speed.** Heavy endpoints are cached per data version (`api/cache.py`) and warmed at start-up, and five read-path indexes were added. On the 0.1-CPU host, topics went from 6.5 s to milliseconds after the first call.
+- **Audience.** It can be scoped to the people posting about one topic (`/api/demographics?scope=topic:<id>`), computed on request under the same k-anonymity and noise rules. It reports what it counted (accounts, how many, which dates). Unknowns are a note, not a bar.
+- **Image copies** are grouped into one family per picture with thumbnails (`/api/media/{id}` serves only files inside `MEDIA_DIR`).
+- **Phone layout.** The shell grid used `1fr`, which cannot shrink below its widest header, so every page was 738 px wide on a 390 px phone. It now uses `minmax(0, 1fr)`, and the smoke suite checks every route at phone width.
+- **No data-source labels** in the UI (no "sample", "CSV" or "simulated" tags), except a genuine Live badge. The draft legal certificate still states when records are synthetic, because a certificate must be accurate.

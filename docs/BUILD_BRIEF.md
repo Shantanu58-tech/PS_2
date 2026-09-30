@@ -30,8 +30,8 @@ Then we also match every table-stakes feature competitors show, so there is noth
 |---|---|
 | OS | Windows (use PowerShell commands, Windows paths) |
 | GPU | RTX 3050, 6 GB VRAM. Train with fp16, seq len 128, batch 16 with gradient accumulation. No model larger than ~300M params for fine-tuning. |
-| Disk | D: has ~70 GB free. Put datasets and model checkpoints under `D:\PRAHARI_DATA` (not in the repo). |
-| Local project path | `D:\PRAHARI` (create it). Do not modify anything inside `D:\SIH`. |
+| Disk | D: has ~70 GB free. Put datasets and model checkpoints under `D:\DEEPASTAMBHA_DATA` (not in the repo). |
+| Local project path | `D:\DEEPASTAMBHA` (create it). Do not modify anything inside `D:\SIH`. |
 | Previous project for reference | `D:\SIH` contains our previous problem statement (TRIVENI, SIH26027) and how it was hosted. **Read only.** |
 | Cloud GPU (optional) | Google Colab. Om may give access. Use it for heavier training runs (see 1.1). |
 | Budget | Near zero. X API is pay-per-use (~$0.005 per post read). Hard budget guard required (see 5.1). |
@@ -45,7 +45,7 @@ Rules for Colab:
 - Detect the GPU at runtime (`torch.cuda.get_device_name`) and pick batch size and precision to match (fp16 on T4, bf16 where supported).
 - Save checkpoints to Google Drive every epoch so a disconnected session can resume. Log the Colab GPU type, runtime, seed and dataset hashes into the eval card so results are reproducible.
 - Upload only datasets with `train_allowed = True`. **Never upload Telegram-sourced data to Colab**, and never upload `.env`, API keys or Telethon session files.
-- After training, export to ONNX int8 on Colab or locally, copy the final model into `D:\PRAHARI_DATA\models`, and record its hash in `docs/EVAL_CARD.md`.
+- After training, export to ONNX int8 on Colab or locally, copy the final model into `D:\DEEPASTAMBHA_DATA\models`, and record its hash in `docs/EVAL_CARD.md`.
 - If you cannot access Colab directly, give Om the ready notebook plus a short list of steps (under 10 lines) to run it, and tell him which files to send back.
 
 ### Code style rules from Om (non-negotiable)
@@ -129,7 +129,7 @@ Replay datasets     -> replay_engine -/     platform, hash)    drop PII)      Re
 | API | FastAPI + Pydantic v2 | Typed contracts, OpenAPI for free |
 | Bus | Redis Streams | Real-time without Kafka's weight; Upstash for hosting |
 | DB | PostgreSQL 16 (+ TimescaleDB if the host supports it, else plain partitions) | Time-series queries, one DB to host |
-| Raw archive | Parquet on local disk (`D:\PRAHARI_DATA\raw`) | Immutable, replayable |
+| Raw archive | Parquet on local disk (`D:\DEEPASTAMBHA_DATA\raw`) | Immutable, replayable |
 | Graph | NetworkX + python-igraph for compute, edges persisted in Postgres | No extra hosted service needed; Neo4j optional later |
 | NLP | Hugging Face Transformers, MuRIL or XLM-R base, sentence-transformers (LaBSE or multilingual MiniLM) | Best Indic code-mixed support that fits 6 GB |
 | Topics | BERTopic with custom embedding model | Dynamic topics, documented method |
@@ -314,7 +314,7 @@ Design: dark, serious, intelligence-console look. Every chart has a "method" too
 ## 7. Phases and gates
 
 ### Phase 0: Setup and reconnaissance
-- Create `D:\PRAHARI`, git init locally, `.gitignore` (env files, data, checkpoints, sessions such as `*.session`), `.env.example`.
+- Create `D:\DEEPASTAMBHA`, git init locally, `.gitignore` (env files, data, checkpoints, sessions such as `*.session`), `.env.example`.
 - Copy the research report to `docs/research/RESEARCH_REPORT.md`.
 - **Read `D:\SIH` read-only**: find its deployment configs (Dockerfiles, `vercel.json`, `render.yaml`, Procfiles, env examples, CI workflows, README deploy notes). Write `docs/HOSTING_NOTES.md` summarising exactly how TRIVENI was hosted, what worked, what hurt. Do not copy secrets.
 - Create agents, `CLAUDE.md`, `PLAN.md`, ADR 0001 (stack), ADR 0002 (hosting approach based on D:\SIH findings).

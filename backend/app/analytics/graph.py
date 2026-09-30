@@ -47,7 +47,14 @@ def compute_kols(G: nx.DiGraph, top_n: int = 20) -> list[dict]:
         bc = {n: 0.0 for n in G.nodes}
     # Edges run interactor -> original author, so the accounts an author set off
     # (repliers, reposters, and theirs) are its ancestors.
-    cascade_size = {n: len(nx.ancestors(G, n)) for n in G.nodes}
+    def two_hop(n: str) -> int:
+        first = set(G.predecessors(n))
+        second = {m for f in first for m in G.predecessors(f)}
+        return len((first | second) - {n})
+
+    # reach within two hops: the full transitive closure saturates on a connected graph
+    # (every account "reaches" almost everyone), which made rankings meaningless
+    cascade_size = {n: two_hop(n) for n in G.nodes}
     # Cascade influence is the primary KOL signal (PRD 8.E); each component
     # is normalised to [0, 1] so no single scale dominates.
     def norm(d: dict) -> dict:
@@ -96,14 +103,17 @@ def graph_payload(G: nx.DiGraph, db_path: str, max_nodes: int = 250) -> dict:
         for acc, plat, n in conn.execute("SELECT author_id, platform, COUNT(*) FROM posts GROUP BY 1, 2"):
             if acc in keep_set and n > home.get(acc, ("", 0))[1]:
                 home[acc] = (plat, n)
-        followers = {a: f for a, f in conn.execute("SELECT account_id, MAX(followers) FROM accounts GROUP BY 1")
-                     if a in keep_set}
+        followers, handles = {}, {}
+        for a, f, h in conn.execute("SELECT account_id, MAX(followers), MAX(handle) FROM accounts GROUP BY 1"):
+            if a in keep_set:
+                followers[a], handles[a] = f, h
     nodes = [
         {"id": n, "degree": round(deg[n], 2), "community": community.get(n, 0),
          "pagerank": round(pr.get(n, 0.0), 5), "coord_score": round(coord.get(n, 0.0) or 0.0, 3),
          "coordinated": (coord.get(n) or 0.0) >= 0.7,
          "behaviour_likelihood": round(behaviour.get(n, 0.0) or 0.0, 3),
-         "platform": home.get(n, ("unknown", 0))[0], "followers": followers.get(n)}
+         "platform": home.get(n, ("unknown", 0))[0], "followers": followers.get(n),
+         "handle": handles.get(n) or n}
         for n in H.nodes
     ]
     edges = [{"source": u, "target": v, "weight": round(d.get("weight", 1.0), 2), "kind": d.get("kind"),
@@ -205,11 +215,24 @@ def compute_segments(db_path: str, top_k: int = 4) -> dict:
         for i, c in enumerate(comms):
             for n in c:
                 member[n] = i + 1 if i < top_k else -1
+        topic_of: dict[str, Counter] = {}
+        for author, label in conn.execute(
+                "SELECT p.author_id, t.label FROM topic_assign ta JOIN posts p ON p.platform=ta.platform "
+                "AND p.post_id=ta.post_id JOIN topics t ON t.topic_id=ta.topic_id WHERE t.nature != 'manufactured'"):
+            topic_of.setdefault(author, Counter())[label] += 1
         labels = [(0, "Coordinated group", len(coord), now)] if coord else []
+        used: set[str] = set()
         for i, c in enumerate(comms[:top_k]):
             plat = Counter(home.get(n) for n in c if home.get(n)).most_common(1)
             where = names.get(plat[0][0], plat[0][0]) if plat else "mixed"
-            labels.append((i + 1, f"Community {'ABCDEFGH'[i]} · mostly {where}", len(c), now))
+            talk: Counter = Counter()
+            for n in c:
+                talk.update(topic_of.get(n, {}))
+            top = next((t for t, _ in talk.most_common() if t not in used), None)
+            if top:
+                used.add(top)
+            name = f"“{top}” crowd · {where}" if top else f"Community {'ABCDEFGH'[i]} · {where}"
+            labels.append((i + 1, name, len(c), now))
         conn.execute("DELETE FROM account_segments")
         conn.execute("DELETE FROM segment_labels")
         conn.executemany("INSERT INTO account_segments (account_id, segment) VALUES (?,?)", member.items())

@@ -40,9 +40,9 @@ const LOGO = () => document.querySelector('svg[aria-label$="logo"]')?.outerHTML 
   const browser = await chromium.launch()
   const ctx = await browser.newContext({ viewport: { width: W, height: H }, recordVideo: { dir: `${out}/raw`, size: { width: W, height: H } } })
   await ctx.addInitScript(() => {
-    localStorage.setItem('prahari.theme', JSON.stringify('light'))
-    localStorage.setItem('prahari.briefingSeen', 'true')
-    localStorage.setItem('prahari.navCollapsed', 'false')
+    localStorage.setItem('deepastambha.theme', JSON.stringify('light'))
+    localStorage.setItem('deepastambha.briefingSeen', 'true')
+    localStorage.setItem('deepastambha.navCollapsed', 'false')
   })
   await ctx.addInitScript(CAPTION_JS)
   const page = await ctx.newPage()
@@ -63,7 +63,7 @@ const LOGO = () => document.querySelector('svg[aria-label$="logo"]')?.outerHTML 
   }
 
   // 0 · title card
-  await page.goto(base + '/', { waitUntil: 'networkidle' })
+  await page.goto(base + '/situation', { waitUntil: 'networkidle' })
   const logo = await page.evaluate(LOGO)
   await card(`<div><div style="transform:scale(3.2);margin-bottom:70px">${logo}</div>
     <div style="font:800 48px Inter,system-ui;letter-spacing:.08em">DEEPASTAMBHA</div>
@@ -112,7 +112,7 @@ const LOGO = () => document.querySelector('svg[aria-label$="logo"]')?.outerHTML 
   await wait(8000)
 
   // 5 · coordination
-  await page.goto(base + '/', { waitUntil: 'networkidle' }); await wait(800)
+  await page.goto(base + '/situation', { waitUntil: 'networkidle' }); await wait(800)
   await page.getByRole('button', { name: /Investigate the group/ }).click(); await wait(1500)
   await cap('Who is behind it? Accounts posting copy-paste text within seconds, on a clock-like rhythm.', 'A signal for review, never a "bot" label')
   await wait(5500)
@@ -128,13 +128,13 @@ const LOGO = () => document.querySelector('svg[aria-label$="logo"]')?.outerHTML 
   await wait(6500)
 
   // 7 · lineage
-  await page.goto(base + '/', { waitUntil: 'networkidle' }); await wait(800)
+  await page.goto(base + '/situation', { waitUntil: 'networkidle' }); await wait(800)
   await page.getByRole('button', { name: /Trace the origin/ }).click(); await wait(1800)
   await cap('The origin: Telegram at 10:10 pm, then X, YouTube, Facebook, Reddit and Instagram.', 'Edited copies of the image are matched automatically')
   await wait(7000)
 
   // 8 · review -> case
-  await page.goto(base + '/', { waitUntil: 'networkidle' }); await wait(800)
+  await page.goto(base + '/situation', { waitUntil: 'networkidle' }); await wait(800)
   await scrollToEl('#signals')
   await cap('The analyst approves the signal. The decision is sealed in the evidence chain.')
   await wait(3500)
@@ -155,14 +155,14 @@ const LOGO = () => document.querySelector('svg[aria-label$="logo"]')?.outerHTML 
   await wait(5000)
 
   // 10 · end card
-  await page.goto(base + '/', { waitUntil: 'networkidle' }); await wait(1500)
+  await page.goto(base + '/situation', { waitUntil: 'networkidle' }); await wait(1500)
   await cap('From a national glance, to the people behind it, to evidence that holds up, in one flow.')
   await wait(5000)
   await cap('')
   await card(`<div><div style="transform:scale(2.6);margin-bottom:56px">${logo}</div>
     <div style="font:800 42px Inter,system-ui;letter-spacing:.08em">DEEPASTAMBHA</div>
     <div style="font-size:18px;margin-top:14px;color:#E4A265">See what is trending · know what is real · prove it</div>
-    <div style="font-size:15px;margin-top:30px;opacity:.75">prahari-h849.onrender.com · github.com/Shantanu58-tech/PS_2</div></div>`)
+    <div style="font-size:15px;margin-top:30px;opacity:.75">deepastambha.onrender.com · github.com/Shantanu58-tech/PS_2</div></div>`)
   await wait(5000)
   await ctx.close()
   await browser.close()

@@ -15,11 +15,11 @@ type Item = { path: string; label: string; icon: ReactNode; count?: (d: any) => 
 
 export const NAV: { group: string; items: Item[] }[] = [
   { group: '1 · Situation', items: [
-    { path: '/', label: 'Situation Room', icon: <Radar size={18} />,
+    { path: '/situation', label: 'Situation Room', icon: <Radar size={18} />,
       count: s => s?.sitrep?.level === 'critical' ? { text: 'Critical', hot: true } : null },
   ] },
   { group: '2 · Detect', items: [
-    { path: '/platforms', label: 'Platforms', icon: <Globe2 size={18} />, count: s => s ? { text: `${s.kpis.platforms} live` } : null },
+    { path: '/platforms', label: 'Platforms', icon: <Globe2 size={18} />, count: s => s ? { text: `${s.kpis.platforms}` } : null },
     { path: '/trends', label: 'Trends', icon: <TrendingUp size={18} />,
       count: s => s?.kpis.manufactured_trends ? { text: `${s.kpis.manufactured_trends} pushed`, hot: true } : null },
     { path: '/timeline', label: 'Emotions', icon: <Activity size={18} /> },
@@ -96,15 +96,15 @@ export default function Layout({ children }: { children: ReactNode }) {
           <button className="hamburger" aria-label="Toggle menu" aria-controls="primary-nav" aria-expanded={navCollapsed ? navOpen : !navCollapsed} onClick={toggleNav}><Menu size={21} /></button>
           <Link to="/" aria-label="DEEPASTAMBHA home" className="row" style={{ gap: 10 }}>
             <DeepastambhaMark size={34} />
-            <span style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15 }}>
+            <span className="brand-word" style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15 }}>
               <span style={{ fontWeight: 800, fontSize: 18, letterSpacing: '0.08em' }}>DEEPASTAMBHA</span>
               <span className="brand-sub">दीपस्तम्भ · National Narrative Situation Room</span>
             </span>
           </Link>
           <TopSearch />
           <Seg label="Which accounts to count" value={organicOnly ? 'organic' : 'raw'} onChange={v => setOrganicOnly(v === 'organic')} options={[
-            { value: 'raw', label: 'All activity' },
-            { value: 'organic', label: 'Organic only' },
+            { value: 'raw', label: <><span className="hide-mobile">All activity</span><span className="mobile-inline">All</span></> },
+            { value: 'organic', label: <><span className="hide-mobile">Organic only</span><span className="mobile-inline">Organic</span></> },
           ]} />
           <span className="hide-mobile"><LiveDot /></span>
           <button className="icon-btn" aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
@@ -121,9 +121,9 @@ export default function Layout({ children }: { children: ReactNode }) {
             <div key={g.group}>
               <div className="nav-group">{g.group}</div>
               {g.items.map(n => {
-                const c = n.path === '/cases' ? (nCases ? { text: `${nCases} open` } : null) : n.count?.(sit)
+                const c = n.path === '/cases' ? (nCases ? { text: `${nCases}` } : null) : n.count?.(sit)
                 return (
-                  <NavLink key={n.path} to={n.path} end={n.path === '/'} title={n.label} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                  <NavLink key={n.path} to={n.path} end title={n.label} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
                     {n.icon}<span>{n.label}</span>{c && <em className={`count ${c.hot ? 'warn' : ''}`} style={{ fontStyle: 'normal' }}>{c.text}</em>}
                   </NavLink>
                 )

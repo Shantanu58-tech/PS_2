@@ -69,11 +69,20 @@ def find_near_duplicate_images(db_path: str, threshold: int = 10) -> list[dict]:
 
 
 def _lineage_from_posts(conn: sqlite3.Connection, posts: list[sqlite3.Row]) -> dict:
+    from app.analytics.stance import STANCES, classify
+
     if not posts:
         return {"platforms": [], "hops": [], "chains": [], "earliest_observed": None, "caveat": CAVEAT}
+    stance = {r["post_id"]: classify(r["text"], r["kind"] if "kind" in r.keys() else "post") for r in posts}
+    stance_counts = {s: sum(1 for v in stance.values() if v == s) for s in STANCES}
+    by_platform: dict[str, dict[str, int]] = {}
+    for r in posts:
+        by_platform.setdefault(r["platform"], {s: 0 for s in STANCES})[stance[r["post_id"]]] += 1
+    # the spread is traced through posts that carry the claim; debunks and questions are shown, not chained
+    spreading = [r for r in posts if stance[r["post_id"]] == "spreading"] or list(posts)
     first_by_platform: dict[str, sqlite3.Row] = {}
     counts: dict[str, int] = {}
-    for r in posts:
+    for r in spreading:
         counts[r["platform"]] = counts.get(r["platform"], 0) + 1
         if r["platform"] not in first_by_platform:
             first_by_platform[r["platform"]] = r
@@ -82,6 +91,7 @@ def _lineage_from_posts(conn: sqlite3.Connection, posts: list[sqlite3.Row]) -> d
     platforms = [
         {"platform": r["platform"], "first_post_id": r["post_id"], "first_seen": r["created_at"],
          "author_id": r["author_id"], "text": r["text"][:280], "n_posts": counts[r["platform"]],
+         "stance": by_platform.get(r["platform"], {}),
          "has_media": bool(conn.execute(
              "SELECT 1 FROM post_media WHERE platform=? AND post_id=?", (r["platform"], r["post_id"])
          ).fetchone())}
@@ -91,16 +101,17 @@ def _lineage_from_posts(conn: sqlite3.Connection, posts: list[sqlite3.Row]) -> d
         {"from": a["platform"], "to": b["platform"], "from_ts": a["created_at"], "to_ts": b["created_at"]}
         for a, b in zip(ordered, ordered[1:])
     ]
-    ids = {r["post_id"] for r in posts}
+    ids = {r["post_id"] for r in spreading}
     chains = [
         {"src": r["origin_post_id"], "dst": r["post_id"], "platform": r["platform"], "ts": r["created_at"]}
-        for r in posts if r["origin_post_id"] and r["origin_post_id"] in ids
+        for r in spreading if r["origin_post_id"] and r["origin_post_id"] in ids
     ][:200]
     return {"platforms": platforms, "hops": hops, "chains": chains, "earliest_observed": t0,
-            "origin_candidate": platforms[0], "n_posts": len(posts), "caveat": CAVEAT}
+            "origin_candidate": platforms[0], "n_posts": len(posts), "n_spreading": len(spreading),
+            "stance_counts": stance_counts, "caveat": CAVEAT}
 
 
-_POST_COLS = "p.platform, p.post_id, p.author_id, p.text, p.created_at, p.origin_post_id"
+_POST_COLS = "p.platform, p.post_id, p.author_id, p.text, p.created_at, p.origin_post_id, p.kind"
 
 
 def topic_lineage(db_path: str, topic_id: int) -> dict:

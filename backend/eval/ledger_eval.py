@@ -20,7 +20,7 @@ FIELDS = ["payload_canonical", "record_hash", "entry_hash", "prev_entry_hash", "
 
 def tamper_trials(db: str, n: int = 1000, seed: int = 7) -> dict:
     rng = random.Random(seed)
-    tmp = Path(tempfile.mkdtemp(prefix="prahari_tamper_eval_"))
+    tmp = Path(tempfile.mkdtemp(prefix="deepastambha_tamper_eval_"))
     try:
         scratch = str(tmp / "scratch.db")
         with sqlite3.connect(db) as src, sqlite3.connect(scratch) as dst:
@@ -59,7 +59,7 @@ def tamper_trials(db: str, n: int = 1000, seed: int = 7) -> dict:
 def verify_timing(sizes: tuple[int, ...] = (10_000, 100_000)) -> list[dict]:
     rows = []
     for n in sizes:
-        tmp = Path(tempfile.mkdtemp(prefix="prahari_verify_"))
+        tmp = Path(tempfile.mkdtemp(prefix="deepastambha_verify_"))
         try:
             db = str(tmp / "ledger.db")
             init_db_sync(db)

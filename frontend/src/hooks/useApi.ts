@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query'
 
-const API = '/api'
+export const API = '/api'
 
 export async function getJSON<T = any>(url: string): Promise<T> {
   const res = await fetch(url)
@@ -46,12 +46,12 @@ export const useSpread = (topicId?: number) => q<any>(['spread', topicId], `${AP
 export const useClusters = () => q<any>(['clusters'], `${API}/coordination/clusters`)
 export const useCluster = (id?: number) => useQuery<any>({ queryKey: ['cluster', id], queryFn: () => getJSON(`${API}/coordination/clusters/${id}`), enabled: id != null })
 export const useBehaviour = () => q<any>(['behaviour'], `${API}/behaviour?limit=20`)
-export const useDemographics = (organic: boolean) => q<any>(['demographics', organic], `${API}/demographics?organic_only=${organic}`)
+export const useDemographics = (organic: boolean, scope = 'global') => q<any>(['demographics', organic, scope], `${API}/demographics?organic_only=${organic}&scope=${encodeURIComponent(scope)}`)
 export const useLineage = () => q<any>(['lineage'], `${API}/lineage`)
 export const useLedgerStatus = () => q<any>(['ledger-status'], `${API}/ledger/status`, { refetchInterval: 30000 })
 export const useCheckpoints = () => q<any>(['checkpoints'], `${API}/ledger/checkpoints?limit=12`)
-export const useAudit = () => q<any>(['audit'], `${API}/audit?limit=20`)
-export const useCases = () => q<any>(['cases'], `${API}/cases`)
+export const useAudit = () => q<any>(['audit'], `${API}/audit?limit=20`, { staleTime: 0, refetchOnMount: 'always' })
+export const useCases = () => q<any>(['cases'], `${API}/cases`, { staleTime: 0, refetchOnMount: 'always' })
 export const useEvalSummary = () => q<any>(['eval'], `${API}/eval/summary`, { staleTime: 5 * 60_000 })
 export const useTraceability = () => q<any>(['traceability'], `${API}/traceability`, { staleTime: 5 * 60_000 })
 export const useCollectors = () => q<any>(['collectors'], `${API}/collectors`, { refetchInterval: 20000 })

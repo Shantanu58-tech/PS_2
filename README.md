@@ -9,7 +9,7 @@
 > Built with military-grade tamper-evident ledgers, advanced behavioral heuristics, and k-anonymized demographic analysis,
 > DEEPASTAMBHA empowers analysts with real-time, actionable insights while maintaining uncompromising ethical standards and data integrity.
 
-**Live demo (public, read-only, synthetic data):** https://prahari-h849.onrender.com  
+**Live demo (public, read-only, synthetic data):** https://deepastambha.onrender.com  
 **Code:** https://github.com/Shantanu58-tech/PS_2
 
 **Core idea: coordination-adjusted analytics.** Every view (sentiment, trends,
@@ -96,7 +96,7 @@ make check-collectors      # one live pull per collector with credentials in .en
 
 Docker: `docker compose up --build` gives one image with the UI and API on port 8000.
 
-Hosted demo: https://prahari-h849.onrender.com (Render free web service, read-only demo mode, kept awake by a Cloudflare cron Worker; see `deploy/render/README.md`).
+Hosted demo: https://deepastambha.onrender.com (Render free web service, read-only demo mode, kept awake by a Cloudflare cron Worker; see `deploy/render/README.md`).
 
 ### Live collectors
 Put credentials in `backend/.env` (see `.env.example`), add targets with

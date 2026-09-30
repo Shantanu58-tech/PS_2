@@ -17,7 +17,17 @@ function SummaryBox({ topicId }: { topicId: number }) {
       <div className="notice">
         <div className="row" style={{ marginBottom: 4 }}><Sparkles size={14} /><b style={{ color: 'var(--ink-1)' }}>AI summary</b></div>
         <div>{data.summary}</div>
-        {data.key_claims?.length > 0 && <ul style={{ margin: '6px 0 0', paddingLeft: 18 }}>{data.key_claims.map((c: string, i: number) => <li key={i}>{c}</li>)}</ul>}
+        <div className="sum-cols">
+          {data.key_claims?.length > 0 && (
+            <div><div className="sum-h claim">What is being claimed</div>
+              <ul>{data.key_claims.map((c: string, i: number) => <li key={i}>{c}</li>)}</ul></div>
+          )}
+          {data.rebuttals?.length > 0 && (
+            <div><div className="sum-h rebut">What pushes back</div>
+              <ul>{data.rebuttals.map((c: string, i: number) => <li key={i}>{c}</li>)}</ul></div>
+          )}
+        </div>
+        <div className="muted" style={{ fontSize: 11.5, marginTop: 6 }}>Claims are what posts say, not verified facts.</div>
       </div>
     )
   }
@@ -114,7 +124,7 @@ export default function Trends() {
                     <span style={{ display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', textTransform: 'capitalize' }}>{t.label}</span>
                     <span className="muted" style={{ fontSize: 12, fontWeight: 400 }}>{num(t.n_posts)} posts</span>
                   </span>
-                  {t.nature === 'manufactured' ? <StatusBadge status="critical">Manufactured</StatusBadge> : <StatusBadge status="good">Organic</StatusBadge>}
+                  {t.nature === 'manufactured' ? <StatusBadge status="critical">Likely coordinated</StatusBadge> : <StatusBadge status="good">Organic</StatusBadge>}
                 </button>
               ))}
             </div>
@@ -126,7 +136,7 @@ export default function Trends() {
             <Card title={<span style={{ textTransform: 'capitalize' }}>{topic.label}</span>}
               sub={<>first seen {ist(topic.first_seen)} · {pct(topic.coordinated_share)} from coordinated accounts</>}
               actions={topic.nature === 'manufactured'
-                ? <StatusBadge status="critical" title="30% or more of posts from coordinated accounts">Manufactured</StatusBadge>
+                ? <StatusBadge status="critical" title="30% or more of posts from coordinated accounts">Likely coordinated</StatusBadge>
                 : <StatusBadge status="good">Organic</StatusBadge>}>
               <ChartOrTable
                 chart={<>
@@ -135,7 +145,7 @@ export default function Trends() {
                     <ResponsiveContainer>
                       <ComposedChart data={chart} margin={{ top: 8, right: 12, left: -16, bottom: 0 }}>
                         <CartesianGrid stroke="var(--hairline)" vertical={false} />
-                        <XAxis dataKey="t" tick={AXIS_TICK} tickFormatter={v => istShort(v)} minTickGap={70} axisLine={{ stroke: 'var(--axis)' }} tickLine={false} />
+                        <XAxis dataKey="t" tick={AXIS_TICK} tickFormatter={v => istShort(v)} minTickGap={100} axisLine={{ stroke: 'var(--axis)' }} tickLine={false} />
                         <YAxis tick={AXIS_TICK} axisLine={false} tickLine={false} width={44} allowDecimals={false} />
                         <Tooltip content={<ChartTip fmtLabel={(l: string) => ist(l)} fmtValue={(v: any) => Array.isArray(v) ? `${v[0].toFixed(1)}–${v[1].toFixed(1)}` : typeof v === 'number' ? v.toFixed(1) : v} />} />
                         {bursts.map((b, i) => <ReferenceArea key={i} x1={snap(b.start)} x2={snap(b.end)} fill="var(--serious)" fillOpacity={0.12} stroke="none" ifOverflow="extendDomain" />)}

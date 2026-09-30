@@ -183,7 +183,7 @@ demographics accuracy and coverage; the bridge rank; a forecast backtest; pipeli
   UI/UX overhaul (planned next, with the team's go-ahead).
 
 ## 9. Where things are
-- Live demo: https://prahari-h849.onrender.com (read-only, synthetic data). Code: https://github.com/Shantanu58-tech/PS_2
+- Live demo: https://deepastambha.onrender.com (read-only, synthetic data). Code: https://github.com/Shantanu58-tech/PS_2
 - Code: `backend/app/` (collectors, pipeline, nlp, analytics, ledger, api), `frontend/src/`.
 - Evidence: `eval/reports/`. Decisions and deviations: `docs/DECISIONS.md`.
 - Run: `make setup && make models && make scenario && make demo` (Windows: `scripts\dev.ps1`).

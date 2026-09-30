@@ -49,7 +49,7 @@ def mini_scenario(tmp_path_factory) -> tuple[str, dict]:
 
     d = tmp_path_factory.mktemp("scenario")
     out = d / "scenario_v1.jsonl"
-    truth = generate_scenario(7, str(out), str(d / "media"), organic_target=3000)
+    truth = generate_scenario(7, str(out), str(d / "media"), organic_target=9000)
     return str(out), {**truth, "_media_dir": str(d / "media"), "_truth": json.loads((d / "truth.json").read_text(encoding="utf-8"))}
 
 

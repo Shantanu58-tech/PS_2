@@ -29,13 +29,22 @@ async def lifespan(app: FastAPI):
 
         task = asyncio.create_task(live_loop(stop))
 
-    async def _warm() -> None:  # the first page's aggregate is cached; build it before the first visitor
+    async def _warm() -> None:  # build the cached views before the first visitor needs them
         from app.analytics.situation import situation
+        from app.api.routers import graph as g, lineage as lin, topics as tp
 
-        try:
-            await asyncio.to_thread(situation, settings.db_path)
-        except Exception:  # an empty database has nothing to warm
-            pass
+        steps = [
+            lambda: asyncio.to_thread(situation, settings.db_path),
+            lambda: tp.list_topics(limit=40, sort="rising"), lambda: tp.list_topics(limit=100, sort="coordinated"),
+            lambda: tp.list_topics(limit=8, sort="rising"), lambda: tp.list_topics(limit=30, sort="coordinated"),
+            lin.lineage_overview, lambda: g.get_graph(organic_only=False, max_nodes=300),
+            lambda: g.get_segment_spread(), lambda: g.get_spread(),
+        ]
+        for step in steps:
+            try:
+                await step()
+            except Exception:  # an empty database has nothing to warm
+                pass
 
     warm = asyncio.create_task(_warm())
     yield

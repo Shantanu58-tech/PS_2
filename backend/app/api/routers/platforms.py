@@ -64,8 +64,14 @@ async def list_platforms():
 
 @router.get("/platforms/{platform}")
 async def platform_detail(platform: str):
+    from app.api.cache import cached
+
     if platform not in PLATFORMS:
         raise HTTPException(404, "unknown platform")
+    return await cached(f"platform:{platform}", lambda: _platform_detail(platform))
+
+
+async def _platform_detail(platform: str):
     topics = await fetch_all(
         "SELECT t.topic_id, t.label, t.nature, COUNT(*) AS n FROM topic_assign ta "
         "JOIN posts p ON p.platform=ta.platform AND p.post_id=ta.post_id JOIN topics t ON t.topic_id=ta.topic_id "

@@ -239,3 +239,63 @@ def compute_demographics(
         )
         conn.commit()
     return {"accounts": len(accounts), "released_rows": len(rows) - n_suppressed, "suppressed": n_suppressed}
+
+
+def scoped_demographics(db_path: str, topic_id: int | None = None, organic_only: bool = False,
+                        rng: np.random.Generator | None = None) -> dict:
+    """Aggregate audience for everyone, or for the people who posted in / replied to one topic.
+
+    Same privacy rules as the stored aggregates: groups under K_ANON are withheld and
+    released counts carry Laplace noise. Nothing per account is returned; the coverage
+    block says what was counted (accounts, not posts), how many, and over which dates."""
+    k = settings.k_anon
+    rng = rng or np.random.default_rng(0)
+    with sqlite3.connect(db_path) as conn:
+        conn.row_factory = sqlite3.Row
+        where, params = "", []
+        if topic_id is not None:
+            where = ("WHERE EXISTS (SELECT 1 FROM posts p LEFT JOIN topic_assign ta ON ta.platform=p.platform "
+                     "AND ta.post_id=p.post_id LEFT JOIN topic_assign tp ON tp.platform=p.platform "
+                     "AND tp.post_id=p.parent_post_id WHERE p.platform=a.platform AND p.author_id=a.account_id "
+                     "AND (ta.topic_id=? OR tp.topic_id=?))")
+            params = [topic_id, topic_id]
+        if organic_only:
+            where += (" AND " if where else "WHERE ") + (
+                "NOT EXISTS (SELECT 1 FROM coord_accounts ca WHERE ca.platform=a.platform "
+                "AND ca.account_id=a.account_id AND ca.score >= 0.7)")
+        accounts = conn.execute(
+            f"SELECT a.account_id, a.platform, a.location_text, a.bio FROM accounts a {where}", params).fetchall()
+        langs = {(p, a): lang for p, a, lang in conn.execute(
+            "SELECT platform, author_id, lang FROM (SELECT platform, author_id, lang, COUNT(*) n FROM posts "
+            "WHERE lang IS NOT NULL GROUP BY 1, 2, 3 ORDER BY n) GROUP BY 1, 2")}
+        span = conn.execute(
+            "SELECT MIN(p.created_at), MAX(p.created_at) FROM posts p" + (
+                " LEFT JOIN topic_assign ta ON ta.platform=p.platform AND ta.post_id=p.post_id "
+                "LEFT JOIN topic_assign tp ON tp.platform=p.platform AND tp.post_id=p.parent_post_id "
+                "WHERE ta.topic_id=? OR tp.topic_id=?" if topic_id is not None else ""),
+            params).fetchone()
+    counts: dict[str, dict[str, int]] = {"geography": {}, "language": {}, "interests": {}, "age": {}}
+    for acc in accounts:
+        geo = _infer_state(acc["location_text"]) or "unknown"
+        counts["geography"][geo] = counts["geography"].get(geo, 0) + 1
+        interest = _infer_interest(acc["bio"])
+        counts["interests"][interest] = counts["interests"].get(interest, 0) + 1
+        age = _infer_age_bracket(acc["bio"])
+        if age:
+            counts["age"][age] = counts["age"].get(age, 0) + 1
+        lang = langs.get((acc["platform"], acc["account_id"]))
+        if lang:
+            counts["language"][lang] = counts["language"].get(lang, 0) + 1
+    dims = {}
+    for dim, buckets in counts.items():
+        released, suppressed = release_counts(buckets, k, settings.dp_epsilon, rng)
+        dims[dim] = {"buckets": [{"bucket": b, "count": c} for b, c in sorted(released.items(), key=lambda kv: -kv[1])],
+                     "suppressed_buckets": suppressed}
+    n = len(accounts)
+    return {
+        "dimensions": dims, "k_anon": k, "dp_epsilon": settings.dp_epsilon, "organic_only": organic_only,
+        "coverage": {"unit": "accounts", "accounts": (round(n, -1) if n >= k else None),
+                     "states": sum(1 for b in dims["geography"]["buckets"] if b["bucket"] != "unknown"),
+                     "from": span[0] if span else None, "to": span[1] if span else None,
+                     "topic_id": topic_id},
+    }

@@ -86,7 +86,10 @@ async def _fetch() -> dict[str, Any]:
             title = getattr(entity, "title", username)
             kept = 0
             for m in msgs:
-                text = (m.message or "").strip()
+                # drop raw links and "via <Paper>" trailers; the post link is shown separately
+                text = re.sub(r"https?://\S+", "", m.message or "")
+                text = re.sub(r"\s+(via\s+(The\s+)?[A-Z][\w]*(\s[A-Z][\w]*){0,3}|Read more.*|Catch the complete story.*)\s*$", "", text)
+                text = re.sub(r"\s*🔗\s*", " ", text).strip()
                 if not text:
                     continue
                 kept += 1

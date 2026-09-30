@@ -1,9 +1,10 @@
 import { lazy, Suspense, useEffect } from 'react'
-import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { ChevronLeft, ChevronRight, PlayCircle, X } from 'lucide-react'
 import Layout from './components/Layout'
 import { Loading } from './components/ui'
 import SituationRoom from './pages/SituationRoom'
+import Landing from './pages/Landing'
 
 // Route-level code splitting: only the landing page ships in the first bundle.
 const TimelineEmotions = lazy(() => import('./pages/TimelineEmotions'))
@@ -49,24 +50,24 @@ function GuidedTour() {
   const { tourStep, setTourStep, setTourActive, setOrganicOnly } = useAppStore()
   const navigate = useNavigate()
   const STEPS = [
-    { route: '/', organic: false, title: 'Step 1 · The national picture',
-      body: 'The Situation Room answers three questions at a glance: what is being pushed (Dam Varunapur Evacuate, 93% coordinated), by whom (a group of 72 accounts in sync) and where it lands (by sector and by state). Every tile opens the detail.' },
-    { route: '/platforms', organic: false, title: 'Step 2 · Detect across platforms',
-      body: 'X and Telegram, Instagram and Facebook, Reddit and YouTube in one place, each with its own activity, mood, topics and most active accounts.' },
-    { route: '/trends', organic: false, title: 'Manufactured vs organic',
-      body: 'The rumour is marked Manufactured; the bigger cricket buzz stays Organic. Bands are bursts, the dashed line is the forecast, viral hashtags sit at the bottom.' },
-    { route: '/timeline', organic: true, title: 'Organic only',
-      body: 'The switch in the top bar is now on Organic only. Gray is all activity; colour is what real users feel once coordinated accounts are removed.' },
-    { route: '/coordination', organic: false, title: 'Step 3 · Investigate who is behind it',
-      body: 'This group posts copy-paste text within seconds of each other, on a clock-like rhythm. DEEPASTAMBHA flags the pattern for review; it never calls anyone a bot.' },
-    { route: '/network', organic: false, title: 'The network, across apps',
-      body: 'Nodes are coloured by platform; press Play to watch the network form over time. Click any account for its followers, connections and activity on every platform.' },
-    { route: '/lineage', organic: false, title: 'Where it started',
-      body: 'First seen on Telegram, then X twelve minutes later, then YouTube, Facebook, Reddit and Instagram. Edited copies of the image are matched automatically.' },
-    { route: '/cases', organic: false, title: 'Step 4 · Evidence',
-      body: 'Approving a signal opens a case: a ready-to-share evidence pack with ledger references and a draft legal certificate.' },
-    { route: '/ledger', organic: false, title: 'Tamper-proof',
-      body: 'Verify integrity, then run the tamper test: one changed character in a copy is caught at that exact post.' },
+    { route: '/situation', organic: false, title: '1 · The national picture',
+      body: 'This page shows the stories spreading right now, and which sectors and states they reach. The red card is the one story the system thinks needs attention first.' },
+    { route: '/platforms', organic: false, title: '2 · Each app on its own',
+      body: 'Pick any app to see its busiest topics, its most active accounts and how people there feel.' },
+    { route: '/trends', organic: false, title: '3 · Real buzz or a push?',
+      body: '“Likely coordinated” means many accounts posted the same thing at the same moment. Ordinary buzz, like cricket chatter, is marked Organic.' },
+    { route: '/timeline', organic: true, title: '4 · How people feel',
+      body: 'We switched on “Organic only”, which hides the coordinated accounts. The coloured lines now show how ordinary users really feel.' },
+    { route: '/coordination', organic: false, title: '5 · Who is pushing it',
+      body: 'These accounts posted near-identical text within seconds of each other, again and again. The page shows the evidence and leaves the judgement to an analyst.' },
+    { route: '/network', organic: false, title: '6 · Who reaches whom',
+      body: 'Each dot is an account and each line is a reply, repost or forward. Press Play to watch the story spread, or click a dot for details.' },
+    { route: '/lineage', organic: false, title: '7 · Where it started',
+      body: 'This traces the story back to the first post we saw and shows how it hopped between apps. Edited copies of the same image are matched too.' },
+    { route: '/cases', organic: false, title: '8 · Build the case',
+      body: 'Approving a signal opens a case: the posts, charts and ledger references packed into one shareable file.' },
+    { route: '/ledger', organic: false, title: '9 · Prove nothing changed',
+      body: 'Every post is sealed when it is collected. Press Verify to check that none was altered, or run the tamper test to see a change caught.' },
   ]
   const step = STEPS[tourStep]
   useEffect(() => {
@@ -99,6 +100,8 @@ function GuidedTour() {
 
 export default function App() {
   const { showBriefing, tourActive } = useAppStore()
+  const { pathname } = useLocation()
+  if (pathname === '/') return <Landing />
   return (
     <>
       {showBriefing && <MissionBriefing />}
@@ -106,7 +109,7 @@ export default function App() {
       <Layout>
         <Suspense fallback={<Loading label="Loading view" />}>
         <Routes>
-          <Route path="/" element={<SituationRoom />} />
+          <Route path="/situation" element={<SituationRoom />} />
           <Route path="/timeline" element={<TimelineEmotions />} />
           <Route path="/trends" element={<Trends />} />
           <Route path="/platforms" element={<Platforms />} />
@@ -117,7 +120,7 @@ export default function App() {
           <Route path="/cases" element={<CaseFile />} />
           <Route path="/ledger" element={<Ledger />} />
           <Route path="/search" element={<Search />} />
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="*" element={<Navigate to="/situation" />} />
         </Routes>
         </Suspense>
       </Layout>

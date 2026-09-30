@@ -1,11 +1,11 @@
 # DEEPASTAMBHA on Render (free)
 
-Live: https://prahari-h849.onrender.com · keepalive: https://prahari-keepalive.triveni-moggers.workers.dev
+Live: https://deepastambha.onrender.com · keepalive: https://deepastambha-keepalive.triveni-moggers.workers.dev
 
 Docker web service built from this repo (`render.yaml` blueprint,
 `deploy/render/Dockerfile`, context = repo root). At start-up `start.sh`
 downloads the private demo bundle from the Hugging Face dataset
-`ZOROxJODD/prahari-bundle` (analysed demo DB + ledger signing key).
+`ZOROxJODD/deepastambha-bundle` (analysed demo DB + ledger signing key).
 
 Secrets (Render environment): `HF_TOKEN` (read access to the bundle),
 `GEMINI_API_KEY` (optional, LLM summaries). Health check: `/healthz`.

@@ -56,7 +56,7 @@ def tamper_scratch_copy(db_path: str, seq: int | None = None) -> dict:
 
     The copy lives in a temp dir and is deleted afterwards; the real ledger is
     never written (append-only triggers are only dropped on the copy)."""
-    tmpdir = tempfile.mkdtemp(prefix="prahari_tamper_")
+    tmpdir = tempfile.mkdtemp(prefix="deepastambha_tamper_")
     scratch = os.path.join(tmpdir, "scratch.db")
     try:
         with sqlite3.connect(db_path) as src, sqlite3.connect(scratch) as dst:

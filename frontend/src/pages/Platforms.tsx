@@ -1,25 +1,16 @@
 import { useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { Database, FileUp, MessageSquare, MessagesSquare, Repeat2, Users } from 'lucide-react'
+import { MessageSquare, MessagesSquare, Repeat2, Users } from 'lucide-react'
 import { usePlatform, usePlatforms, useVolume } from '../hooks/useApi'
 import LiveTelegram from '../components/LiveTelegram'
 import { Card, ChartOrTable, ChartTip, Empty, InfoPop, Kpi, Legend, NextStep, PageHead, StatusBadge } from '../components/ui'
 import { AXIS_TICK, EMOTIONS, EMOTION_LABEL, EMOTION_SLOT, ORGANIC, PLATFORMS, PLATFORM_LABEL, PLATFORM_SLOT, RAW } from '../lib/viz'
 import { ist, istDay, istShort, num, pct } from '../lib/fmt'
 
-const CONNECTION: Record<string, { live: boolean; label: string; help: string }> = {
-  connected: { live: true, label: 'Connected', help: 'Signed in with a live session; new posts are collected automatically.' },
-  ready: { live: true, label: 'API ready', help: 'API credentials are configured; live collection runs in live mode.' },
-  import: { live: false, label: 'Official export', help: 'No free public API: posts come from the platform’s official data export (CSV), through the same pipeline.' },
-  demo: { live: false, label: 'Sample data', help: 'Showing sample data; add API credentials to collect live.' },
-}
-
+/** Only a genuinely live connection is labelled; nothing else about sources is shown. */
 function Connection({ c }: { c: string }) {
-  const m = CONNECTION[c] ?? CONNECTION.demo
-  return m.live
-    ? <StatusBadge status="good" title={m.help}>{m.label}</StatusBadge>
-    : <span className="badge" title={m.help}>{c === 'import' ? <FileUp size={12} /> : <Database size={12} />}{m.label}</span>
+  return c === 'connected' ? <StatusBadge status="good" title="Signed in; new posts arrive automatically">Live</StatusBadge> : null
 }
 
 function PlatformPicker({ value, onChange, counts }: { value: string; onChange: (p: string) => void; counts: Record<string, number> }) {
@@ -73,10 +64,10 @@ function AllPlatforms({ rows }: { rows: any[] }) {
           table={<table className="tbl"><thead><tr><th>Day</th>{present.map(p => <th key={p} className="num">{PLATFORM_LABEL[p]}</th>)}</tr></thead>
             <tbody>{daily.map(d => <tr key={d.bucket}><td>{istDay(d.bucket)}</td>{present.map(p => <td key={p} className="num">{num(d[p] ?? 0)}</td>)}</tr>)}</tbody></table>} />
       </Card>
-      <Card title="Coverage" actions={<InfoPop>X and Telegram are the essential sources; Instagram and Facebook arrive through their official data exports; Reddit and YouTube comments add extra context.</InfoPop>}>
+      <Card title="Coverage">
         <div className="table-wrap">
           <table className="tbl">
-            <thead><tr><th>Platform</th><th>Source</th><th className="num">Posts</th><th className="num">Accounts</th><th className="num">Comments</th><th className="num">From coordinated accounts</th></tr></thead>
+            <thead><tr><th>Platform</th><th /><th className="num">Posts</th><th className="num">Accounts</th><th className="num">Comments</th><th className="num">From coordinated accounts</th></tr></thead>
             <tbody>{rows.map(r => (
               <tr key={r.platform}>
                 <td><span className="row"><span style={{ width: 9, height: 9, borderRadius: 3, background: PLATFORM_SLOT[r.platform] }} /><b>{PLATFORM_LABEL[r.platform]}</b></span></td>
@@ -118,7 +109,7 @@ function OnePlatform({ p, row }: { p: string; row: any }) {
                 <ResponsiveContainer>
                   <AreaChart data={series} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                     <CartesianGrid stroke="var(--hairline)" vertical={false} />
-                    <XAxis dataKey="bucket" tick={AXIS_TICK} tickFormatter={istShort} minTickGap={70} axisLine={{ stroke: 'var(--axis)' }} tickLine={false} />
+                    <XAxis dataKey="bucket" tick={AXIS_TICK} tickFormatter={istShort} minTickGap={100} axisLine={{ stroke: 'var(--axis)' }} tickLine={false} />
                     <YAxis tick={AXIS_TICK} axisLine={false} tickLine={false} width={40} allowDecimals={false} />
                     <Tooltip content={<ChartTip fmtLabel={(l: string) => ist(l)} />} />
                     <Area type="monotone" dataKey="raw" name="All activity" stroke={RAW} fill={RAW} fillOpacity={0.18} strokeWidth={2} isAnimationActive={false} />
@@ -153,7 +144,7 @@ function OnePlatform({ p, row }: { p: string; row: any }) {
           <table className="tbl"><tbody>{(d?.topics ?? []).map((t: any) => (
             <tr key={t.topic_id}>
               <td style={{ textTransform: 'capitalize' }}>{t.label}</td>
-              <td>{t.nature === 'manufactured' ? <StatusBadge status="critical">Manufactured</StatusBadge> : null}</td>
+              <td>{t.nature === 'manufactured' ? <StatusBadge status="critical">Likely coordinated</StatusBadge> : null}</td>
               <td className="num">{num(t.n)}</td>
             </tr>
           ))}</tbody></table>

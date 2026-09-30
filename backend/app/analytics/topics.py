@@ -86,8 +86,43 @@ def _cluster_bertopic(texts: list[str], vecs: np.ndarray) -> np.ndarray:
     return np.asarray(labels)
 
 
+
+_PREFIX = re.compile(r"^(breaking|alert|urgent|warning|update|news|fyi|exclusive)\s*[:\-!]\s*", re.I)
+_TAGS = re.compile(r"#\w+|@\w[\w.]*|https?://\S+|\[[^\]]*\]")
+
+
+def readable_label(texts: list[str], max_words: int = 7) -> str | None:
+    """A human-readable topic name from its most central posts (given in order of
+    closeness to the centroid): hashtags, mentions, links and 'BREAKING:'-style
+    prefixes removed, the longest of the first two sentences, Latin script preferred."""
+    for text in texts[:25]:
+        t = _TAGS.sub(" ", text)
+        parts = [p.strip(" -–—,:;") for p in re.split(r"[!?.]+|\s[-–—]\s", t) if p.strip(" -–—,:;")]
+        if not parts:
+            continue
+        cand = max(parts[:2], key=lambda p: len(p.split()))
+        cand = _PREFIX.sub("", cand).strip()
+        words = cand.split()
+        if len(words) < 2 or not re.search(r"[A-Za-z]", cand):
+            continue
+        cand = " ".join(words[:max_words]).rstrip(" ,;:-")
+        if cand.isupper():
+            cand = cand.title()
+        return cand[0].upper() + cand[1:]
+    return None
+
+_NOISE = re.compile(r"@\w[\w.]*|https?://\S+")
+
+
+def topic_text(text: str) -> str:
+    """Text used for clustering: @mentions and URLs carry no topic meaning (and make
+    otherwise identical posts look unique), so they are dropped."""
+    return " ".join(_NOISE.sub(" ", text).split()) or text
+
+
 def cluster_window(texts: list[str], engine: str = "agglomerative") -> tuple[np.ndarray, np.ndarray]:
     """Return (labels per text, vectors). Label -1 = noise."""
+    texts = [topic_text(t) for t in texts]
     vecs = embed(texts)
     unique = list(dict.fromkeys(texts))
     uvecs = embed(unique)
@@ -159,7 +194,8 @@ def run_topics(
                         best_id, best_sim = tid, sim
                 if best_id is None:
                     kw = keywords.get(c, [])
-                    label = " ".join(k.lstrip("#") for k in kw[:3]) or "topic"
+                    central = sorted(members, key=lambda i: -_cosine(vecs[i], centroid))
+                    label = readable_label([rows[i]["text"] for i in central]) or                         " ".join(k.lstrip("#") for k in kw[:3]) or "topic"
                     cur = conn.execute(
                         "INSERT INTO topics (label, keywords, centroid, first_seen, last_seen, status) "
                         "VALUES (?,?,?,?,?,?)",

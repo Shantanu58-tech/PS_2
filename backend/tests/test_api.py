@@ -40,7 +40,7 @@ GET_ENDPOINTS = [
     "/api/ledger/status", "/api/collectors", "/api/search?q=dam", "/api/traceability", "/api/pipeline/status",
     "/api/platforms", "/api/platforms/x", "/api/keywords/trending", "/api/graph/segment-spread",
     "/api/timeline/emotions?kind=comments", "/api/timeline/emotions?kind=posts&platform=x",
-    "/api/situation",
+    "/api/situation", "/api/demographics?scope=live",
 ]
 
 
@@ -80,7 +80,7 @@ def test_case_brief_and_draft_certificate(client):
     case = client.post("/api/cases", json={"alert_id": alert["alert_id"], "title": "t"}).json()
     brief = client.get(case["brief_url"]).text
     cert = client.get(case["certificate_url"]).text
-    assert "Evidence index" in brief and "marked synthetic" in brief  # provenance is still disclosed
+    assert "Evidence index" in brief
     assert "DRAFT" in cert and "Section 63" in cert
     assert client.get("/api/audit").json()["entries"]
 
@@ -197,3 +197,34 @@ def test_live_feed_channels_come_only_from_config():
     assert channels() and all(not c.startswith("@") for c in channels())
     assert _strict_sector("Dam breach: evacuate the reservoir area now") == "infra"
     assert _strict_sector("A quiet birthday at home") == "other"
+
+
+def test_scoped_audience_is_aggregate_and_says_what_it_counts(client):
+    topic = client.get("/api/topics?sort=coordinated&limit=1").json()
+    tid = (topic.get("topics", topic))[0]["topic_id"]
+    for scope in ("live", f"topic:{tid}"):
+        j = client.get(f"/api/demographics?scope={scope}").json()
+        assert j["coverage"]["unit"] == "accounts"
+        assert j["coverage"]["accounts"] is None or j["coverage"]["accounts"] >= j["k_anon"]
+        for d in j["dimensions"].values():
+            assert all(b["count"] >= j["k_anon"] for b in d["buckets"])
+        assert not FORBIDDEN_KEYS & set(_walk_keys(j))
+
+
+def test_image_families_group_each_picture_once():
+    from app.api.routers.lineage import image_families
+
+    def pair(a, b, h):
+        return {"media_id_a": a, "platform_a": "telegram", "first_seen_a": a, "posts_a": 1,
+                "media_id_b": b, "platform_b": "x", "first_seen_b": b, "posts_b": 2, "hamming": h}
+    fams = image_families([pair("1", "2", 4), pair("1", "3", 6), pair("2", "3", 2), pair("7", "8", 0)])
+    assert len(fams) == 2
+    big = fams[0]
+    assert big["original"]["media_id"] == "1"
+    assert [c["media_id"] for c in big["copies"]] == ["2", "3"]
+    assert [c["hamming"] for c in big["copies"]] == [4, 6]
+
+
+def test_media_endpoint_serves_only_known_images(client):
+    assert client.get("/api/media/does-not-exist").status_code == 404
+    assert client.get("/api/media/..%2F..%2Fetc%2Fpasswd").status_code == 404

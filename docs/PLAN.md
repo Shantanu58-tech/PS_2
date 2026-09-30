@@ -5,7 +5,7 @@ Legend: `[x]` done, `[~]` in progress, `[ ]` not started, `[!]` blocked (reason 
 ## Phase 0: Setup and reconnaissance
 - [x] Repo at `D:\SIH_P2` with git and `.gitignore`/`.gitattributes`/`.env.example`
 - [x] Brief and research report moved to `docs/BUILD_BRIEF.md` and `docs/research/RESEARCH_REPORT.md`
-- [x] `D:\PRAHARI_DATA` tree created
+- [x] `D:\DEEPASTAMBHA_DATA` tree created
 - [x] `docs/HOSTING_NOTES.md` from the read-only review of `D:\SIH`
 - [x] ADR 0001 (stack), 0002 (hosting), 0003 (local infra)
 - [x] `CLAUDE.md`, PLAN, PROGRESS, BACKLOG, SCORECARD_MAP

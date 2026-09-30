@@ -32,21 +32,21 @@ interface AppState {
 }
 
 export const useAppStore = create<AppState>((set) => ({
-  showBriefing: !load('prahari.briefingSeen', false),
+  showBriefing: false,  // the landing page introduces the product; About re-opens this
   tourActive: false,
   tourStep: 0,
-  organicOnly: load('prahari.organicOnly', false),
-  theme: load<Theme>('prahari.theme', 'light'),
+  organicOnly: load('deepastambha.organicOnly', false),
+  theme: load<Theme>('deepastambha.theme', 'light'),
   navOpen: false,
-  navCollapsed: load('prahari.navCollapsed', false),
-  setNavCollapsed: (v) => { save('prahari.navCollapsed', v); set({ navCollapsed: v }) },
-  setShowBriefing: (v) => { if (!v) save('prahari.briefingSeen', true); set({ showBriefing: v }) },
+  navCollapsed: load('deepastambha.navCollapsed', false),
+  setNavCollapsed: (v) => { save('deepastambha.navCollapsed', v); set({ navCollapsed: v }) },
+  setShowBriefing: (v) => { if (!v) save('deepastambha.briefingSeen', true); set({ showBriefing: v }) },
   setTourActive: (v) => set({ tourActive: v, tourStep: v ? 0 : 0 }),
   setTourStep: (v) => set({ tourStep: v }),
-  setOrganicOnly: (v) => { save('prahari.organicOnly', v); set({ organicOnly: v }) },
-  setTheme: (t) => { save('prahari.theme', t); document.documentElement.setAttribute('data-theme', t); set({ theme: t }) },
+  setOrganicOnly: (v) => { save('deepastambha.organicOnly', v); set({ organicOnly: v }) },
+  setTheme: (t) => { save('deepastambha.theme', t); document.documentElement.setAttribute('data-theme', t); set({ theme: t }) },
   setNavOpen: (v) => set({ navOpen: v }),
 }))
 
 // apply persisted theme before first paint of React tree
-document.documentElement.setAttribute('data-theme', load<Theme>('prahari.theme', 'light'))
+document.documentElement.setAttribute('data-theme', load<Theme>('deepastambha.theme', 'light'))

@@ -30,6 +30,10 @@ async def create_case(body: CreateCase):
         await db.commit()
         case_id = cursor.lastrowid
     assert case_id is not None
+    from app.ledger.audit import log_action
+
+    await asyncio.to_thread(log_action, settings.db_path, "analyst", "case_opened",
+                            {"case_id": case_id, "alert_id": body.alert_id, "title": body.title[:80]})
     brief = await asyncio.to_thread(generate_brief, settings.db_path, case_id)
     cert = await asyncio.to_thread(generate_certificate, settings.db_path, case_id)
     return {"case_id": case_id, "title": body.title, "brief_url": f"/api/cases/{case_id}/brief",

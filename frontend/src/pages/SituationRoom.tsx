@@ -56,7 +56,7 @@ function SitRep({ sit }: { sit: any }) {
               A coordinated campaign is pushing <span className="hl" style={{ textTransform: 'capitalize' }}>“{lead.label}”</span> in <b>{lead.sector}</b>:{' '}
               <b>{pct(lead.coordinated_share, 0)}</b> of its {num(lead.posts)} posts come from a group of <b>{lead.group_accounts} accounts acting in sync</b>.
               It started on <b>{PLATFORM_LABEL[lead.first_platform] ?? lead.first_platform}</b> and has reached <b>{lead.platforms.length} platforms</b>
-              {lead.reactions ? <>; <b>{num(lead.reactions)} real users</b> reacted with <b>{pct(lead.reaction_anxiety, 0)} anxiety</b></> : null}
+              {lead.reactions ? <>; <b>{num(lead.reactions)} ordinary users</b> replied, and <b>{pct(lead.reaction_anxiety, 0)}</b> of what they wrote reads as anxious</> : null}
               {lead.states?.length ? <>, most in <b>{lead.states.map(titleCase).join(' and ')}</b></> : null}.
             </> : <>No coordinated campaign is active; activity looks organic.</>}
           </p>
@@ -108,7 +108,7 @@ function Kpis({ k }: { k: any }) {
         <div className="foot"><span>acting in sync</span>{k.sync_index != null && <span className="mono">sync {k.sync_index.toFixed(2)}</span>}</div>
       </button>
       <button className="card kpi-card" onClick={() => navigate('/trends?sort=coordinated')}>
-        <div className="top">Manufactured trends<span className="ic"><TrendingUp size={16} /></span></div>
+        <div className="top">Coordinated trends<span className="ic"><TrendingUp size={16} /></span></div>
         <div className="val" style={{ color: k.manufactured_trends ? 'var(--accent-ink)' : undefined }}>{k.manufactured_trends}<small>of {k.topics} topics</small></div>
         <div className="foot"><span style={{ color: 'var(--accent-ink)', textTransform: 'capitalize', fontWeight: 600 }}>{k.top_manufactured ?? 'none'}</span><span>{k.platforms} platforms</span></div>
       </button>
@@ -182,7 +182,8 @@ function StatesPanel({ sit }: { sit: any }) {
           </div>
         </div>
         <div>
-          <div className="muted" style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 4 }}>Top states · {labels[metric]}</div>
+          <div className="muted" style={{ fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 2 }}>Top states · {labels[metric]}</div>
+          <div className="muted" style={{ fontSize: 11.5, marginBottom: 4 }}>under each state: the topic people there post about most</div>
           <table className="tbl"><tbody>{ranked.map((s, i) => (
             <tr key={s.state} style={{ cursor: 'pointer' }} onClick={() => setSel(s.state)}>
               <td className="muted tnum" style={{ width: 20 }}>{i + 1}</td>
@@ -214,20 +215,20 @@ function Narratives({ sit }: { sit: any }) {
                   <div className="t">{n.label}</div>
                   <div className="muted" style={{ fontSize: 12 }}>{secName(n.sector)} · first seen {istShort(n.first_seen)}</div>
                 </div>
-                {n.nature === 'manufactured' ? <span className="lvl critical"><AlertTriangle size={11} />Manufactured</span> : <span className="lvl watch">Coordinated</span>}
+                {n.nature === 'manufactured' ? <span className="lvl critical"><AlertTriangle size={11} />Likely coordinated</span> : <span className="lvl watch">Coordinated</span>}
               </div>
               <Meter value={n.coordinated_share} color="var(--critical)" label="Coordinated share" />
               <dl className="who">
                 <dt>Pushed by</dt>
-                <dd>{n.groups.length ? n.groups.map((g: any) => <span key={g.cluster_id}><b>{g.accounts} accounts</b> in sync (sync {g.sync.toFixed(2)}) · </span>) : null}
-                  <b>{pct(n.coordinated_share, 0)}</b> of {num(n.posts)} posts</dd>
+                <dd>{n.groups.length ? n.groups.map((g: any) => <span key={g.cluster_id}>a group of <b>{g.accounts} accounts</b> acting in sync · </span>) : null}
+                  <b>{pct(n.coordinated_share, 0)}</b> of the {num(n.posts)} posts in this topic come from them</dd>
                 <dt>Amplifiers</dt>
                 <dd>{n.amplifiers.map((a: any) => (
                   <button key={a.account_id} className="acct" onClick={() => navigate(`/network?account=${encodeURIComponent(a.account_id)}`)} title="Open in the network">
                     <span className="dot" style={{ background: PLATFORM_SLOT[a.platform] }} />@{a.account_id}</button>
                 ))}</dd>
                 <dt>Platforms</dt><dd>{plats(n.platforms)}</dd>
-                {n.states.length > 0 && <><dt>Reached</dt><dd style={{ textTransform: 'capitalize' }}>{n.states.join(', ')}{n.reactions ? ` · ${num(n.reactions)} reactions` : ''}</dd></>}
+                {n.states.length > 0 && <><dt>Reached</dt><dd><span style={{ textTransform: 'capitalize' }}>{n.states.join(', ')}</span>{n.reactions ? ` · ${num(n.reactions)} people replied` : ''}{n.reaction_anxiety != null ? ` (anxiety among them ${pct(n.reaction_anxiety, 0)})` : ''}</dd></>}
               </dl>
               <div className="row-wrap">
                 <Link className="btn btn-sm btn-primary" to={`/coordination?topic=${n.topic_id}`}>Investigate<ArrowRight size={13} /></Link>
@@ -291,7 +292,7 @@ function Signal({ a }: { a: any }) {
     <article className={`card signal ${high ? 'high' : a.priority >= 50 ? 'mid' : ''}`} style={{ padding: '14px 16px 12px 20px' }}>
       <div className="spread">
         <div className="row-wrap">
-          {manufactured ? <span className="lvl critical"><AlertTriangle size={11} />Manufactured surge</span> : <span className="lvl normal"><Check size={11} />Organic burst</span>}
+          {manufactured ? <span className="lvl critical"><AlertTriangle size={11} />Likely coordinated surge</span> : <span className="lvl normal"><Check size={11} />Organic burst</span>}
           {high && <span className="lvl elevated">High priority</span>}
           <span className="muted" style={{ fontSize: 12 }}>{plats(ev.platforms ?? [])}</span>
         </div>
@@ -301,7 +302,7 @@ function Signal({ a }: { a: any }) {
         <Link to={`/trends?topic=${a.topic_id}`} style={{ fontSize: 15.5, fontWeight: 750, color: 'var(--ink-1)', textTransform: 'capitalize' }}>{a.topic_label ?? 'Topic'}</Link>
         <span className="review">{STATUS_TEXT[a.status] ?? a.status}</span>
       </div>
-      <div className="muted" style={{ fontSize: 12.5, marginTop: 2 }}>{num(ev.n_posts)} posts · {pct(ev.coordinated_share ?? 0, 0)} coordinated · {istShort(ev.start)} → {istShort(ev.end)}</div>
+      <div className="muted" style={{ fontSize: 12.5, marginTop: 2 }}>{num(ev.n_posts)} posts in the burst window · {pct(ev.coordinated_share ?? 0, 0)} from coordinated accounts · {istShort(ev.start)} → {istShort(ev.end)}</div>
       <div className="row-wrap" style={{ marginTop: 10 }}>
         <button className="btn btn-sm btn-ghost" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}Why it fired</button>
         <span style={{ marginLeft: 'auto' }} />
@@ -335,7 +336,7 @@ function HotTopics({ sit }: { sit: any }) {
             <span className="muted" style={{ display: 'block', fontSize: 12 }}>{secName(h.sector)} · {num(h.posts)} posts · {plats(h.platforms)}</span>
           </span>
           <span style={{ textAlign: 'right' }}>
-            <span className={`spike ${h.nature === 'manufactured' ? '' : 'org'}`}>{h.nature === 'manufactured' ? 'PUSHED' : 'ORGANIC'} · {h.spike.toFixed(0)}×</span>
+            <span className={`spike ${h.nature === 'manufactured' ? '' : 'org'}`}>{h.nature === 'manufactured' ? 'COORDINATED' : 'ORGANIC'} · {h.spike.toFixed(0)}×</span>
             <span className="muted" style={{ display: 'block', fontSize: 11.5, marginTop: 3 }}>{pct(h.coordinated_share, 0)} coordinated</span>
           </span>
         </button>
@@ -364,7 +365,7 @@ function Activity() {
               <ResponsiveContainer>
                 <AreaChart data={series} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                   <CartesianGrid stroke="var(--hairline)" vertical={false} />
-                  <XAxis dataKey="bucket" tick={AXIS_TICK} tickFormatter={istShort} minTickGap={80} axisLine={{ stroke: 'var(--axis)' }} tickLine={false} />
+                  <XAxis dataKey="bucket" tick={AXIS_TICK} tickFormatter={istShort} minTickGap={110} axisLine={{ stroke: 'var(--axis)' }} tickLine={false} />
                   <YAxis tick={AXIS_TICK} axisLine={false} tickLine={false} width={44} />
                   <Tooltip content={<ChartTip fmtLabel={(l: string) => ist(l)} />} />
                   <Area type="monotone" dataKey="raw" name="All activity" stroke={RAW} fill={RAW} fillOpacity={0.25} strokeWidth={2} isAnimationActive={false} />
@@ -406,13 +407,13 @@ export default function SituationRoom() {
         <div>
           <div className="section-head" id="signals"><h2 className="section-title">Signals for review</h2><span className="section-sub">approve to open a case, or keep on the watchlist</span></div>
           <div className="stack" style={{ gap: 12 }}>{alerts.slice(0, 4).map(a => <Signal key={a.alert_id} a={a} />)}</div>
+          <div style={{ marginTop: 16 }}><Activity /></div>
         </div>
         <div>
           <div className="section-head"><h2 className="section-title">Trending now</h2></div>
           <div className="stack" style={{ gap: 16 }}>
             <LiveTelegram compact />
             <HotTopics sit={sit} />
-            <Activity />
           </div>
         </div>
       </div>

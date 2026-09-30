@@ -21,7 +21,7 @@ DEEPASTAMBHA adds needs TRIVENI did not have:
 3. **Redis:** Upstash (Redis Streams supported).
 4. **Frontend:** Next.js on Vercel. The API has a locked CORS allowlist. The alternative, a static export served by the API from one URL (TRIVENI's pattern), gets re-evaluated at Phase 5 and a follow-up ADR records the choice.
 5. **Warmth:** a Cloudflare Worker cron pings `/healthz` every 10 minutes, and the console shows a "starting up" state while it polls `/healthz`.
-6. **Mode:** the hosted mode is `PRAHARI_MODE=replay`, with SYNTHETIC injection. Live connectors need explicit env flags and are never enabled on the public demo.
+6. **Mode:** the hosted mode is `MODE=replay`, with SYNTHETIC injection. Live connectors need explicit env flags and are never enabled on the public demo.
 7. **Secrets:** only in host env settings. Never in the repo, the docs or the bundle.
 
 ## Consequences
