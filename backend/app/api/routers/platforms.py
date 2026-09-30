@@ -30,8 +30,8 @@ def _connection(platform: str) -> str:
         return "ready" if (s.tg_api_id and s.tg_api_hash) else "demo"
     if platform == "x":
         return "connected" if (s.x_auth_token and s.x_ct0 and s.live_x_accounts) else "demo"
-    if platform == "reddit":  # the public RSS feed needs no credentials
-        return "connected" if s.live_reddit_subs else "demo"
+    if platform == "reddit":  # from a cloud server Reddit answers only with an app key
+        return "connected" if (s.reddit_client_id and s.reddit_client_secret and s.live_reddit_subs) else "demo"
     if platform == "youtube":  # channel RSS for videos; the API key adds viewer comments
         return "connected" if s.live_yt_channels else "demo"
     return "import"

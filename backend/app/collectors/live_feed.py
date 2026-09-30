@@ -250,10 +250,50 @@ async def _fetch_youtube() -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------- Reddit
+def _reddit_oauth(subs: list[str]) -> list[dict[str, Any]]:
+    """Reddit's official API with an app-only token (a free "script" app). Needed on cloud servers:
+    Reddit refuses anonymous requests from data-centre addresses."""
+    import requests
+
+    tok = requests.post("https://www.reddit.com/api/v1/access_token", data={"grant_type": "client_credentials"},
+                        auth=(settings.reddit_client_id, settings.reddit_client_secret),
+                        headers={"User-Agent": settings.reddit_user_agent or UA}, timeout=20)
+    tok.raise_for_status()
+    r = requests.get(f"https://oauth.reddit.com/r/{'+'.join(subs)}/new", params={"limit": 40, "raw_json": 1},
+                     headers={"User-Agent": settings.reddit_user_agent or UA,
+                              "Authorization": f"Bearer {tok.json()['access_token']}"}, timeout=20)
+    r.raise_for_status()
+    posts = []
+    for c in r.json()["data"]["children"]:
+        d = c["data"]
+        p = _post("reddit", d["subreddit"], f"r/{d['subreddit']}", d["name"],
+                  datetime.fromtimestamp(d["created_utc"], timezone.utc),
+                  d["title"] + (". " + d["selftext"] if d.get("selftext") else ""),
+                  "https://www.reddit.com" + d["permalink"], author=f"u/{d['author']}",
+                  likes=d.get("score"), replies=d.get("num_comments"))
+        if p:
+            posts.append(p)
+    return posts
+
+
 def _reddit_sync() -> dict[str, Any]:
     subs = _split(settings.live_reddit_subs)
-    # one combined feed = one request per refresh (Reddit rate-limits rapid repeats)
-    root = ET.fromstring(_get(f"https://www.reddit.com/r/{'+'.join(subs)}/new/.rss", limit=40).content)
+    if settings.reddit_client_id and settings.reddit_client_secret:
+        posts = _reddit_oauth(subs)
+        srcs = [_source_row(s, f"r/{s}", posts) for s in subs]
+        for s in srcs:
+            s["posts"] = sum(1 for p in posts if p["source"].lower() == s["username"].lower())
+        return {"connected": True, "channels": srcs, "posts": posts}
+    # no app key: the public RSS feed, one combined request per refresh (works from home and
+    # office networks; Reddit blocks it from cloud servers)
+    try:
+        resp = _get(f"https://www.reddit.com/r/{'+'.join(subs)}/new/.rss", limit=40)
+    except Exception as exc:
+        code = getattr(getattr(exc, "response", None), "status_code", None)
+        return {"connected": False, "channels": [],
+                "reason": f"Reddit refused the public feed from this server (HTTP {code}); "
+                          "it needs a Reddit app key (REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET)."}
+    root = ET.fromstring(resp.content)
     posts: list[dict[str, Any]] = []
     for e in root.findall("a:entry", _ATOM):
         sub = (e.find("a:category", _ATOM).get("term") if e.find("a:category", _ATOM) is not None else "") or ""
