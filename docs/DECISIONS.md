@@ -347,3 +347,6 @@ The team asked for a first page that works as a national situation room and for 
   outline that another tool added to the working tree predates the 2019 J&K/Ladakh reorganisation
   and may not follow the official boundary, which would be a problem on an NTRO demo. The tile grid
   sidesteps that and keeps small states clickable.
+
+### D-38 Logo: the deepastambha
+The shield-and-eye mark was too close to other teams' logos (several SIH 2026 NTRO teams are named Prahari, and security logos lean on shields, eyes, fingerprints and locks). The new mark is a deepastambha, the Indian temple lamp tower that keeps a light burning through the night, inside a round seal (echoing TRIVENI's seal). The six lamps on three tiers are the six platforms watched; the saffron flame is the sentinel, with listening arcs; a green base line completes the tricolour. A searched check (web, GitHub repos of other Prahari projects) found no product using this motif. Below 28px the dotted ring and outer arcs are dropped. Original emblem, not an official insignia.

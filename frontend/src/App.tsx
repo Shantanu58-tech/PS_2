@@ -17,16 +17,20 @@ const CaseFile = lazy(() => import('./pages/CaseFile'))
 const Ledger = lazy(() => import('./pages/Ledger'))
 const Search = lazy(() => import('./pages/Search'))
 import { useAppStore } from './store/app'
-import { PrahariMark } from './components/Brand'
+import { PrahariMark, TAGLINE } from './components/Brand'
 
 function MissionBriefing() {
   const { setShowBriefing, setTourActive } = useAppStore()
   return (
     <div className="overlay" role="dialog" aria-modal="true" aria-labelledby="briefing-title">
       <div className="card" style={{ maxWidth: 520, width: '100%', padding: 32, textAlign: 'center' }}>
-        <div style={{ display: 'flex', justifyContent: 'center' }}><PrahariMark size={64} /></div>
-        <h1 id="briefing-title" style={{ fontSize: 30, fontWeight: 800, margin: '14px 0 2px', letterSpacing: '0.06em' }}>PRAHARI</h1>
-        <div className="muted" style={{ marginBottom: 18 }}>प्रहरी · National Narrative Situation Room</div>
+        <div style={{ display: 'flex', justifyContent: 'center' }}><PrahariMark size={92} /></div>
+        <h1 id="briefing-title" style={{ fontSize: 28, fontWeight: 800, margin: '14px 0 2px', letterSpacing: '0.06em' }}>
+          <span style={{ fontFamily: '"Noto Sans Devanagari", var(--font)', letterSpacing: 0 }}>प्रहरी</span>
+          <span style={{ color: 'var(--accent)', margin: '0 10px', fontWeight: 400 }}>|</span>PRAHARI
+        </h1>
+        <div className="muted" style={{ fontSize: 13 }}>National Narrative Situation Room</div>
+        <div style={{ margin: '6px 0 18px', fontSize: 13.5, fontWeight: 600, color: 'var(--accent-ink)' }}>{TAGLINE}</div>
         <p className="secondary" style={{ margin: '0 auto', fontSize: 15, maxWidth: 420 }}>
           One national picture of what is happening on social media: which narratives are being pushed, by which coordinated groups, and where the impact lands. From that overview, investigate, then secure the evidence.
         </p>
