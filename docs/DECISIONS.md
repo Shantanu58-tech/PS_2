@@ -278,3 +278,16 @@ minutes.
 The model that answered is stored with each summary. Tests blank every
 credential through environment variables so they can never call real services,
 even when backend/.env holds real keys.
+
+### D-35 Clean product UI (overrides the on-screen SIMULATED banner)
+The team asked for a clean, uncluttered hackathon product site rather than a
+compliance console. The UI now follows the look of the team's Deepentra project:
+light theme by default, white rounded cards, pill controls and a flat sidebar
+with a new PRAHARI logo (shield + watchful eye with a network pupil). Removed
+from the UI: the SIMULATED/SIH/team banner, requirement codes in the nav, the
+Sources and PS 26152 & Eval pages, and long methodology notes (short popovers
+remain). The problem-statement mapping and evaluation numbers live in the PPT and
+in `eval/reports/`. Records still carry `synthetic=true` in the data layer, and
+the backend endpoints for collectors, evaluation and traceability are unchanged.
+This deliberately departs from CLAUDE.md rule 7 (SIMULATED banner) at the
+team's request.

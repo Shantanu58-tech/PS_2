@@ -42,7 +42,7 @@ flowchart LR
     end
 
     subgraph OUT["Analyst console (React)"]
-        UI["Command Center · Timeline · Trends ·<br/>Network · Audience · Lineage ·<br/>Cases · Ledger · Compliance"]
+        UI["Overview · Trends · Emotions ·<br/>Coordination · Network · Lineage ·<br/>Audience · Cases · Evidence ledger"]
         CASE["Case brief +<br/>draft BSA §63 certificate"]
         LLM["Gemini summaries<br/>(injection-safe)"]
     end

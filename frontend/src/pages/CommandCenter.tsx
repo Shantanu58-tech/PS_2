@@ -1,10 +1,9 @@
 import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { ChevronDown, ChevronRight, FileText, GitBranch, Network, Play } from 'lucide-react'
+import { AlertTriangle, ArrowRight, ChevronDown, ChevronRight, Database, FileText, Fingerprint, Play, TrendingUp } from 'lucide-react'
 import { useAlerts, useClusters, useCreateCase, useHealth, useLedgerStatus, useTopics, useVolume, postJSON } from '../hooks/useApi'
-import { useAppStore } from '../store/app'
-import { ChartOrTable, ChartTip, Empty, ErrorNote, InfoPop, Kpi, Legend, Meter, PageHead, StatusBadge } from '../components/ui'
+import { ChartOrTable, ChartTip, Empty, ErrorNote, Kpi, Legend, Meter, PageHead, StatusBadge } from '../components/ui'
 import { AXIS_TICK, ORGANIC, PLATFORM_LABEL, RAW } from '../lib/viz'
 import { ist, istShort, num, pct } from '../lib/fmt'
 
@@ -23,7 +22,7 @@ function priorityParts(ev: any) {
   ]
 }
 
-function SignalCard({ alert, readOnly }: { alert: any; readOnly: boolean }) {
+function SignalCard({ alert }: { alert: any }) {
   const [open, setOpen] = useState(false)
   const createCase = useCreateCase()
   const navigate = useNavigate()
@@ -32,23 +31,23 @@ function SignalCard({ alert, readOnly }: { alert: any; readOnly: boolean }) {
   const manufactured = ev.coordinated_share >= 0.3
   const parts = priorityParts(ev)
   return (
-    <article className={`card signal ${high ? 'high' : alert.priority >= 50 ? 'mid' : ''}`} style={{ padding: '14px 16px' }}>
+    <article className={`card signal ${high ? 'high' : alert.priority >= 50 ? 'mid' : ''}`} style={{ padding: '18px 20px 16px 24px' }}>
       <div className="spread">
         <div className="row-wrap">
           {manufactured
             ? <StatusBadge status="critical">Manufactured surge</StatusBadge>
             : <StatusBadge status="good">Organic burst</StatusBadge>}
           {high && <StatusBadge status="serious">High priority</StatusBadge>}
-          {(ev.platforms ?? []).map((p: string) => <span key={p} className="chip">{PLATFORM_LABEL[p] ?? p}</span>)}
+          <span className="muted" style={{ fontSize: 12.5 }}>{(ev.platforms ?? []).map((p: string) => PLATFORM_LABEL[p] ?? p).join(' · ')}</span>
         </div>
         <div className="row" title="Priority 0–100">
           <span className="muted" style={{ fontSize: 12 }}>Priority</span>
-          <span style={{ fontSize: 20, fontWeight: 650 }}>{alert.priority.toFixed(0)}</span>
+          <span style={{ fontSize: 22, fontWeight: 700 }}>{alert.priority.toFixed(0)}</span>
         </div>
       </div>
-      <h3 style={{ fontSize: 14.5, fontWeight: 600, margin: '10px 0 4px' }}>{alert.topic_label ?? 'Topic'}</h3>
-      <p className="secondary" style={{ margin: 0, fontSize: 13 }}>{alert.headline}</p>
-      <div className="muted" style={{ fontSize: 12, marginTop: 6 }}>{istShort(ev.start)} → {istShort(ev.end)} IST · {num(ev.n_posts)} posts in burst</div>
+      <h3 style={{ fontSize: 16, fontWeight: 650, margin: '12px 0 4px', textTransform: 'capitalize' }}>{alert.topic_label ?? 'Topic'}</h3>
+      <p className="secondary" style={{ margin: 0, fontSize: 13.5 }}>{(alert.headline ?? '').split(' - ').slice(1).join(' - ') || alert.headline}</p>
+      <div className="muted" style={{ fontSize: 12.5, marginTop: 4 }}>{istShort(ev.start)} → {istShort(ev.end)}</div>
       <div style={{ marginTop: 10 }}>
         <Meter value={alert.priority / 100} color={high ? 'var(--critical)' : 'var(--serious)'} label="Priority" />
       </div>
@@ -61,22 +60,18 @@ function SignalCard({ alert, readOnly }: { alert: any; readOnly: boolean }) {
             { onSuccess: () => navigate('/cases') })}>
           <FileText size={14} />{createCase.isPending ? 'Assembling…' : 'Open case'}
         </button>
-        <Link className="btn btn-sm btn-ghost" to="/lineage"><GitBranch size={14} />Lineage</Link>
-        <Link className="btn btn-sm btn-ghost" to="/coordination"><Network size={14} />Coordination</Link>
-        {readOnly && <span className="muted" style={{ fontSize: 11 }}>Cases created in the demo are temporary.</span>}
+        {manufactured && <Link className="btn btn-sm btn-ghost" to="/coordination">Investigate<ArrowRight size={14} /></Link>}
       </div>
       {createCase.isError && <div className="notice crit" style={{ marginTop: 8 }}>{String(createCase.error)}</div>}
       {open && (
         <div style={{ marginTop: 12 }}>
-          <div className="muted" style={{ fontSize: 12, marginBottom: 8 }}>
-            P = 100 × (0.35·B + 0.30·C + 0.20·S + 0.15·R). Each component is normalised to 0–1.
-          </div>
+          <div className="muted" style={{ fontSize: 12.5, marginBottom: 8 }}>Priority is built from four signals, each scaled 0–1:</div>
           <table className="tbl">
-            <thead><tr><th>Component</th><th>Input</th><th className="num">Weight</th><th style={{ width: '32%' }}>Contribution</th><th className="num">Points</th></tr></thead>
+            <thead><tr><th>Signal</th><th>Value</th><th style={{ width: '36%' }}>Strength</th><th className="num">Points</th></tr></thead>
             <tbody>
               {parts.map(p => (
                 <tr key={p.k}>
-                  <td>{p.k}</td><td className="tnum">{p.raw}</td><td className="num">{p.w.toFixed(2)}</td>
+                  <td>{p.k}</td><td className="tnum">{p.raw}</td>
                   <td><Meter value={p.v} label={p.k} /></td>
                   <td className="num">{(100 * p.w * p.v).toFixed(1)}</td>
                 </tr>
@@ -90,7 +85,6 @@ function SignalCard({ alert, readOnly }: { alert: any; readOnly: boolean }) {
 }
 
 export default function CommandCenter() {
-  const { organicOnly } = useAppStore()
   const { data: health } = useHealth()
   const { data: alertsData, error } = useAlerts()
   const { data: ledger } = useLedgerStatus()
@@ -119,7 +113,7 @@ export default function CommandCenter() {
   const startReplay = async () => {
     try {
       await postJSON('/api/replay/start', {})
-      setReplayMsg('Replay started: ingesting the scenario through the ledger, then running analytics. Progress shows in the top bar.')
+      setReplayMsg('Loading data. The Live indicator in the top bar shows progress.')
     } catch (e) {
       setReplayMsg(String((e as Error).message))
     }
@@ -127,37 +121,36 @@ export default function CommandCenter() {
 
   return (
     <div>
-      <PageHead code="OVR" title="Command Center"
-        sub="Ranked, explained Signal Cards instead of raw volume alarms. Every card shows why it fired and how much of it is coordinated."
-        actions={!readOnly && <button className="btn btn-primary" onClick={startReplay}><Play size={14} />Start replay</button>} />
+      <PageHead title="Overview"
+        sub="What is trending right now, and which of it is being pushed by coordinated accounts."
+        actions={!readOnly && <button className="btn btn-primary" onClick={startReplay}><Play size={14} />Load data</button>} />
       {replayMsg && <div className="notice" style={{ marginBottom: 16 }}>{replayMsg}</div>}
       <ErrorNote error={error} />
 
-      <div className="grid g-4" style={{ marginBottom: 16 }} data-tour="kpis">
-        <Kpi label="Records in evidence ledger" value={num(ledger?.record_count)} foot={`${num(ledger?.checkpoint_count)} signed Merkle checkpoints`}
-          info={<>Every collected record is hash-chained (SHA-256) before analysis; each block of 100 is summarised by a Merkle root signed with Ed25519.</>} />
-        <Kpi label="High-priority signals" value={num(highCount)} foot={`${num(alerts.length)} signals in total · threshold P ≥ ${HIGH}`}
-          info={<>Priority = 100 × (0.35·burst level + 0.30·coordinated share + 0.20·anxiety shift + 0.15·reach). One card per topic.</>} />
-        <Kpi label="Coordinated accounts" value={num(coordinated)} foot="behaviour consistent with scripted amplification"
-          info={<>Account score ≥ 0.7 from co-posting, cadence regularity and repetition inside a narrative cluster. A signal for review, not an accusation.</>} />
-        <Kpi label="Manufactured trends" value={num(allTopics.filter(t => t.nature === 'manufactured').length)} foot={`of ${num(allTopics.length)} detected topics`}
-          info={<>A topic is labelled manufactured when ≥ 30% of its posts come from coordinated accounts.</>} />
+      <div className="grid g-4" style={{ marginBottom: 24 }} data-tour="kpis">
+        <Kpi icon={<Database size={20} />} label="Posts secured" value={num(ledger?.record_count)} foot="tamper-evident"
+          info={<>Every post is hash-chained before analysis, and each block of 100 is sealed with a signed Merkle root.</>} />
+        <Kpi icon={<AlertTriangle size={20} />} label="Priority alerts" value={num(highCount)} foot={`of ${num(alerts.length)} signals`} />
+        <Kpi icon={<Fingerprint size={20} />} label="Coordinated accounts" value={num(coordinated)} foot="acting in sync"
+          info={<>Accounts that post near-identical content in lock-step inside one narrative. A signal for review, not an accusation.</>} />
+        <Kpi icon={<TrendingUp size={20} />} label="Manufactured trends" value={num(allTopics.filter(t => t.nature === 'manufactured').length)} foot={`of ${num(allTopics.length)} topics`}
+          info={<>A trend is manufactured when 30% or more of its posts come from coordinated accounts.</>} />
       </div>
 
       <div className="grid g-main">
         <div className="stack">
           <div className="spread">
-            <h2 className="card-title" style={{ fontSize: 15 }}>Signal Cards</h2>
-            <span className="muted" style={{ fontSize: 12 }}>sorted by priority</span>
+            <h2 className="card-title" style={{ fontSize: 17 }}>Signals</h2>
+            <span className="muted" style={{ fontSize: 12.5 }}>highest priority first</span>
           </div>
-          {alerts.length === 0 ? <Empty>No signals yet.</Empty> : alerts.slice(0, 8).map(a => <SignalCard key={a.alert_id} alert={a} readOnly={readOnly} />)}
+          {alerts.length === 0 ? <Empty>No signals yet.</Empty> : alerts.slice(0, 5).map(a => <SignalCard key={a.alert_id} alert={a} />)}
         </div>
 
         <div className="stack">
           <section className="card">
             <div className="card-head">
               <div>
-                <h2 className="card-title">Posting volume, raw vs organic</h2>
+                <h2 className="card-title">Activity</h2>
                 <p className="card-sub">posts per hour · the gap is coordinated amplification</p>
               </div>
             </div>
@@ -165,10 +158,10 @@ export default function CommandCenter() {
               {series.length === 0 ? <Empty>No posts yet.</Empty> : (
                 <ChartOrTable
                   chart={<>
-                    <Legend items={[{ label: 'Organic only', color: ORGANIC }, { label: 'Raw (all accounts)', color: RAW }]} />
+                    <Legend items={[{ label: 'Organic', color: ORGANIC }, { label: 'All activity', color: RAW }]} />
                     <div style={{ height: 220, marginTop: 8 }}>
                       <ResponsiveContainer>
-                        <AreaChart data={series} margin={{ top: 8, right: 8, left: -18, bottom: 0 }}>
+                        <AreaChart data={series} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                           <CartesianGrid stroke="var(--hairline)" vertical={false} />
                           <XAxis dataKey="bucket" tick={AXIS_TICK} tickFormatter={v => istShort(v)} minTickGap={70} axisLine={{ stroke: 'var(--axis)' }} tickLine={false} />
                           <YAxis tick={AXIS_TICK} axisLine={false} tickLine={false} width={48} />
@@ -190,27 +183,25 @@ export default function CommandCenter() {
             <div className="card-head">
               <div>
                 <h2 className="card-title">Rising topics</h2>
-                <p className="card-sub">rank by rise score <InfoPop>Rise = 0.35·z(burst level) + 0.25·z(acceleration) + 0.20·z(novelty) + 0.20·z(unique-account growth), computed at the newest post.</InfoPop></p>
+                <p className="card-sub">fastest growing right now</p>
               </div>
               <Link to="/trends" className="btn btn-sm btn-ghost">All trends</Link>
             </div>
             <div className="card-body" style={{ paddingTop: 4 }}>
               {topics.length === 0 ? <Empty>No topics yet.</Empty> : (
                 <table className="tbl">
-                  <thead><tr><th>Topic</th><th>Label</th><th className="num">Posts</th><th className="num">Rise</th></tr></thead>
+                  <thead><tr><th>Topic</th><th /><th className="num">Posts</th></tr></thead>
                   <tbody>{topics.map(t => (
                     <tr key={t.topic_id}>
-                      <td style={{ maxWidth: 200 }}>{t.label}<div className="muted" style={{ fontSize: 11 }}>{(t.keywords ?? []).slice(0, 4).join(' · ')}</div></td>
+                      <td style={{ maxWidth: 200, textTransform: 'capitalize' }}>{t.label}</td>
                       <td>{t.nature === 'manufactured' ? <StatusBadge status="critical">Manufactured</StatusBadge> : <StatusBadge status="good">Organic</StatusBadge>}</td>
                       <td className="num">{num(t.n_posts)}</td>
-                      <td className="num">{t.rise != null ? t.rise.toFixed(2) : '—'}</td>
                     </tr>
                   ))}</tbody>
                 </table>
               )}
             </div>
           </section>
-          {organicOnly && <div className="notice">Organic-only mode is on: timeline, trends, network and audience views exclude coordinated accounts.</div>}
         </div>
       </div>
     </div>

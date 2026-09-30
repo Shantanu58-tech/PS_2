@@ -15,30 +15,25 @@ const Lineage = lazy(() => import('./pages/Lineage'))
 const CaseFile = lazy(() => import('./pages/CaseFile'))
 const Ledger = lazy(() => import('./pages/Ledger'))
 const Search = lazy(() => import('./pages/Search'))
-const Sources = lazy(() => import('./pages/Sources'))
-const Compliance = lazy(() => import('./pages/Compliance'))
 import { useAppStore } from './store/app'
-import { useEvalSummary } from './hooks/useApi'
+import { PrahariMark } from './components/Brand'
 
 function MissionBriefing() {
   const { setShowBriefing, setTourActive } = useAppStore()
   return (
     <div className="overlay" role="dialog" aria-modal="true" aria-labelledby="briefing-title">
-      <div className="card" style={{ maxWidth: 600, width: '100%', padding: 28 }}>
-        <div className="muted mono" style={{ fontSize: 11, letterSpacing: '0.14em' }}>SIH 2026 · PS 26152 · NTRO</div>
-        <h1 id="briefing-title" style={{ fontSize: 30, margin: '6px 0 2px', letterSpacing: '0.04em' }}>PRAHARI</h1>
-        <div className="secondary" style={{ marginBottom: 16 }}>प्रहरी · coordination-adjusted social media intelligence</div>
-        <div className="notice crit" style={{ marginBottom: 16 }}>SIMULATED SCENARIO: fictional places, accounts and events.</div>
-        <div className="stack secondary" style={{ gap: 10, fontSize: 14 }}>
-          <p style={{ margin: 0 }}><b style={{ color: 'var(--ink-1)' }}>Problem.</b> Narratives, real and manufactured, spread across Telegram, X, Reddit and YouTube in English and Hinglish. Analysts cannot tell organic virality from coordinated amplification.</p>
-          <p style={{ margin: 0 }}><b style={{ color: 'var(--ink-1)' }}>PRAHARI</b> detects coordinated clusters, shows every metric raw or organic-only, traces where a narrative was first seen, and keeps every record in a tamper-evident, Bitcoin-anchored ledger.</p>
-          <p style={{ margin: 0 }}><b style={{ color: 'var(--ink-1)' }}>Scenario.</b> Seven days of synthetic posts: a dam-crack rumour seeded on Telegram and amplified on X by coordinated accounts, anxious organic reactions, and a bigger but genuine cricket surge as a decoy.</p>
-        </div>
-        <div className="row" style={{ marginTop: 22 }}>
-          <button className="btn btn-primary" style={{ flex: 1, justifyContent: 'center' }} onClick={() => { setShowBriefing(false); setTourActive(true) }}>
-            <PlayCircle size={16} />Start the 3-minute guided investigation
+      <div className="card" style={{ maxWidth: 520, width: '100%', padding: 32, textAlign: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'center' }}><PrahariMark size={64} /></div>
+        <h1 id="briefing-title" style={{ fontSize: 30, fontWeight: 800, margin: '14px 0 2px', letterSpacing: '0.06em' }}>PRAHARI</h1>
+        <div className="muted" style={{ marginBottom: 18 }}>प्रहरी · the sentinel for social media narratives</div>
+        <p className="secondary" style={{ margin: '0 auto', fontSize: 15, maxWidth: 420 }}>
+          See what is trending, tell genuine buzz from coordinated campaigns, trace where a story started, and keep every post as tamper-proof evidence.
+        </p>
+        <div className="row" style={{ marginTop: 26, flexWrap: 'wrap', justifyContent: 'center' }}>
+          <button className="btn btn-primary" onClick={() => { setShowBriefing(false); setTourActive(true) }}>
+            <PlayCircle size={16} />Take the guided tour
           </button>
-          <button className="btn" style={{ flex: 1, justifyContent: 'center' }} onClick={() => setShowBriefing(false)}>Explore freely</button>
+          <button className="btn" onClick={() => setShowBriefing(false)}>Explore on my own</button>
         </div>
       </div>
     </div>
@@ -48,29 +43,23 @@ function MissionBriefing() {
 function GuidedTour() {
   const { tourStep, setTourStep, setTourActive, setOrganicOnly } = useAppStore()
   const navigate = useNavigate()
-  const { data: ev } = useEvalSummary()
-  const lead = ev?.burst?.lead_time_minutes
-  const mig = ev?.lineage?.telegram_to_x_minutes
-  const tamper = ev?.ledger?.tamper_detection_rate
   const STEPS = [
-    { route: '/', organic: false, title: 'A Signal Card fires',
-      body: `The top card is a manufactured surge: a dam-crack rumour amplified by coordinated accounts. Open "Why it fired" to see the priority formula.${lead != null ? ` In evaluation it was flagged ${lead} minutes before a keyword-volume alarm.` : ''}` },
-    { route: '/trends', organic: false, title: 'Manufactured vs organic trends',
-      body: 'Trends marks the rumour as a Manufactured trend, while the bigger cricket surge stays Organic. Shaded bands are Kleinberg burst windows; the purple band is the forecast.' },
-    { route: '/coordination', organic: false, title: 'Why accounts are flagged',
-      body: 'The cluster was flagged for synchrony, low timing entropy and near-duplicate text, and each account is scored on its own cadence. This is a statistical signal, not an accusation.' },
-    { route: '/timeline', organic: true, title: 'Raw vs organic',
-      body: 'The global switch is now on Organic only. Every panel compares all accounts (gray) with coordinated accounts removed (colour).' },
+    { route: '/', organic: false, title: 'A signal fires',
+      body: 'The top signal is a manufactured surge: a dam-crack rumour pushed by accounts acting in sync. Open "Why it fired" to see what drove its priority.' },
+    { route: '/trends', organic: false, title: 'Manufactured vs organic',
+      body: 'The rumour is marked Manufactured, while the bigger cricket buzz stays Organic. Shaded bands are bursts; the dashed line is the forecast.' },
+    { route: '/coordination', organic: false, title: 'Accounts acting in sync',
+      body: 'This group posts copy-paste text within seconds of each other, on a clock-like rhythm. PRAHARI flags the pattern for review; it never calls anyone a bot.' },
+    { route: '/timeline', organic: true, title: 'Organic only',
+      body: 'The switch in the top bar is now on Organic only. Gray is all activity; colour is what real users feel once coordinated accounts are removed.' },
     { route: '/lineage', organic: false, title: 'Where it started',
-      body: `The rumour was first observed on Telegram, then moved to X${mig != null ? ` about ${Math.round(mig)} minutes later` : ''}. Re-encoded and cropped copies of the meme are matched by perceptual hash.` },
+      body: 'The rumour first appeared on Telegram and jumped to X minutes later. Cropped and re-compressed copies of its image are matched automatically.' },
     { route: '/network', organic: false, title: 'Who spreads it',
-      body: 'Coordinated accounts carry a red ring. Switch to Organic only in the top bar to see how the influencer ranking changes when amplification is removed.' },
-    { route: '/ledger', organic: false, title: 'Tamper-evident evidence',
-      body: `Click Verify to re-check every hash, Merkle root and signature, then run the Tamper simulation: one changed character in a copy fails at that exact record.${tamper != null ? ` Evaluation: ${Math.round(tamper * 100)}% of ${ev?.ledger?.tamper_trials} tampers detected.` : ''}` },
-    { route: '/cases', organic: false, title: 'Case & §63 draft',
-      body: 'Open a case from a signal: the brief assembles lineage, coordination and an evidence index with ledger sequence numbers, plus a draft BSA §63 certificate for counsel review.' },
-    { route: '/compliance', organic: false, title: 'PS 26152 coverage',
-      body: 'Requirements A–E and the theme, each with the page that implements it and a measured number from the evaluation harness, including the limitations.' },
+      body: 'Accounts acting in sync carry a red ring. Flip to Organic only to see who genuinely drives the conversation.' },
+    { route: '/ledger', organic: false, title: 'Tamper-proof evidence',
+      body: 'Click Verify integrity, then run the Tamper test: changing a single character in a copy is caught at that exact post.' },
+    { route: '/cases', organic: false, title: 'Build a case',
+      body: 'Start a case from any signal to get a ready-to-share evidence pack, with a draft legal certificate.' },
   ]
   const step = STEPS[tourStep]
   useEffect(() => {
@@ -120,8 +109,6 @@ export default function App() {
           <Route path="/cases" element={<CaseFile />} />
           <Route path="/ledger" element={<Ledger />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/sources" element={<Sources />} />
-          <Route path="/compliance" element={<Compliance />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
         </Suspense>

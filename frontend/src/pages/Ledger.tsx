@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { Bomb, KeyRound, Search as SearchIcon, ShieldCheck } from 'lucide-react'
+import { Bitcoin, Bomb, KeyRound, Lock, Search as SearchIcon, ShieldCheck, Stamp } from 'lucide-react'
 import { getJSON, postJSON, useAudit, useCheckpoints, useLedgerStatus } from '../hooks/useApi'
 import { Card, InfoPop, Kpi, PageHead, StatusBadge } from '../components/ui'
 import { ist, num } from '../lib/fmt'
@@ -34,18 +34,18 @@ export default function Ledger() {
 
   return (
     <div>
-      <PageHead code="THEME" title="Evidence ledger"
-        sub="Append-only and tamper-evident: every record is hashed (SHA-256) and chained to the previous entry. Every 100 entries a Merkle root is signed with Ed25519, and roots can be anchored to Bitcoin through OpenTimestamps." />
-      <div className="grid g-4" style={{ marginBottom: 16 }}>
-        <Kpi label="Records" value={num(status?.record_count)} foot={`last seq ${num(status?.last_seq)}`} />
-        <Kpi label="Signed checkpoints" value={num(status?.checkpoint_count)} foot="Merkle root + Ed25519 per 100 records" />
-        <Kpi label="Signing key" value={<span className="mono" style={{ fontSize: 18 }}>{status?.pubkey_id ?? '—'}</span>} foot="public-key fingerprint" />
-        <Kpi label="Bitcoin anchoring" value={status?.last_checkpoint?.ots_status ?? (status?.ots_enabled ? 'enabled' : 'off')} foot="OpenTimestamps"
-          info={<>The newest checkpoint root is stamped on public OpenTimestamps calendars and later upgraded to a Bitcoin block attestation. Because entries are chained, one anchor covers every earlier record.</>} />
+      <PageHead title="Evidence ledger" sub="Every post is sealed the moment it arrives, so any later change is caught." />
+      <div className="grid g-3" style={{ marginBottom: 24 }}>
+        <Kpi icon={<Lock size={20} />} label="Posts sealed" value={num(status?.record_count)} foot="each chained to the one before"
+          info={<>Every post is fingerprinted (SHA-256) and linked to the previous one, so changing any post breaks the chain from that point on.</>} />
+        <Kpi icon={<Stamp size={20} />} label="Signed seals" value={num(status?.checkpoint_count)} foot="one for every 100 posts"
+          info={<>Every 100 posts are rolled into a single Merkle root and digitally signed (Ed25519).</>} />
+        <Kpi icon={<Bitcoin size={20} />} label="Bitcoin anchor" value={<span style={{ textTransform: 'capitalize' }}>{status?.last_checkpoint?.ots_status ?? (status?.ots_enabled ? 'enabled' : 'off')}</span>} foot="via OpenTimestamps"
+          info={<>The newest seal is timestamped on the Bitcoin blockchain, proving the evidence existed at that time.</>} />
       </div>
 
       <div className="grid g-2" style={{ marginBottom: 16 }}>
-        <Card title="Verify integrity" sub="recompute every record hash, chain link, Merkle root and signature">
+        <Card title="Verify integrity" sub="re-check every post, link and signed seal">
           <button className="btn btn-primary" disabled={!!busy} onClick={() => run('verify')}><ShieldCheck size={15} />{busy === 'verify' ? 'Verifying…' : 'Verify integrity'}</button>
           {verify && (
             <div style={{ marginTop: 12 }}>
@@ -53,25 +53,24 @@ export default function Ledger() {
                 ? <StatusBadge status="good">VERIFICATION PASSED</StatusBadge>
                 : <StatusBadge status="critical">VERIFICATION FAILED</StatusBadge>}
               <div className="secondary" style={{ marginTop: 8, fontSize: 13 }}>
-                {num(verify.records)} records and {num(verify.checkpoints)} signed checkpoints checked in {verify.seconds}s.
-                {verify.status !== 'PASS' && <> First failure at seq {verify.seq}: {verify.reason}.</>}
+                {num(verify.records)} posts and {num(verify.checkpoints)} seals checked in {verify.seconds}s.
+                {verify.status !== 'PASS' && <> First failure at post #{verify.seq}: {verify.reason}.</>}
               </div>
             </div>
           )}
         </Card>
-        <Card title="Tamper simulation" sub="change one character of one stored record, on a scratch copy only"
-          actions={<InfoPop>The real ledger is never modified: the database is copied to a temporary file, the append-only trigger is dropped on the copy, one record's payload is changed, and the copy is verified and deleted.</InfoPop>}>
+        <Card title="Tamper test" sub="change one character in a copy and watch it get caught"
+          actions={<InfoPop>The real ledger is never touched: the test runs on a temporary copy that is deleted afterwards.</InfoPop>}>
           <button className="btn btn-danger" disabled={!!busy} onClick={() => run('tamper')}><Bomb size={15} />{busy === 'tamper' ? 'Simulating…' : 'Run tamper simulation'}</button>
           {tamper && (
             <div style={{ marginTop: 12 }}>
-              <div className="secondary" style={{ fontSize: 13 }}>Mutated record <b className="mono">seq {tamper.tampered_seq}</b> at byte {tamper.byte_offset} (scratch copy).</div>
+              <div className="secondary" style={{ fontSize: 13 }}>Changed one character in <b>post #{tamper.tampered_seq}</b> (on a copy).</div>
               <div className="row-wrap" style={{ marginTop: 8 }}>
                 {tamper.verify_result?.status === 'FAIL'
                   ? <StatusBadge status="critical">Detected: {tamper.verify_result.reason}</StatusBadge>
                   : <StatusBadge status="warning">Not detected</StatusBadge>}
-                {tamper.detected_at_expected_seq && <StatusBadge status="good">Pinpointed exact record</StatusBadge>}
+                {tamper.detected_at_expected_seq && <StatusBadge status="good">Pinpointed the exact post</StatusBadge>}
               </div>
-              <div className="muted" style={{ fontSize: 12, marginTop: 6 }}>The original ledger is unchanged. Run Verify again to confirm.</div>
             </div>
           )}
         </Card>
@@ -79,24 +78,24 @@ export default function Ledger() {
       {err && <div className="notice crit" style={{ marginBottom: 16 }}>{err}</div>}
 
       <div className="grid g-2">
-        <Card title="Signed checkpoints" sub="newest first">
+        <Card title="Signed seals" sub="newest first">
           <table className="tbl">
-            <thead><tr><th>#</th><th>Seq range</th><th>Merkle root</th><th>OTS</th></tr></thead>
+            <thead><tr><th>#</th><th>Posts</th><th>Fingerprint</th><th>Bitcoin</th></tr></thead>
             <tbody>{(cps?.checkpoints ?? []).map((c: any) => (
               <tr key={c.id}><td className="tnum">{c.id}</td><td className="tnum">{c.first_seq}–{c.last_seq}</td><td className="mono" style={{ fontSize: 12 }} title={c.merkle_root}>{short(c.merkle_root)}</td>
                 <td>{c.ots_status ? <span className="chip">{c.ots_status}</span> : <span className="muted">—</span>}</td></tr>
             ))}</tbody>
           </table>
         </Card>
-        <Card title="Inclusion proof" sub="prove one record belongs to a signed checkpoint">
+        <Card title="Proof of inclusion" sub="prove a single post is part of a signed seal">
           <div className="row">
             <input className="input" style={{ width: 140 }} inputMode="numeric" value={seq} onChange={e => setSeq(e.target.value.replace(/\D/g, ''))} aria-label="Record sequence number" />
             <button className="btn" disabled={!seq || !!busy} onClick={lookup}><SearchIcon size={14} />Get proof</button>
-            <InfoPop>A verifier needs only the record, this Merkle path and the ledger public key. Hash the entry up the path and compare with the signed root.</InfoPop>
+            <InfoPop>Anyone can check this proof with just the post, this short path and our public key.</InfoPop>
           </div>
           {proof && (
             <div style={{ marginTop: 12, fontSize: 13 }} className="stack">
-              <div className="row"><KeyRound size={14} />Checkpoint {proof.checkpoint.id} (seq {proof.checkpoint.first_seq}–{proof.checkpoint.last_seq}) · leaf index {proof.index}</div>
+              <div className="row"><KeyRound size={14} />Seal {proof.checkpoint.id} (posts {proof.checkpoint.first_seq}–{proof.checkpoint.last_seq})</div>
               <div className="mono" style={{ fontSize: 12 }}>entry {short(proof.record.entry_hash)}</div>
               <ol style={{ margin: 0, paddingLeft: 18 }} className="mono">
                 {proof.path.map((p: any, i: number) => <li key={i} style={{ fontSize: 12 }}>{p.position === 'left' ? 'left ' : 'right'} {short(p.hash)}</li>)}
@@ -107,12 +106,12 @@ export default function Ledger() {
         </Card>
       </div>
 
-      <Card title="Audit trail" sub="analyst actions are written into the same hash chain" style={{ marginTop: 16 }}>
-        {(audit?.entries ?? []).length === 0 ? <div className="muted">No analyst actions yet.</div> : (
+      <Card title="Activity log" sub="every analyst action is sealed too" style={{ marginTop: 20 }}>
+        {(audit?.entries ?? []).length === 0 ? <div className="muted">No actions yet.</div> : (
           <table className="tbl">
-            <thead><tr><th>Time</th><th>Action</th><th>Detail</th><th className="num">Ledger seq</th></tr></thead>
-            <tbody>{audit.entries.map((a: any) => (
-              <tr key={a.id}><td>{ist(a.ts)}</td><td>{a.action.replace(/_/g, ' ')}</td><td className="mono" style={{ fontSize: 12 }}>{a.detail_json}</td><td className="num mono">{a.ledger_seq}</td></tr>
+            <thead><tr><th>Time</th><th>Action</th><th className="num">Evidence #</th></tr></thead>
+            <tbody>{audit.entries.slice(0, 10).map((a: any) => (
+              <tr key={a.id}><td>{ist(a.ts)}</td><td style={{ textTransform: 'capitalize' }}>{a.action.replace(/_/g, ' ')}</td><td className="num">{a.ledger_seq}</td></tr>
             ))}</tbody>
           </table>
         )}

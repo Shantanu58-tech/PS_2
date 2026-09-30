@@ -3,11 +3,10 @@ import { AlertTriangle, CheckCircle2, Info, ShieldAlert, BarChart3, Table2, Load
 import { Link } from 'react-router-dom'
 import { useHealth } from '../hooks/useApi'
 
-export function PageHead({ title, sub, actions, code }: { title: string; sub?: ReactNode; actions?: ReactNode; code?: string }) {
+export function PageHead({ title, sub, actions }: { title: string; sub?: ReactNode; actions?: ReactNode; code?: string }) {
   return (
     <div className="page-head">
       <div>
-        {code && <div className="muted mono" style={{ fontSize: 11, letterSpacing: '0.12em' }}>{code}</div>}
         <h1 className="page-title">{title}</h1>
         {sub && <p className="page-sub">{sub}</p>}
       </div>
@@ -35,12 +34,15 @@ export function Card({ title, sub, actions, children, pad = false, className = '
   )
 }
 
-export function Kpi({ label, value, foot, info, tone }: { label: ReactNode; value: ReactNode; foot?: ReactNode; info?: ReactNode; tone?: 'good' | 'critical' }) {
+export function Kpi({ label, value, foot, info, tone, icon }: { label: ReactNode; value: ReactNode; foot?: ReactNode; info?: ReactNode; tone?: 'good' | 'critical'; icon?: ReactNode }) {
   return (
     <div className="card kpi">
-      <div className="kpi-label">{label}{info && <InfoPop>{info}</InfoPop>}</div>
-      <div className="kpi-value" style={tone ? { color: tone === 'good' ? 'var(--good-ink)' : 'var(--ink-1)' } : undefined}>{value}</div>
-      {foot && <div className="kpi-foot">{foot}</div>}
+      {icon && <div className="kpi-icon" aria-hidden="true">{icon}</div>}
+      <div style={{ minWidth: 0 }}>
+        <div className="kpi-label">{label}{info && <InfoPop>{info}</InfoPop>}</div>
+        <div className="kpi-value" style={tone ? { color: tone === 'good' ? 'var(--good-ink)' : 'var(--ink-1)' } : undefined}>{value}</div>
+        {foot && <div className="kpi-foot">{foot}</div>}
+      </div>
     </div>
   )
 }
@@ -152,11 +154,7 @@ export function Empty({ children }: { children?: ReactNode }) {
   return (
     <div className="empty">
       {children ?? 'No data yet.'}
-      <div style={{ marginTop: 8 }}>
-        {health?.demo_readonly
-          ? <span className="muted">This public demo is read-only and pre-loaded; if this stays empty, reload in a minute.</span>
-          : <Link to="/">Start the replay from the Command Center →</Link>}
-      </div>
+      {health && !health.demo_readonly && <div style={{ marginTop: 8 }}><Link to="/">Load data from the Overview →</Link></div>}
     </div>
   )
 }

@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
 import { ExternalLink, FilePlus2, Scale } from 'lucide-react'
-import { useAlerts, useCases, useCreateCase, useHealth } from '../hooks/useApi'
-import { Card, Empty, PageHead, StatusBadge } from '../components/ui'
-import { ist, num } from '../lib/fmt'
+import { useAlerts, useCases, useCreateCase } from '../hooks/useApi'
+import { Card, Empty, PageHead } from '../components/ui'
+import { ist } from '../lib/fmt'
 
 export default function CaseFile() {
-  const { data: health } = useHealth()
   const { data: alertsData } = useAlerts()
   const { data: casesData } = useCases()
   const createCase = useCreateCase()
@@ -16,19 +15,17 @@ export default function CaseFile() {
 
   return (
     <div>
-      <PageHead code="CASE" title="Case files"
-        sub="A case turns a Signal Card into an evidence pack: summary, lineage, raw-vs-organic affect, coordination statistics, an evidence index with ledger sequence numbers and record hashes, and a draft BSA §63 certificate." />
-      {health?.demo_readonly && <div className="notice" style={{ marginBottom: 16 }}>Public demo: cases you create are kept until the server restarts, then the demo resets.</div>}
+      <PageHead title="Cases" sub="Turn a signal into a ready-to-share evidence pack." />
       <div className="grid" style={{ gridTemplateColumns: 'minmax(260px, 360px) minmax(0, 1fr)' }}>
         <div className="stack">
-          <Card title="Open a case from a signal">
+          <Card title="Start a case">
             {alerts.length === 0 ? <Empty>No signals.</Empty> : (
               <div className="stack" style={{ gap: 8 }}>
                 {alerts.slice(0, 6).map(a => (
                   <div key={a.alert_id} className="spread" style={{ alignItems: 'flex-start' }}>
                     <div style={{ minWidth: 0 }}>
-                      <div style={{ fontSize: 13, fontWeight: 560 }}>{a.topic_label ?? 'Topic'}</div>
-                      <div className="muted" style={{ fontSize: 12 }}>P {a.priority.toFixed(0)} · {a.status}</div>
+                      <div style={{ fontSize: 13.5, fontWeight: 600, textTransform: 'capitalize' }}>{a.topic_label ?? 'Topic'}</div>
+                      <div className="muted" style={{ fontSize: 12 }}>priority {a.priority.toFixed(0)}</div>
                     </div>
                     <button className="btn btn-sm" disabled={createCase.isPending}
                       onClick={() => createCase.mutate({ alert_id: a.alert_id, title: (a.topic_label ?? a.headline).slice(0, 80) },
@@ -41,14 +38,13 @@ export default function CaseFile() {
               </div>
             )}
           </Card>
-          <Card title="Cases" sub={`${num(cases.length)} in this session`}>
-            {cases.length === 0 ? <div className="muted">No cases yet. Open one from a signal above.</div> : (
+          <Card title="Your cases">
+            {cases.length === 0 ? <div className="muted">No cases yet. Start one above.</div> : (
               <div className="stack" style={{ gap: 4 }}>
                 {cases.map(c => (
                   <button key={c.case_id} className="btn btn-ghost" onClick={() => setSel(c.case_id)}
-                    style={{ justifyContent: 'space-between', textAlign: 'left', background: sel === c.case_id ? 'var(--surface-2)' : undefined }}>
-                    <span>Case #{c.case_id} · {c.title}<div className="muted" style={{ fontSize: 11 }}>{ist(c.created_at)}</div></span>
-                    {c.n_certificates > 0 && <StatusBadge status="warning">§63 draft</StatusBadge>}
+                    style={{ justifyContent: 'space-between', textAlign: 'left', borderRadius: 12, background: sel === c.case_id ? 'var(--accent-soft)' : undefined }}>
+                    <span style={{ textTransform: 'capitalize' }}>{c.title}<div className="muted" style={{ fontSize: 12, fontWeight: 400 }}>Case #{c.case_id} · {ist(c.created_at)}</div></span>
                   </button>
                 ))}
               </div>
@@ -56,15 +52,14 @@ export default function CaseFile() {
           </Card>
         </div>
         {sel != null ? (
-          <Card title={`Case #${sel} brief`} sub="auto-assembled; every figure links back to ledger records"
+          <Card title={`Case #${sel}`} sub="evidence pack, assembled automatically"
             actions={<>
               <a className="btn btn-sm" href={`/api/cases/${sel}/brief`} target="_blank" rel="noreferrer"><ExternalLink size={14} />Open brief</a>
-              <a className="btn btn-sm" href={`/api/cases/${sel}/certificate`} target="_blank" rel="noreferrer"><Scale size={14} />§63 draft certificate</a>
+              <a className="btn btn-sm" href={`/api/cases/${sel}/certificate`} target="_blank" rel="noreferrer" title="Draft BSA §63 certificate for legal review"><Scale size={14} />Certificate (draft)</a>
             </>}>
-            <div className="notice warn" style={{ marginBottom: 10 }}>The §63 certificate is a DRAFT for review and signature. It is not a legal opinion, and no admissibility is claimed.</div>
-            <iframe title={`Case ${sel} brief`} src={`/api/cases/${sel}/brief`} style={{ width: '100%', height: 640, border: '1px solid var(--ring)', borderRadius: 8, background: '#fff' }} />
+            <iframe title={`Case ${sel} brief`} src={`/api/cases/${sel}/brief`} style={{ width: '100%', height: 640, border: '1px solid var(--ring)', borderRadius: 12, background: '#fff' }} />
           </Card>
-        ) : <Empty>Open a case to see its brief.</Empty>}
+        ) : <Empty>Start a case to see its evidence pack.</Empty>}
       </div>
     </div>
   )

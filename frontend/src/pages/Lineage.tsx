@@ -23,7 +23,7 @@ function Swimlanes({ lin }: { lin: any }) {
             <div className="lane-track">
               <span className="lane-dot" style={{ left: `${x}%`, background: PLATFORM_SLOT[p.platform] ?? 'var(--ink-3)' }} title={ist(p.first_seen)} />
               <span className="muted" style={{ position: 'absolute', ...(x > 50 ? { right: `calc(${100 - x}% + 12px)` } : { left: `calc(${x}% + 12px)` }), top: 4, fontSize: 12, whiteSpace: 'nowrap' }}>
-                {i === 0 ? 'earliest observed' : `+${minutesBetween(plats[0].first_seen, p.first_seen)} min`} · {num(p.n_posts)} posts{p.has_media ? ' · image' : ''}
+                {i === 0 ? 'first seen' : `+${minutesBetween(plats[0].first_seen, p.first_seen)} min`} · {num(p.n_posts)} post{p.n_posts === 1 ? '' : 's'}
               </span>
             </div>
           </div>
@@ -43,17 +43,16 @@ export default function Lineage() {
 
   return (
     <div>
-      <PageHead code="V3" title="Narrative lineage"
-        sub="Where a narrative was first seen and how it moved across platforms: text-claim clustering, repost and forward chains (Telegram forward headers), and perceptual image hashing." />
+      <PageHead title="Lineage" sub="Where a story started and how it moved across platforms." />
       {topics.length === 0 ? <Empty>No lineage yet.</Empty> : (
         <div className="stack">
           <div className="row-wrap">
             <Seg label="Narrative" value={sel} onChange={setSel}
-              options={topics.slice(0, 4).map(t => ({ value: String(t.topic_id), label: t.label }))} />
+              options={topics.slice(0, 4).map(t => ({ value: String(t.topic_id), label: <span style={{ textTransform: 'capitalize' }}>{t.label}</span> }))} />
           </div>
           {lin && (
             <div className="grid g-main">
-              <Card title={lin.label} sub={`${num(lin.n_posts)} posts · ${pct(lin.coordinated_share)} from coordinated accounts`}
+              <Card title={<span style={{ textTransform: 'capitalize' }}>{lin.label}</span>} sub={`${num(lin.n_posts)} posts · ${pct(lin.coordinated_share)} from coordinated accounts`}
                 actions={lin.nature === 'manufactured' ? <StatusBadge status="critical">Manufactured</StatusBadge> : <StatusBadge status="good">Organic</StatusBadge>}>
                 <Swimlanes lin={lin} />
                 <div className="divider" />
@@ -65,31 +64,29 @@ export default function Lineage() {
                     </span>
                   ))}
                 </div>
-                <p className="muted" style={{ fontSize: 12, marginTop: 10, fontStyle: 'italic' }}>{lin.caveat}</p>
               </Card>
-              <Card title="Origin candidate" sub={ist(lin.earliest_observed)}>
+              <Card title="First seen" sub={ist(lin.earliest_observed)}>
                 {lin.origin_candidate && (
                   <div className="stack" style={{ gap: 8 }}>
                     <span className="badge"><span className="dot" style={{ background: PLATFORM_SLOT[lin.origin_candidate.platform] }} />{PLATFORM_LABEL[lin.origin_candidate.platform]}</span>
-                    <blockquote style={{ margin: 0, paddingLeft: 12, borderLeft: '2px solid var(--axis)', color: 'var(--ink-1)' }}>{lin.origin_candidate.text}</blockquote>
-                    <div className="muted mono" style={{ fontSize: 12 }}>{lin.origin_candidate.first_post_id} · author {lin.origin_candidate.author_id}</div>
-                    <div className="muted" style={{ fontSize: 12 }}>{num((lin.chains ?? []).length)} explicit repost/forward links traced from here.</div>
+                    <blockquote style={{ margin: 0, padding: '10px 14px', borderRadius: 12, background: 'var(--surface-2)', color: 'var(--ink-1)' }}>{lin.origin_candidate.text}</blockquote>
+                    <div className="muted" style={{ fontSize: 12.5 }}>by @{lin.origin_candidate.author_id} · {num((lin.chains ?? []).length)} reposts and forwards traced from here</div>
                   </div>
                 )}
               </Card>
             </div>
           )}
-          <Card title="Image variants" sub="perceptual hash (pHash) matches: same picture after re-encoding, cropping or watermarking"
-            actions={<InfoPop>64-bit pHash; a match is a Hamming distance ≤ threshold. On our 200-image transformation suite the chosen threshold gives the recall and false-positive rate shown on the PS 26152 &amp; Eval page.</InfoPop>}>
+          <Card title="Image copies" sub="the same picture found again after cropping, re-compressing or watermarking"
+            actions={<InfoPop>Each image gets a visual fingerprint. Two images match when their fingerprints are nearly identical, even after edits.</InfoPop>}>
             {images.length === 0 ? <Empty>No image matches.</Empty> : (
               <table className="tbl">
-                <thead><tr><th>First seen</th><th /><th>Variant</th><th className="num">Hamming</th><th className="num">Posts</th></tr></thead>
+                <thead><tr><th>Original</th><th /><th>Copy</th><th className="num">Similarity</th><th className="num">Posts</th></tr></thead>
                 <tbody>{images.map((m, i) => (
                   <tr key={i}>
-                    <td><span className="row"><ImageIcon size={14} /><span className="mono" style={{ fontSize: 12 }}>{m.media_id_a}</span></span><div className="muted" style={{ fontSize: 11 }}>{PLATFORM_LABEL[m.platform_a]} · {ist(m.first_seen_a)}</div></td>
+                    <td><span className="row"><ImageIcon size={14} />{PLATFORM_LABEL[m.platform_a]}</span><div className="muted" style={{ fontSize: 12 }}>{ist(m.first_seen_a)}</div></td>
                     <td><ArrowRight size={14} /></td>
-                    <td><span className="mono" style={{ fontSize: 12 }}>{m.media_id_b}</span><div className="muted" style={{ fontSize: 11 }}>{PLATFORM_LABEL[m.platform_b]} · {ist(m.first_seen_b)}</div></td>
-                    <td className="num">{m.hamming} / {m.threshold}</td>
+                    <td>{PLATFORM_LABEL[m.platform_b]}<div className="muted" style={{ fontSize: 12 }}>{ist(m.first_seen_b)}</div></td>
+                    <td className="num">{Math.round((1 - m.hamming / 64) * 100)}%</td>
                     <td className="num">{m.posts_b}</td>
                   </tr>
                 ))}</tbody>

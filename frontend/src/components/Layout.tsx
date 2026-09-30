@@ -1,111 +1,102 @@
-import { ReactNode, useEffect } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { ReactNode, useEffect, useState } from 'react'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import {
-  Activity, BookOpenCheck, Database, FileText, Fingerprint, GitBranch, Menu, Moon, Network as NetIcon,
-  Radar, Search as SearchIcon, ShieldCheck, Sun, TrendingUp, Users, PlayCircle,
+  Activity, FileText, Fingerprint, GitBranch, Info, LayoutDashboard, Menu, Moon, Network as NetIcon,
+  PlayCircle, Search as SearchIcon, ShieldCheck, Sun, TrendingUp, Users,
 } from 'lucide-react'
 import { useAppStore } from '../store/app'
 import { useHealth } from '../hooks/useApi'
 import { useLiveStatus } from '../hooks/useLive'
 import { Seg } from './ui'
+import { PrahariLogo } from './Brand'
 
-export const NAV: { group: string; items: { path: string; label: string; code: string; icon: ReactNode }[] }[] = [
+export const NAV: { group: string; items: { path: string; label: string; icon: ReactNode }[] }[] = [
   { group: 'Monitor', items: [
-    { path: '/', label: 'Command Center', code: 'OVR', icon: <Radar size={16} /> },
-    { path: '/timeline', label: 'Timeline & Emotions', code: 'B', icon: <Activity size={16} /> },
-    { path: '/trends', label: 'Trends', code: 'D', icon: <TrendingUp size={16} /> },
+    { path: '/', label: 'Overview', icon: <LayoutDashboard size={19} /> },
+    { path: '/trends', label: 'Trends', icon: <TrendingUp size={19} /> },
+    { path: '/timeline', label: 'Emotions', icon: <Activity size={19} /> },
   ] },
   { group: 'Investigate', items: [
-    { path: '/coordination', label: 'Coordination', code: 'V2', icon: <Fingerprint size={16} /> },
-    { path: '/network', label: 'Network', code: 'E', icon: <NetIcon size={16} /> },
-    { path: '/lineage', label: 'Lineage', code: 'V3', icon: <GitBranch size={16} /> },
-    { path: '/audience', label: 'Audience', code: 'C', icon: <Users size={16} /> },
-    { path: '/search', label: 'Search', code: 'FTS', icon: <SearchIcon size={16} /> },
+    { path: '/coordination', label: 'Coordination', icon: <Fingerprint size={19} /> },
+    { path: '/network', label: 'Network', icon: <NetIcon size={19} /> },
+    { path: '/lineage', label: 'Lineage', icon: <GitBranch size={19} /> },
+    { path: '/audience', label: 'Audience', icon: <Users size={19} /> },
   ] },
   { group: 'Evidence', items: [
-    { path: '/cases', label: 'Cases', code: 'CASE', icon: <FileText size={16} /> },
-    { path: '/ledger', label: 'Ledger', code: 'LDG', icon: <ShieldCheck size={16} /> },
-  ] },
-  { group: 'System', items: [
-    { path: '/sources', label: 'Sources', code: 'A', icon: <Database size={16} /> },
-    { path: '/compliance', label: 'PS 26152 & Eval', code: 'PS', icon: <BookOpenCheck size={16} /> },
+    { path: '/cases', label: 'Cases', icon: <FileText size={19} /> },
+    { path: '/ledger', label: 'Evidence ledger', icon: <ShieldCheck size={19} /> },
   ] },
 ]
 
-function EngineStatus() {
+function LiveDot() {
   const { data: health, isError } = useHealth()
   const live = useLiveStatus()
-  const analytics = live?.analytics
-  const replay = live?.replay
-  if (isError) return <span className="badge status-critical">Engine unreachable</span>
-  if (!health) return <span className="badge">Connecting…</span>
-  if (replay?.state === 'running') {
-    return <span className="badge status-warning">Replay {Math.round((replay.ingested / Math.max(1, replay.total)) * 100)}%</span>
-  }
-  if (analytics?.state === 'running') return <span className="badge status-warning">Analytics: {analytics.stage ?? 'running'}</span>
+  if (isError) return <span className="live-dot down">Offline</span>
+  if (!health) return <span className="live-dot busy">Connecting</span>
+  if (live?.replay?.state === 'running' || live?.analytics?.state === 'running') return <span className="live-dot busy">Updating</span>
+  return <span className="live-dot">Live</span>
+}
+
+function TopSearch() {
+  const navigate = useNavigate()
+  const [q, setQ] = useState('')
   return (
-    <span className="row">
-      <span className="badge status-good" title={`${health.service} v${health.version}`}>Engine online</span>
-      <span className="badge">{health.mode === 'live' ? 'LIVE' : 'REPLAY'}</span>
-      {health.demo_readonly && <span className="badge" title="Public demo: ingestion and configuration are disabled">Read-only demo</span>}
-    </span>
+    <form className="search-pill hide-mobile" role="search" onSubmit={e => { e.preventDefault(); if (q.trim()) navigate(`/search?q=${encodeURIComponent(q.trim())}`) }}>
+      <SearchIcon size={16} />
+      <input value={q} onChange={e => setQ(e.target.value)} placeholder="Search posts, hashtags, accounts…" aria-label="Search posts" />
+    </form>
   )
 }
 
 export default function Layout({ children }: { children: ReactNode }) {
-  const { organicOnly, setOrganicOnly, theme, setTheme, navOpen, setNavOpen, setTourActive } = useAppStore()
+  const { organicOnly, setOrganicOnly, theme, setTheme, navOpen, setNavOpen, setTourActive, setShowBriefing } = useAppStore()
   const location = useLocation()
   useEffect(() => setNavOpen(false), [location.pathname, setNavOpen])
 
   return (
     <div className="shell">
-      <div className="shell-banner sim-banner" role="note">
-        SIMULATED SCENARIO — fictional places, accounts and events · PRAHARI · SIH 2026 · PS 26152 (NTRO) · Team MOGGERS, VIT Pune
-      </div>
       <aside className={`sidebar ${navOpen ? 'open' : ''}`} aria-label="Primary navigation">
-        <div className="brand">
-          <div className="brand-name">PRAHARI</div>
-          <div className="brand-sub">प्रहरी · narrative intelligence</div>
-        </div>
+        <div className="brand"><Link to="/"><PrahariLogo size={38} /></Link></div>
         <nav className="nav">
           {NAV.map(g => (
             <div key={g.group}>
               <div className="nav-group">{g.group}</div>
               {g.items.map(n => (
                 <NavLink key={n.path} to={n.path} end={n.path === '/'} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                  {n.icon}<span>{n.label}</span><span className="code">{n.code}</span>
+                  {n.icon}<span>{n.label}</span>
                 </NavLink>
               ))}
             </div>
           ))}
         </nav>
-        <div className="sidebar-foot stack" style={{ gap: 8 }}>
-          <button className="btn btn-sm" onClick={() => setTourActive(true)}><PlayCircle size={14} />Guided investigation</button>
-          <span className="muted" style={{ fontSize: 11 }}>Times shown in IST · data is synthetic</span>
+        <div className="sidebar-foot stack" style={{ gap: 2 }}>
+          <button className="nav-link" style={{ border: 0, background: 'transparent', cursor: 'pointer', font: 'inherit', textAlign: 'left' }} onClick={() => setTourActive(true)}>
+            <PlayCircle size={19} /><span>Guided tour</span>
+          </button>
+          <button className="nav-link" style={{ border: 0, background: 'transparent', cursor: 'pointer', font: 'inherit', textAlign: 'left' }} onClick={() => setShowBriefing(true)}>
+            <Info size={19} /><span>About PRAHARI</span>
+          </button>
         </div>
       </aside>
       <main className="main" id="main">
-        <div className="topbar">
+        <header className="topbar">
           <div className="topbar-inner">
-            <button className="btn btn-ghost btn-sm mobile-only" aria-label="Open navigation" onClick={() => setNavOpen(!navOpen)}><Menu size={16} /></button>
-            <Seg label="Analytics view" value={organicOnly ? 'organic' : 'raw'} onChange={v => setOrganicOnly(v === 'organic')} options={[
-              { value: 'raw', label: 'Raw' },
+            <button className="icon-btn mobile-only" aria-label="Open navigation" onClick={() => setNavOpen(!navOpen)}><Menu size={18} /></button>
+            <TopSearch />
+            <span style={{ marginLeft: 'auto' }} />
+            <Seg label="Which accounts to count" value={organicOnly ? 'organic' : 'raw'} onChange={v => setOrganicOnly(v === 'organic')} options={[
+              { value: 'raw', label: 'All activity' },
               { value: 'organic', label: 'Organic only' },
             ]} />
-            <span className="muted" style={{ fontSize: 12 }}>
-              {organicOnly ? 'Coordinated accounts (score ≥ 0.7) removed from every view' : 'All accounts, including coordinated amplification'}
-            </span>
-            <span style={{ marginLeft: 'auto' }} />
-            <EngineStatus />
-            <button className="btn btn-ghost btn-sm" aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+            <span className="hide-mobile"><LiveDot /></span>
+            <button className="icon-btn" aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-              {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+              {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
             </button>
           </div>
-        </div>
+        </header>
         <div className="page">{children}</div>
       </main>
     </div>
   )
 }
-

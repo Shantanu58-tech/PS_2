@@ -58,25 +58,25 @@ export default function Network() {
 
   return (
     <div>
-      <PageHead code="PS · E" title="Network & influence"
-        sub={organicOnly ? 'Organic-only view: coordinated accounts removed and every metric recomputed.' : 'Account-to-account interaction graph (replies, reposts, forwards, mentions). Switch to Organic only to see who really influences.'} />
+      <PageHead title="Network"
+        sub={organicOnly ? 'Showing organic accounts only: rankings recomputed without coordinated accounts.' : 'Who influences whom. Switch to Organic only to see who really drives the conversation.'} />
       <div className="grid g-main">
-        <Card title="Interaction graph" sub={g ? `${num(data.nodes.length)} most-connected of ${num(g.total_nodes)} accounts · ${num(g.communities)} communities · store: ${g.store}` : ''}>
+        <Card title="Interaction map" sub={g ? `${num(data.nodes.length)} most-connected accounts` : ''}>
           <Legend items={[
-            { label: `Community 1 (${data.topCount[0] ?? 0})`, color: 'var(--s1)' },
-            { label: `Community 2 (${data.topCount[1] ?? 0})`, color: 'var(--s2)' },
-            { label: `Community 3 (${data.topCount[2] ?? 0})`, color: 'var(--s3)' },
-            { label: 'Other communities', color: 'var(--neutral-series)' },
-            { label: 'Ring = flagged coordinated', color: 'var(--critical)' },
+            { label: 'Group 1', color: 'var(--s1)' },
+            { label: 'Group 2', color: 'var(--s2)' },
+            { label: 'Group 3', color: 'var(--s3)' },
+            { label: 'Other', color: 'var(--neutral-series)' },
+            { label: 'Red ring: in sync', color: 'var(--critical)' },
           ]} />
-          <div ref={box} className={isFetching ? 'loading-hold' : ''} style={{ height: 460, marginTop: 8, borderRadius: 8, overflow: 'hidden', background: 'var(--surface-1)', position: 'relative' }}>
+          <div ref={box} className={isFetching ? 'loading-hold' : ''} style={{ height: 460, marginTop: 10, borderRadius: 12, overflow: 'hidden', background: 'var(--surface-1)', position: 'relative' }}>
             {data.nodes.length === 0 ? <Empty>No interactions yet.</Empty> : (
               <ForceGraph2D
                 width={width} height={460} graphData={data} backgroundColor={colors.bg}
                 nodeId="id" cooldownTicks={120} d3VelocityDecay={0.35}
                 linkColor={() => colors.link} linkWidth={(l: any) => Math.min(3, 0.5 + l.weight / 4)}
                 linkDirectionalArrowLength={2.5} linkDirectionalArrowRelPos={1}
-                nodeLabel={(n: any) => `${n.id} · PageRank ${n.pagerank.toFixed(4)}${n.coordinated ? ' · flagged coordinated' : ''}`}
+                nodeLabel={(n: any) => `@${n.id}${n.coordinated ? ' · in sync' : ''}`}
                 onNodeHover={(n: any) => setHover(n)}
                 nodeCanvasObject={(n: any, ctx, scale) => {
                   const r = 3 + 12 * Math.sqrt(n.pagerank / maxPr)
@@ -91,29 +91,24 @@ export default function Network() {
             )}
             {hover && (
               <div className="chart-tip" style={{ position: 'absolute', top: 10, left: 10 }}>
-                <div className="t mono">{hover.id}</div>
-                <div className="r"><span>PageRank</span><span className="tnum">{hover.pagerank.toFixed(4)}</span></div>
-                <div className="r"><span>Weighted degree</span><span className="tnum">{hover.degree}</span></div>
-                <div className="r"><span>Coordination score</span><span className="tnum">{hover.coord_score.toFixed(2)}</span></div>
-                <div className="r"><span>Behaviour likelihood</span><span className="tnum">{hover.behaviour_likelihood.toFixed(2)}</span></div>
+                <div className="t">@{hover.id}</div>
+                <div className="r"><span>Interactions</span><span className="tnum">{hover.degree}</span></div>
+                <div className="r"><span>Coordination</span><span className="tnum">{Math.round(hover.coord_score * 100)}%</span></div>
               </div>
             )}
           </div>
         </Card>
 
         <div className="stack">
-          <Card title="Key opinion leaders" sub={`ranked by influence · ${organicOnly ? 'organic-only' : 'raw'} view`}
-            actions={<InfoPop>Influence = 0.5·cascade + 0.3·PageRank + 0.2·betweenness (each normalised). Cascade = accounts that replied to, reposted or forwarded this account, directly or indirectly. The arrow shows the rank change versus the other view.</InfoPop>}>
+          <Card title="Top influencers" sub={organicOnly ? 'organic accounts only' : 'all activity'}
+            actions={<InfoPop>Influence combines how far an account's posts travel (replies, reposts and forwards, direct or indirect) with its position in the network. The arrow shows how its rank changes when you flip the All activity / Organic only switch.</InfoPop>}>
             <table className="tbl">
-              <thead><tr><th>#</th><th>Account</th><th className="num">Cascade</th><th className="num">vs {organicOnly ? 'raw' : 'organic'}</th></tr></thead>
+              <thead><tr><th>#</th><th>Account</th><th className="num">Reach</th><th className="num">Change</th></tr></thead>
               <tbody>{(inf?.influencers ?? []).map((k: any) => (
                 <tr key={k.account_id}>
                   <td className="tnum">{k.rank}</td>
-                  <td className="mono" style={{ fontSize: 12 }}>{k.account_id}
-                    <div className="row" style={{ gap: 4, marginTop: 2 }}>
-                      <span className="chip">{k.role}</span>
-                      {k.coordinated && <StatusBadge status="critical">coordinated</StatusBadge>}
-                    </div>
+                  <td>@{k.account_id}
+                    {k.coordinated && <div style={{ marginTop: 3 }}><StatusBadge status="critical">In sync</StatusBadge></div>}
                   </td>
                   <td className="num">{num(k.cascade_size)}</td>
                   <td className="num"><RankDelta rank={k.rank} other={k.rank_other_view} /></td>
@@ -121,19 +116,19 @@ export default function Network() {
               ))}</tbody>
             </table>
           </Card>
-          <Card title="Bridge accounts" sub="connect otherwise separate communities">
-            <table className="tbl"><tbody>{(inf?.bridges ?? []).slice(0, 6).map((b: any) => (
-              <tr key={b.account_id}><td className="mono" style={{ fontSize: 12 }}>{b.account_id}</td><td className="num">{b.communities_touched} communities</td><td className="num">{b.betweenness.toFixed(4)}</td></tr>
+          <Card title="Bridges" sub="accounts linking otherwise separate groups">
+            <table className="tbl"><tbody>{(inf?.bridges ?? []).slice(0, 5).map((b: any) => (
+              <tr key={b.account_id}><td>@{b.account_id}</td><td className="num muted">{b.communities_touched} groups</td></tr>
             ))}</tbody></table>
           </Card>
         </div>
       </div>
 
-      <Card title="Spread over time" sub="cumulative reach of the most coordinated topic" style={{ marginTop: 16 }}>
+      <Card title="How it spread" sub="cumulative reach of the most-pushed narrative" style={{ marginTop: 20 }}>
         {(spread?.frames ?? []).length === 0 ? <Empty>No spread data.</Empty> : (
           <ChartOrTable
             chart={<>
-              <Legend items={[{ label: 'Posts (cumulative)', color: 'var(--s1)' }, { label: 'Accounts reached (cumulative)', color: 'var(--s2)' }]} />
+              <Legend items={[{ label: 'Posts', color: 'var(--s1)' }, { label: 'Accounts reached', color: 'var(--s2)' }]} />
               <div style={{ height: 220, marginTop: 8 }}>
                 <ResponsiveContainer>
                   <LineChart data={spread.frames} margin={{ top: 6, right: 8, left: -16, bottom: 0 }}>
@@ -147,7 +142,7 @@ export default function Network() {
                 </ResponsiveContainer>
               </div>
             </>}
-            table={<table className="tbl"><thead><tr><th>Hour (IST)</th><th className="num">Posts</th><th className="num">Accounts</th><th>Platforms</th></tr></thead>
+            table={<table className="tbl"><thead><tr><th>Hour</th><th className="num">Posts</th><th className="num">Accounts</th><th>Platforms</th></tr></thead>
               <tbody>{spread.frames.map((f: any) => <tr key={f.hour}><td>{ist(f.hour)}</td><td className="num">{f.posts}</td><td className="num">{f.accounts}</td><td>{Object.entries(f.platforms).map(([p, n]) => `${p}: ${n}`).join(' · ')}</td></tr>)}</tbody></table>} />
         )}
       </Card>

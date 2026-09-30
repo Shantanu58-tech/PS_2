@@ -238,7 +238,7 @@ co-posting for synchronized but genuine groups.
 **Slide 1: Title and hook.** PS 26152 · NTRO · Team MOGGERS · members. Headline: *"From
 noisy streams to evidence-grade intelligence, and who's really behind the noise."* Chips:
 "5/5 PS components live" · "Coordination-adjusted analytics" · "Every record
-hash-chained". Buttons: live prototype (https://prahari-h849.onrender.com) · demo video · GitHub (https://github.com/Shantanu58-tech/PS_2). Screenshot: Command Center
+hash-chained". Buttons: live prototype (https://prahari-h849.onrender.com) · demo video · GitHub (https://github.com/Shantanu58-tech/PS_2). Screenshot: Overview
 with the "Manufactured surge" Signal Card.
 
 **Slide 2: Solution in one picture.** Left: A→E + ledger strip. Middle: the traceability
@@ -264,29 +264,23 @@ k-anonymity (Sweeney 2002); differential privacy (Dwork 2006).
 
 ---
 
-## 9. Demo script (about 3.5 min)
-The console opens with a Mission Briefing. **Start the 3-minute guided investigation** walks
-the same path automatically (9 steps; its numbers are read from the eval summary). On the
-public read-only demo the data is pre-loaded; locally, Command Center has **Start replay**.
+## 9. Demo script (about 3 min)
+The full click-by-click walkthrough and the video script are in the shared doc
+"PRAHARI — Demo Walkthrough & Video Script". Short version:
 
-1. **(0:00)** Mission Briefing: state the problem in one sentence.
-2. **(0:20)** Command Center: KPIs, then the top Signal Card "Manufactured surge: dam varunapur
-   evacuate". Open **Why it fired** to show the priority formula. The cricket surge is bigger but organic.
-3. **(0:50)** Trends: the "Manufactured trend" vs "Organic" badges, burst bands, the forecast band.
-4. **(1:10)** Coordination: why the cluster was flagged (synchrony, entropy, burstiness,
-   duplicates, cadence), flagged vs other timing, per-account scores.
-5. **(1:40)** Flip **Raw / Organic only** in the top bar: Timeline & Emotions and Network change.
-   Network marks coordinated accounts with a red ring and shows the KOL rank changes.
-6. **(2:00)** Lineage: Telegram origin at 22:10 IST → X at +12 min; image variants by pHash.
-7. **(2:30)** Ledger: **Verify integrity** passes → **Run tamper simulation** is detected at the
-   exact record, on a copy.
-8. **(3:00)** Cases: open a case from the signal → brief (evidence index with ledger seqs) →
-   **§63 DRAFT** certificate.
-9. **(3:20)** PS 26152 & Eval: traceability table, scoreboard, limitations.
+1. **About PRAHARI** pop-up → **Take the guided tour** (8 steps), or explore on your own.
+2. **Overview**: the top signal "Dam Varunapur Evacuate" is a *Manufactured surge*; open **Why it fired**.
+   The cricket buzz is bigger but *Organic*.
+3. **Trends**: Manufactured vs Organic badges, burst band, dashed forecast.
+4. **Coordination**: why the group was flagged (posting in sync, copy-paste text, robotic cadence).
+5. Flip **All activity / Organic only** in the top bar: Emotions and Network change.
+6. **Lineage**: first seen on Telegram, on X 12 minutes later; image copies matched.
+7. **Evidence ledger**: **Verify integrity** passes → **Run tamper simulation** is caught at the exact post.
+8. **Cases**: start a case → evidence pack + draft certificate.
 
-Console map: Monitor (Command Center, Timeline & Emotions, Trends) · Investigate (Coordination,
-Network, Lineage, Audience, Search) · Evidence (Cases, Ledger) · System (Sources, PS 26152 & Eval).
-Dark theme by default with a light toggle; every chart has a Table view.
+Console map: Monitor (Overview, Trends, Emotions) · Investigate (Coordination, Network, Lineage,
+Audience) · Evidence (Cases, Evidence ledger). Search sits in the top bar. Light theme by default,
+dark toggle top right. Problem-statement mapping and evaluation numbers live in the PPT, not the site.
 
 ---
 

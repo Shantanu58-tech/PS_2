@@ -34,7 +34,7 @@ export const useAppStore = create<AppState>((set) => ({
   tourActive: false,
   tourStep: 0,
   organicOnly: load('prahari.organicOnly', false),
-  theme: load<Theme>('prahari.theme', 'dark'),
+  theme: load<Theme>('prahari.theme', 'light'),
   navOpen: false,
   setShowBriefing: (v) => { if (!v) save('prahari.briefingSeen', true); set({ showBriefing: v }) },
   setTourActive: (v) => set({ tourActive: v, tourStep: v ? 0 : 0 }),
@@ -45,4 +45,4 @@ export const useAppStore = create<AppState>((set) => ({
 }))
 
 // apply persisted theme before first paint of React tree
-document.documentElement.setAttribute('data-theme', load<Theme>('prahari.theme', 'dark'))
+document.documentElement.setAttribute('data-theme', load<Theme>('prahari.theme', 'light'))

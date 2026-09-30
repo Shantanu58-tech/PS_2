@@ -83,7 +83,7 @@ make scenario              # synthetic 7-day scenario -> replay/ (+ data/media)
 make demo                  # builds the console and serves UI + API on http://localhost:8000
 ```
 
-Open http://localhost:8000, then click **Start Replay** on the Command Center.
+Open http://localhost:8000, then click **Load data** on the Overview page.
 Replay ingests about 37k records through the ledger, and the analytics run automatically.
 Then:
 
