@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-29T20:28:59.866927+00:00",
+  "generated_at": "2026-09-30T17:35:08.704412+00:00",
   "scenario": {
     "validation_seed": 7,
     "heldout_seed": 11,
@@ -447,18 +447,18 @@
     "verify_timing": [
       {
         "records": 10000,
-        "write_seconds": 0.29,
-        "verify_seconds": 0.09,
+        "write_seconds": 0.46,
+        "verify_seconds": 0.13,
         "status": "PASS"
       },
       {
         "records": 100000,
-        "write_seconds": 3.26,
-        "verify_seconds": 1.33,
+        "write_seconds": 4.08,
+        "verify_seconds": 1.11,
         "status": "PASS"
       }
     ],
-    "verify_100k_seconds": 1.33
+    "verify_100k_seconds": 1.11
   },
   "pipeline": {
     "records": 37353,
@@ -508,29 +508,13 @@
     "mae_gbr": 1.414,
     "mae_hawkes": 1.826
   },
-  "runtime_seconds": 2119.4,
+  "runtime_seconds": 803.0,
   "partial_updates": [
     {
       "sections": [
-        "burst",
-        "components",
-        "emotion"
+        "components"
       ],
-      "at": "2026-09-29T19:17:01.073166+00:00"
-    },
-    {
-      "sections": [
-        "burst",
-        "emotion"
-      ],
-      "at": "2026-09-29T19:53:44.467214+00:00"
-    },
-    {
-      "sections": [
-        "burst",
-        "emotion"
-      ],
-      "at": "2026-09-29T20:28:59.866927+00:00"
+      "at": "2026-09-30T17:35:08.704412+00:00"
     }
   ]
 }

@@ -4,19 +4,19 @@
 **Team MOGGERS · VIT Pune · Smart India Hackathon 2026**
 **Problem Statement 26152 "Social Media Analytics" · NTRO · Category: Software · Theme: Blockchain & Cybersecurity**
 
-- **Live demo:** https://deepastambha.onrender.com (the URL keeps the old project name; see §13)
+- **Live demo:** https://deepastambha.onrender.com (landing page; the console starts at `/situation`)
 - **Code:** https://github.com/Shantanu58-tech/PS_2
 - **Walkthrough and video script:** shared doc "DEEPASTAMBHA — Demo Walkthrough & Video Script"
-- **Screen-recorded demo:** `demo_video/deepastambha_demo.mp4` (captioned, about 3 min; not in git)
+- **Screen-recorded demo:** `demo_video/deepastambha_demo.mp4` (captioned, 3 min 20 s; not in git)
 
 > This is the single reference for the team: what we built, how it works, what we
 > measured, how to demo it and how to pitch it.
 >
 > - **Evaluation numbers** (§6) come only from `eval/reports/summary.json`
->   (generated 2026-09-30). Never put a number on a slide that isn't in that file.
+>   (regenerated 2026-09-30 after the review fixes). Never put a number on a slide that isn't in that file.
 > - **Numbers labelled "on the live demo"** are what the demo database shows on screen.
 >
-> More detail: `docs/DECISIONS.md` (every design decision, D-01…D-39), `eval/reports/*.md`
+> More detail: `docs/DECISIONS.md` (every design decision, D-01…D-41), `eval/reports/*.md`
 > (every measurement), `docs/DIAGRAMS.md` (Mermaid diagrams and references).
 
 ---
@@ -91,7 +91,7 @@ Around this sits an evidence pipeline:
    PREPARE normaliser → SQLite (WAL, FTS5): posts · accounts · edges (account→account) · media (sha256+pHash)
                            ▼
    ANALYSE (each stage an idempotent recompute):
-     emotions → edges → topics → coordination → series & Kleinberg bursts → manufactured/organic
+     emotions → edges → topics → coordination → series & Kleinberg bursts → likely coordinated/organic
      → demographics (all + organic) → behaviour → influence (KOLs) → segments → forecasts → signals → OTS
                            ▼
    ALL ACTIVITY vs ORGANIC → PRIORITY SCORE → high? ALERT : lower in the queue
@@ -140,29 +140,39 @@ Every element on the first page is one click from its detail.
 
 The look follows the team's reference build: espresso masthead with a tricolour strip, sand
 canvas, copper accent. It is structured like a government portal but modern. Light is the default
-and dark is one click away.
+and dark is one click away. Every page fits a phone (checked by the test suite at 390 px wide).
+
+**Landing page (`/`).** A government-portal front page: accessibility bar (skip link, text size,
+Hindi tagline), a 3D globe of India's conversation (three.js; red arcs are coordinated spread),
+counters, a live Telegram headline ticker, "How it works" and "Built for trust". While the free
+server wakes up, a lamp with a flickering flame is shown instead of a blank page.
 
 | Step | Page | What it shows |
 |---|---|---|
-| 1 | **Situation Room** | Auto-written situation report and a "How it travelled" strip. Four KPIs: posts secured, priority alerts, coordinated accounts, manufactured trends. **India state map** (exposure to pushed narratives, anxiety or posts; click a state). **Narratives being pushed**, with the coordinated group and its amplifiers. **Sector-wise impact matrix.** **Signals for analyst review** (Approve → case, Watchlist, Dismiss). **Live from Telegram.** Hot topics. Activity and amplification gap |
-| 2 | Platforms | All six sources with their status (Connected / API ready / official export) and per-platform activity, mood, topics, accounts and posts; the Telegram page shows the full live feed |
-| 2 | Trends | Topics marked manufactured or organic, burst bands, forecast, top posts, AI summary, viral hashtags; opens pre-filtered from a sector or topic |
-| 2 | Emotions | Five emotions over time, all activity vs organic, filtered by platform and by posts or comments |
-| 3 | Coordination | Why a group was flagged (posting in sync, predictable timing, clock-like rhythm, copy-paste text, robotic cadence), timing chart, accounts, sample posts |
+| 1 | **Situation Room** | Auto-written situation report and a "How it travelled" strip. Four KPIs: posts secured, priority alerts, coordinated accounts, likely coordinated trends. **India state map** (exposure to pushed narratives, anxiety or posts; click a state). **Narratives being pushed**, with the coordinated group and its amplifiers. **Sector-wise impact matrix.** **Signals for analyst review** (Approve → case, Watchlist, Dismiss). **Live from Telegram.** Hot topics. Activity and amplification gap |
+| 2 | Platforms | All six apps, each with its own activity, mood, topics, accounts and posts; Telegram carries a Live badge and the full live feed |
+| 2 | Trends | Topics marked Likely coordinated or Organic, burst bands, forecast, top posts, AI summary (claims and rebuttals shown separately), viral hashtags; opens pre-filtered from a sector or topic |
+| 2 | Emotions | Opens on the flagged story. Five emotions over time, all activity vs organic, and a table comparing the story with the everyday level (in percentage points); filters for platform and posts vs comments |
+| 3 | Coordination | Group size, score, posts and time span; why it was flagged in plain words; **"Compared with ordinary users"** table; **synchrony fingerprint** (one row per account, one tick per post: the group's ticks line up, ordinary users' don't); timing chart; accounts; sample posts |
 | 3 | Network | Interaction map across apps, platform filters, time-lapse, account panel, top influencers, bridges, spread between groups, reach over time |
-| 3 | Lineage | First seen per platform, hand-offs, image copies (pHash) |
-| 3 | Audience | Region, language, interests and age as group counts only |
+| 3 | Lineage | Opens on the flagged story. First seen per platform, hand-offs, **what the posts do with the claim** (spreading / questioning / debunking / reacting; only spreading posts are traced), image copies grouped into one family with thumbnails |
+| 3 | Audience | Scope selector (everyone, or the people posting about one story) and a line saying exactly what is counted ("about 3,950 accounts · 14 states · 23–30 Sept 2026"). India tile map, language donut, age columns in order, interest bars; "unknown" is a note, not a bar. Group counts only |
 | 4 | Cases | Evidence pack (brief) and draft §63 certificate |
-| 4 | Evidence ledger | Verify integrity, tamper test, signed seals, proof of inclusion, activity log |
+| 4 | Evidence ledger | Verify integrity, tamper test, signed seals, proof of inclusion (post number explained, "Random post" button), activity log |
 
-**On the live demo** (from the demo database):
-- The situation report reads: "Dam Varunapur Evacuate", Critical Infrastructure, 93% of 347 posts
-  from a group of 72 accounts acting in sync.
-- It started on Telegram and went X (+12 min) → YouTube → Facebook → Reddit → Instagram.
-- 223 real users reacted with 59% anxiety, mostly in Maharashtra and Telangana.
+**On the live demo** (from the demo database built 30 Sept 2026; the incident is on 27 Sept):
+- The situation report reads: "Forwarded: Varunapur Dam has cracked, evacuate now", Critical
+  Infrastructure, 91% of 314 posts from a group of 68 accounts acting in sync.
+- The claim itself started on Telegram (27 Sept, 2:10 pm IST) and was spread on X 12 minutes later,
+  then on Facebook. Replies and reactions reached all six platforms.
+- Of the posts on the story, 319 spread it, 15 debunk it and 5 question it.
+- 224 ordinary users replied; 57% of what they wrote reads as anxious, mostly in Maharashtra and Telangana.
+- On the flagged story, "against" is +31.6 points above the everyday level.
 - Critical Infrastructure is the only CRITICAL sector. The bigger cricket surge is organic.
+- Synchrony fingerprint: the group's median gap between posts is about 90 s and every post lands
+  within a minute of another account's; for ordinary users on the same story it is 13.6%.
 - The live Telegram feed shows about 45–50 real posts from The Indian Express, Hindustan Times,
-  Mint and Moneycontrol, refreshed every few minutes.
+  Mint and Moneycontrol, refreshed every 10 minutes.
 
 ---
 
@@ -198,14 +208,15 @@ and dark is one click away.
   - released counts get Laplace noise (ε=1);
   - IDs are HMAC-pseudonymised;
   - **no per-account endpoint exists**, and a test enforces that.
-- **State impact:** share of a state's posts that are **in a manufactured narrative or reply to
+- **State impact:** share of a state's posts that are **in a likely coordinated narrative or reply to
   one**. Replies count because the coordinated accounts give no location, and the public reacts
   through replies.
 
 ### 5.4 Trends, sectors and signals (D)
 - **Topics:** 24 h windows; multilingual sentence embeddings (paraphrase-multilingual-MiniLM-L12-v2);
   agglomerative clustering. A new cluster is matched to an existing topic when centroid cosine is
-  ≥ 0.80. Labels come from c-TF-IDF.
+  ≥ 0.80. Mentions and links are stripped before clustering. The label is the opening sentence of
+  the post closest to the cluster centre, so it reads like a headline, not a keyword list.
 - **Kleinberg bursts (corrected form):** αᵢ = sⁱ/ĝ; σ(i,x) = −ln αᵢ + αᵢx; τ = (j−i)·γ·ln n; solved
   by Viterbi.
 - **Rise score** = 0.35·z(burst) + 0.25·z(acceleration) + 0.20·z(novelty) + 0.20·z(unique-account growth).
@@ -217,8 +228,8 @@ and dark is one click away.
 
   | Level | Rule |
   |---|---|
-  | Critical | A manufactured topic with a high-priority signal |
-  | Elevated | A manufactured topic, or ≥ 10% coordinated |
+  | Critical | A likely coordinated topic with a high-priority signal |
+  | Elevated | A likely coordinated topic, or ≥ 10% coordinated |
   | Watch | ≥ 2% coordinated, or burst level ≥ 3 |
   | Quiet | No posts |
 
@@ -227,7 +238,9 @@ and dark is one click away.
 ### 5.5 Network (E)
 - Directed interaction graph, account → account. Edge weights: reply 1.0, forward 0.9, repost 0.8,
   mention 0.3.
-- **KOL influence** = 0.5·cascade + 0.3·PageRank + 0.2·betweenness, each normalised.
+- **KOL influence** = 0.5·cascade + 0.3·PageRank + 0.2·betweenness, each normalised. Cascade (shown
+  as "Reach") counts the accounts that replied to, reposted or forwarded an account, directly or one
+  step removed (two hops), so reach does not saturate at one value.
 - **Bridges:** high betweenness among accounts that touch more than one community.
 - **Segments:** segment 0 is the coordinated group; segments 1–4 are the largest greedy-modularity
   communities of everyone else. For a narrative we show when each segment was reached and its
@@ -250,9 +263,13 @@ and dark is one click away.
 
 ### 5.7 Lineage and LLM summaries
 - **Lineage:** earliest *observed* post per platform, hand-offs, Telegram forward chains, image
-  copies by perceptual hash.
+  copies by perceptual hash (grouped into one family per picture).
+- **Stance:** every post is tagged by transparent rules as spreading, questioning, debunking or
+  reacting (`analytics/stance.py`). Only spreading posts count as spread, so a debunk never inflates
+  a rumour's reach.
 - **AI summaries (Gemini):** posts are treated as untrusted data. They are fenced with a nonce,
-  output must match a JSON schema, and output must be grounded in the source posts. 11 injection
+  output must match a JSON schema, and output must be grounded in the source posts. Claims and
+  rebuttals are separate lists, and each post is tagged with its stance in the prompt. 11 injection
   break tests; the feature is disabled without a key.
 
 ---
@@ -280,7 +297,11 @@ tuning was involved. The evaluation data is synthetic, with ground truth.
 | Lineage | Origin / migration | earliest = **Telegram**, X after **12.1 min** |
 | Lineage | pHash suite (200 images × 6 transforms, 2,000 negatives) | recall **98.2%** at FPR **0.9%** |
 | Theme | Single-character tamper detection | **1000 / 1000** |
-| Theme | Full verification, 100k records | **1.33 s** |
+| Theme | Full verification, 100k records | **1.11 s** |
+
+**Organic view of the network.** 0 coordinated accounts in the organic top 20 influencers. (A rerun
+first showed 11: the organic filter dropped coordinated accounts only when they started an
+interaction, so replies to them kept them ranked. Fixed to drop them from both ends, with a test.)
 
 **Ablation (coordination, held-out).** Removing the scripted-cadence share drops recall to 0; it is
 the key signal. Removing synchrony, entropy or cross-account duplication removes the fan-club false
@@ -288,22 +309,43 @@ positives: the detector over-weights co-posting for synchronized but genuine gro
 
 ---
 
-## 7. Demo data
-- **Scenario (for ground truth).** 7 days (Nov 4–11 2024) on X, Telegram, Reddit and YouTube, plus
-  a synthetic Instagram/Facebook official-export sample loaded through the real import path.
-  Records carry `synthetic=true`; the site does not display it, and we say it in the pitch.
-- **The planted story:**
-  - **Rumour:** "Varunapur Dam has cracked, evacuate", first posted by a Telegram channel at
-    22:10 IST on day 4.
-  - **Amplification:** 60 coordinated X accounts posting every ~90 s ± 5 s.
-  - **Real reaction:** anxious replies and debunks, and a Facebook residents' group share. The
-    district administration's debunk follows.
-  - **Decoy:** a bigger, genuine cricket surge with a legitimate fan-club swarm.
-  - **Bridge:** one account linking both communities.
-  - **Image copies:** resized, compressed, cropped and watermarked versions of the rumour photo.
-- **Real data:** the **live Telegram feed** fetches real posts from The Indian Express, Hindustan
-  Times, Mint and Moneycontrol through our connected account. They are scored live and refreshed
-  every few minutes. They are shown alongside the scenario, not mixed into its timeline.
+## 7. Demo data: what is real-time and what is not
+
+| Part of the site | Source | Real-time? |
+|---|---|---|
+| **Live Telegram feed** (landing ticker, Situation Room card, Telegram page) | Real public posts from The Indian Express, Hindustan Times, Mint and Moneycontrol, fetched through our connected Telegram account | **Yes.** Fetched on request, cached 10 min, scored live. Shown, not stored |
+| **Everything else** (situation report, trends, coordination, network, lineage, audience, ledger) | A synthetic 7-day scenario with ground truth, replayed through the real pipeline (collectors → ledger → analytics) | **No.** It is a recorded week, dated to the week before the bundle was built |
+
+**Why the main story is synthetic.** To prove the detector works we need ground truth: which
+accounts really are coordinated, where the rumour really started. Real platform data never comes
+with those answers, and it would expose real people. Also:
+- X, Instagram and Facebook do not allow free scraping. X needs paid API access or session cookies;
+  Instagram and Facebook data comes through their official exports.
+- The free server has 0.1 CPU and no GPU, so it cannot run the transformer models continuously on a
+  live stream.
+
+The X, Reddit and YouTube collectors are built and tested, and switch on when their credentials are
+added; the Telegram collector is live today.
+
+**Keeping the dates fresh.** The scenario is anchored to the time the demo bundle is built, so the
+incident sits in "the last 7 days". As real days pass the scenario stays where it was, so rebuild it
+shortly before a demo: `scripts/build_demo_bundle.py --keys <ledger key dir> --out <dir>` (about
+20 min), upload `bundle.tar.gz` to the private dataset and restart the service. Timestamps cannot
+simply be shifted on the server, because they are part of the hashed, signed ledger records.
+
+**The planted story:**
+- **Rumour:** "Varunapur Dam has cracked, evacuate", first posted by a Telegram channel
+  (@varunapur_updates).
+- **Amplification:** 60 coordinated X accounts posting every ~90 s ± 5 s.
+- **Real reaction:** anxious replies and debunks, and a Facebook residents' group share. The
+  district administration's debunk follows.
+- **Decoy:** a bigger, genuine cricket surge with a legitimate fan-club swarm.
+- **Bridge:** one account (@neha_reports) linking both communities.
+- **Image copies:** resized, compressed, cropped and watermarked versions of the rumour photo.
+
+Account and post IDs are random (`acc_52747`) and handles look like ordinary users, so nothing on
+screen gives the answer away. Records carry `synthetic=true` internally; the site does not label it,
+and we say it in the pitch.
 
 ---
 
@@ -315,7 +357,7 @@ positives: the detector over-weights co-posting for synchronized but genuine gro
 - "Our Telegram collector is live: these are real posts from public news channels, fetched just now."
 - "The detector found all 60 planted accounts on a held-out scenario; simple baselines score F1 0.01 and 0.21."
 - "The rumour fires a high-priority signal 5 minutes before a volume alarm; the bigger organic cricket surge doesn't."
-- "1000 out of 1000 tampers caught; 100k records verified in 1.3 s; checkpoints anchored to Bitcoin."
+- "1000 out of 1000 tampers caught; 100k records verified in 1.1 s; checkpoints anchored to Bitcoin."
 - "Every analyst decision is sealed in the same chain as the evidence."
 
 **Don't say:**
@@ -371,22 +413,24 @@ voice-over are in the shared doc.
 1. **Situation Room:** read the report. Switch the state map to anxiety and click Maharashtra.
    Click the Critical Infrastructure sector card, which opens Trends filtered.
 2. **Live from Telegram:** real posts from Indian news channels, fetched now.
-3. **Trends:** the manufactured badge and viral hashtags.
+3. **Trends:** the Likely coordinated badge and viral hashtags.
 4. **Investigate the group** (from the report): Coordination.
-5. **Network:** press Play the week, then click the Telegram channel node (12,000 followers,
-   forwarded by 66 accounts on X).
-6. **Lineage:** Telegram → X +12 min → four more platforms.
-7. Back on the Situation Room, press **Approve → case**. The case opens with the evidence pack and
+5. **Emotions and Audience:** the flagged story vs the everyday level; who is talking, by state and language.
+6. **Network:** press Play the week, then click @varunapur_updates (12,000 followers, picked up by
+   66 accounts).
+7. **Lineage:** Telegram → X +12 min → Facebook; 319 posts spread it, 15 debunk it; the image family.
+8. Back on the Situation Room, press **Approve → case**. The case opens with the evidence pack and
    draft certificate.
-8. **Evidence ledger:** Verify integrity, then Run tamper simulation, which is caught at the exact record.
+9. **Evidence ledger:** Verify integrity, then Run tamper simulation, which is caught at the exact record.
 
 ---
 
 ## 11. Likely jury questions (with answers)
-- **"Is the data real?"** The storyline is a synthetic scenario so that we can measure against
-  ground truth. The Telegram collector is live on the site: those posts are real and fetched now.
-  X, Reddit and YouTube collectors are built and tested; Instagram and Facebook come through their
-  official exports.
+- **"Is the data real?"** Two parts. The Telegram feed is real and live: posts from Indian news
+  channels, fetched now. The investigation storyline is a synthetic week replayed through the real
+  pipeline, because only a planted scenario has ground truth to measure the detector against, and it
+  profiles no real person. X, Reddit and YouTube collectors are built and tested and switch on with
+  credentials; Instagram and Facebook come through their official exports.
 - **"How do you know they're bots?"** We don't label bots. We score behaviour (synchronized
   near-duplicate posting plus scripted cadence) and show every factor. Held-out: all 60 accounts
   found; precision 0.71, because a legitimate fan swarm also looks coordinated.
@@ -400,13 +444,13 @@ voice-over are in the shared doc.
 - **"How is the state map computed?"** Only from the location people write on their public
   profile, aggregated. Impact counts posts in a pushed narrative or replies to one.
 - **"Scale?"** Each component sits behind an interface for Postgres, Kafka, Neo4j and Milvus.
-  Verifying 100k records takes 1.3 s.
+  Verifying 100k records takes 1.1 s.
 
 ---
 
 ## 12. Limitations
-1. The storyline is synthetic. Only Telegram is connected live on the hosted demo; X, Reddit and
-   YouTube need their credentials there.
+1. The storyline is synthetic and dated to when the bundle was built; rebuild it before a demo (§7).
+   Only Telegram is connected live on the hosted demo; X, Reddit and YouTube need their credentials there.
 2. The live Telegram feed is scored with the lexicon model and is shown, not stored, on the public
    demo.
 3. Emotion is measured on synthetic labels with no gold set; sarcasm F1 is 0.17; the panic
@@ -426,8 +470,10 @@ voice-over are in the shared doc.
     start-up.
   - A Cloudflare cron Worker keeps it awake 24/7.
   - Telegram, Gemini and HF credentials are Render secrets.
-  - Infrastructure names keep the old name so nothing breaks: `deepastambha.onrender.com`,
-    `deepastambha-keepalive`, `ZOROxJODD/deepastambha-bundle`, `data/deepastambha.db`.
+  - Names: `deepastambha.onrender.com`, the `deepastambha-keepalive` Worker, the private bundle
+    `ZOROxJODD/deepastambha-bundle`, `data/deepastambha.db`. The old service is suspended.
+  - Heavy views are cached per data version and warmed at start-up, so pages answer in under half
+    a second on the free server.
   - TRIVENI runs on a separate account and is untouched.
 - **Repositories.** `Shantanu58-tech/PS_2` is canonical. `OMEExZORO/PS_2` is the deploy mirror. Both
   always get the same commits.
@@ -441,10 +487,10 @@ backend/app/analytics/    topics, trends, burst, forecast, signals, coordination
 backend/app/ledger/       canonical, chain, merkle, sign, verify, proof, audit, ots
 backend/app/api/routers/  REST endpoints (OpenAPI at /docs)
 backend/eval/             eval harness + calibration
-backend/tests/            153 tests
-frontend/src/             React console (SituationRoom, Platforms, Trends, …); frontend/tests = Playwright
+backend/tests/            157 tests
+frontend/src/             Landing page + React console (SituationRoom, Platforms, …); frontend/tests = Playwright (desktop + phone)
 scenario/                 synthetic scenario + IG/FB export sample generator
-scripts/                  fetch_models, check_collectors, telegram_login (two-step), dev.ps1
+scripts/                  build_demo_bundle, fetch_models, check_collectors, telegram_login (two-step), dev.ps1
 docs/                     DECISIONS.md, DIAGRAMS.md, APPROACH.md, ADRs
 eval/reports/             summary.json + reports (the source of every evaluation number)
 ```

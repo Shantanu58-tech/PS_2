@@ -19,5 +19,5 @@ Single-character mutations of one random field of one random record, 1000 trials
 
 | records | write_seconds | verify_seconds | status |
 |---|---|---|---|
-| 10000 | 0.29 | 0.09 | PASS |
-| 100000 | 3.26 | 1.33 | PASS |
+| 10000 | 0.46 | 0.13 | PASS |
+| 100000 | 4.08 | 1.11 | PASS |

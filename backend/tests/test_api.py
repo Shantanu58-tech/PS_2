@@ -228,3 +228,14 @@ def test_image_families_group_each_picture_once():
 def test_media_endpoint_serves_only_known_images(client):
     assert client.get("/api/media/does-not-exist").status_code == 404
     assert client.get("/api/media/..%2F..%2Fetc%2Fpasswd").status_code == 404
+
+
+def test_organic_graph_has_no_coordinated_accounts(analysed_db):
+    import sqlite3
+
+    from app.analytics.graph import build_graph
+
+    with sqlite3.connect(analysed_db) as c:
+        flagged = {a for (a,) in c.execute("SELECT account_id FROM coord_accounts WHERE score >= 0.7")}
+    assert flagged
+    assert not flagged & set(build_graph(analysed_db, organic_only=True).nodes)

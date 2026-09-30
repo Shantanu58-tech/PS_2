@@ -62,7 +62,26 @@ const LOGO = () => document.querySelector('svg[aria-label$="logo"]')?.outerHTML 
     await scrollTo(y)
   }
 
-  // 0 · title card
+  // every number in a caption comes from the API of the server being recorded
+  const api = async p => (await page.request.get(base + p)).json()
+  const fmtTime = iso => new Date(iso).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', hour: 'numeric', minute: '2-digit', hour12: true, day: 'numeric', month: 'short', year: 'numeric' })
+  const sit = await api('/api/situation')
+  const flaggedId = sit.kpis.top_alert?.topic_id
+  const lin = (await api('/api/lineage')).topics.find(t => t.topic_id === flaggedId) ?? (await api('/api/lineage')).topics[0]
+  const plats = lin.platforms, P = { x: 'X', telegram: 'Telegram', instagram: 'Instagram', facebook: 'Facebook', reddit: 'Reddit', youtube: 'YouTube' }
+  const hopMin = plats.length > 1 ? Math.round((new Date(plats[1].first_seen) - new Date(plats[0].first_seen)) / 60000) : 0
+  const viral = (await api('/api/keywords/trending')).viral ?? []
+  const vtag = viral.find(v => /dam|varunapur|evacuat|emergency/i.test(v.keyword)) ?? viral[0]
+  const top = (await api('/api/influencers?limit=1')).influencers[0]
+  const node = await api('/api/graph/node/' + encodeURIComponent(top.account_id))
+  const sc = lin.stance_counts ?? {}
+
+  // 0 · landing page, then title card
+  await page.goto(base + '/', { waitUntil: 'networkidle' })
+  await wait(1500)
+  await cap('DEEPASTAMBHA: a situation room for social media.', 'The landing page, with live headlines from Telegram')
+  await wait(6500)
+  await cap('')
   await page.goto(base + '/situation', { waitUntil: 'networkidle' })
   const logo = await page.evaluate(LOGO)
   await card(`<div><div style="transform:scale(3.2);margin-bottom:70px">${logo}</div>
@@ -76,10 +95,11 @@ const LOGO = () => document.querySelector('svg[aria-label$="logo"]')?.outerHTML 
   // 1 · situation report
   await cap('A rumour says a dam has cracked. Within an hour it is everywhere.', 'Is the panic real, or is someone pushing it?')
   await wait(5000)
-  await cap('The Situation Room answers it in one glance: what is pushed, by whom, and how it travelled.', 'Telegram first, X 12 minutes later, then four more platforms')
+  await cap('The Situation Room answers it in one glance: what is pushed, by whom, and how it travelled.',
+    plats.length > 1 ? `${P[plats[0].platform]} first, ${P[plats[1].platform]} ${hopMin} minutes later${plats.length > 2 ? `, then ${plats.length - 2} more platform${plats.length > 3 ? 's' : ''}` : ''}` : '')
   await wait(7000)
   await scrollToEl('.kpi-card')
-  await cap('Every number is live and clickable: posts secured, priority alerts, accounts in sync, manufactured trends.')
+  await cap('Every number is clickable: posts secured, priority alerts, accounts in sync, likely coordinated trends.')
   await wait(5500)
 
   // 2 · map and narratives
@@ -99,10 +119,10 @@ const LOGO = () => document.querySelector('svg[aria-label$="logo"]')?.outerHTML 
   await wait(5000)
   await page.locator('.sector.critical').first().click()
   await wait(1500)
-  await cap('One click opens the detail: the rumour is marked Manufactured, with its burst and forecast.')
+  await cap('One click opens the detail: the rumour is marked Likely coordinated, with its burst and forecast.')
   await wait(5500)
   await page.evaluate(() => document.querySelector('.main').scrollTo(0, 99999)); await wait(800)
-  await cap('Viral hashtags: #VarunapurDam spiked to 95× its usual rate.')
+  await cap(vtag ? `Viral hashtags: ${vtag.keyword} spiked to ${Math.round(vtag.spike)}× its usual rate.` : 'Viral hashtags, with how far each spiked above its usual rate.')
   await wait(5000)
 
   // 4 · live telegram
@@ -116,21 +136,33 @@ const LOGO = () => document.querySelector('svg[aria-label$="logo"]')?.outerHTML 
   await page.getByRole('button', { name: /Investigate the group/ }).click(); await wait(1500)
   await cap('Who is behind it? Accounts posting copy-paste text within seconds, on a clock-like rhythm.', 'A signal for review, never a "bot" label')
   await wait(5500)
-  await scrollToEl('.recharts-wrapper'); await wait(4000)
+  await scrollToEl('.fp-row'); await cap('Each row is an account, each tick a post. The group fires together; ordinary users do not.'); await wait(6000)
+
+  // 5b · emotions and audience
+  await page.goto(base + '/timeline', { waitUntil: 'networkidle' }); await wait(2000)
+  await cap('How it makes people feel, compared with the everyday level.', 'Switch to Organic only to see ordinary users without the campaign')
+  await wait(6500)
+  await page.goto(base + '/audience', { waitUntil: 'networkidle' }); await wait(1500)
+  await cap('Who is talking: states, languages, age groups and interests.', 'Group counts only. Small groups are hidden, and no individual is profiled')
+  await wait(6500)
 
   // 6 · network
   await page.goto(base + '/network', { waitUntil: 'networkidle' }); await wait(3500)
   await cap('The network across apps, coloured by platform. Watch it form over the week.')
   await page.getByRole('button', { name: /Play the week/ }).click()
   await wait(15500)
-  await page.goto(base + '/network?account=acc_tgchannel_1', { waitUntil: 'networkidle' }); await wait(2500)
-  await cap('Click any account: this Telegram channel has 12,000 followers and was forwarded by 66 accounts on X.')
+  await page.goto(base + '/network?account=' + encodeURIComponent(top.account_id), { waitUntil: 'networkidle' }); await wait(2500)
+  await cap(`Click any account: @${node.profile?.handle ?? top.account_id} on ${P[node.profile?.platform] ?? 'its platform'} has ${(node.profile?.followers ?? 0).toLocaleString('en-IN')} followers and was picked up by ${node.engaged_by} accounts.`)
   await wait(6500)
 
   // 7 · lineage
   await page.goto(base + '/situation', { waitUntil: 'networkidle' }); await wait(800)
   await page.getByRole('button', { name: /Trace the origin/ }).click(); await wait(1800)
-  await cap('The origin: Telegram at 10:10 pm, then X, YouTube, Facebook, Reddit and Instagram.', 'Edited copies of the image are matched automatically')
+  await cap(`The origin: ${P[plats[0].platform]} at ${fmtTime(plats[0].first_seen)}, then ${plats.slice(1).map(p => P[p.platform]).join(', ')}.`,
+    `${sc.spreading ?? 0} posts spread it, ${sc.debunking ?? 0} debunk it, ${sc.questioning ?? 0} question it`)
+  await wait(6000)
+  await scrollToEl('.img-family')
+  await cap('Edited copies of the same image are grouped automatically: cropped, re-compressed, watermarked.')
   await wait(7000)
 
   // 8 · review -> case

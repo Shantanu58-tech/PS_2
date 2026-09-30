@@ -18,20 +18,10 @@ Evaluated on seed 11 (held-out); per-label thresholds tuned on the validation se
 
 Macro-F1: pre-trained pipeline 0.6308; zero-shot NLI baseline 0.5721; lexicon 0.7568. Hinglish subset macro-F1 (pipeline) 0.6229 (n=160).
 
-**Caveat:** the lexicon was written by the same team that wrote the scenario templates, so it leaks the labels and is an upper bound, not a fair baseline. The fair comparison is the pipeline vs the zero-shot NLI baseline. English pre-trained models under-read anxious replies phrased as questions ("Is this real? Someone verify please") and the sarcasm model (news-headline trained) misses sarcastic debunks; this motivates the PRD 11 MuRIL fine-tune.
+**Caveat:** the lexicon was written by the same team that wrote the scenario templates, so it leaks the labels and is an upper bound, not a fair baseline. The fair comparison is the pipeline vs the zero-shot NLI baseline. Pre-trained models key on emotion words rather than meaning (a debunk saying 'stop spreading panic' scores higher anxiety than the rumour broadcast) and sarcasm stays weak; this motivates the PRD 11 MuRIL fine-tune.
 
 ## Raw vs organic-only distortion (rumour window)
 
 | raw_anxiety_share | organic_anxiety_share | distortion_ratio | raw_posts | organic_posts |
 |---|---|---|---|---|
 | 0.4196 | 0.6078 | 0.69 | 367 | 51 |
-
-## Analysis: why the distortion ratio is below 1 (validation seed 7)
-Mean anxiety per template shows the zero-shot model reacting to *words* like
-"panic", "fear" or "dar" rather than to panic-spreading content:
-"BREAKING: Varunapur Dam has cracked! Evacuate immediately!" scores 0.13 and the
-Devanagari rumour 0.02, while the debunk "Stop spreading panic" scores 0.94.
-Coordinated accounts post the rumour templates, so removing them *raises* the
-organic anxiety share. The "bots made it look more panicked" claim is therefore
-**not supported** by the current pre-trained models. It needs a fine-tuned
-model (PRD 11, MuRIL) trained on panic-inducing rumours.

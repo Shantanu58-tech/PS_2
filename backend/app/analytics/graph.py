@@ -12,10 +12,13 @@ def build_graph(db_path: str, since: str | None = None, organic_only: bool = Fal
             clauses.append("e.ts >= ?")
             params.append(since)
         if organic_only:
-            clauses.append(
-                "NOT EXISTS (SELECT 1 FROM coord_accounts ca WHERE ca.platform=e.src_platform "
-                "AND ca.account_id=e.src_account AND ca.score >= 0.7)"
-            )
+            # drop coordinated accounts from both ends: replies *to* them would otherwise
+            # keep them in the graph and let them rank in the "organic" view
+            for side in ("src", "dst"):
+                clauses.append(
+                    f"NOT EXISTS (SELECT 1 FROM coord_accounts ca WHERE ca.platform=e.{side}_platform "
+                    f"AND ca.account_id=e.{side}_account AND ca.score >= 0.7)"
+                )
         clauses.append("e.dst_account NOT LIKE 'post:%'")
         where = "WHERE " + " AND ".join(clauses)
         edges = conn.execute(
@@ -308,11 +311,13 @@ def node_detail(db_path: str, account_id: str) -> dict | None:
         seg = conn.execute("SELECT l.label FROM account_segments s JOIN segment_labels l ON l.segment=s.segment "
                            "WHERE s.account_id=?", (account_id,)).fetchone()             if conn.execute("SELECT name FROM sqlite_master WHERE name='account_segments'").fetchone() else None
         out_e = conn.execute(
-            "SELECT dst_account AS account, dst_platform AS platform, kind, COUNT(*) AS n, MIN(ts) AS first FROM edges "
+            "SELECT dst_account AS account, dst_platform AS platform, kind, COUNT(*) AS n, MIN(ts) AS first, "
+            "(SELECT a.handle FROM accounts a WHERE a.account_id=dst_account LIMIT 1) AS handle FROM edges "
             "WHERE src_account=? AND dst_account NOT LIKE 'post:%' GROUP BY 1, 2, 3 ORDER BY n DESC LIMIT 12",
             (account_id,)).fetchall()
         in_e = conn.execute(
-            "SELECT src_account AS account, src_platform AS platform, kind, COUNT(*) AS n, MIN(ts) AS first FROM edges "
+            "SELECT src_account AS account, src_platform AS platform, kind, COUNT(*) AS n, MIN(ts) AS first, "
+            "(SELECT a.handle FROM accounts a WHERE a.account_id=src_account LIMIT 1) AS handle FROM edges "
             "WHERE dst_account=? GROUP BY 1, 2, 3 ORDER BY n DESC LIMIT 12", (account_id,)).fetchall()
         n_in, n_out = conn.execute(
             "SELECT (SELECT COUNT(DISTINCT src_account) FROM edges WHERE dst_account=?), "

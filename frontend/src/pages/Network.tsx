@@ -123,7 +123,7 @@ function NodeDrawer({ id, onClose }: { id: string; onClose: () => void }) {
               {d.followers_interacting.length === 0 ? <div className="muted" style={{ fontSize: 12.5, marginTop: 4 }}>None recorded.</div> : (
                 <table className="tbl" style={{ marginTop: 6 }}><tbody>{d.followers_interacting.map((r: any, i: number) => (
                   <tr key={i} style={{ cursor: 'pointer' }} onClick={() => navigate(`/network?account=${encodeURIComponent(r.account)}`)}>
-                    <td><span className="row"><span style={{ width: 8, height: 8, borderRadius: 2, background: PLATFORM_SLOT[r.platform] }} />@{r.account}</span></td>
+                    <td><span className="row"><span style={{ width: 8, height: 8, borderRadius: 2, background: PLATFORM_SLOT[r.platform] }} />@{r.handle ?? r.account}</span></td>
                     <td className="muted">{r.kind}</td><td className="num">{r.n}×</td></tr>
                 ))}</tbody></table>)}
             </div>
@@ -131,7 +131,7 @@ function NodeDrawer({ id, onClose }: { id: string; onClose: () => void }) {
               <h3>Engages with</h3>
               <table className="tbl" style={{ marginTop: 6 }}><tbody>{d.interacts_with.map((r: any, i: number) => (
                 <tr key={i} style={{ cursor: 'pointer' }} onClick={() => navigate(`/network?account=${encodeURIComponent(r.account)}`)}>
-                  <td><span className="row"><span style={{ width: 8, height: 8, borderRadius: 2, background: PLATFORM_SLOT[r.platform] }} />@{r.account}</span></td>
+                  <td><span className="row"><span style={{ width: 8, height: 8, borderRadius: 2, background: PLATFORM_SLOT[r.platform] }} />@{r.handle ?? r.account}</span></td>
                   <td className="muted">{r.kind}</td><td className="num">{r.n}×</td></tr>
               ))}</tbody></table>
             </div>}
