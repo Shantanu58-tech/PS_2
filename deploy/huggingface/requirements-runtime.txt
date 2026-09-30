@@ -20,3 +20,5 @@ huggingface_hub>=0.23
 google-genai>=1.0
 opentimestamps-client>=0.7
 telethon>=1.36
+twscrape==0.20.1
+requests>=2.31

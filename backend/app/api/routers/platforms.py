@@ -29,11 +29,11 @@ def _connection(platform: str) -> str:
             return "connected"
         return "ready" if (s.tg_api_id and s.tg_api_hash) else "demo"
     if platform == "x":
-        return "ready" if (s.x_auth_token and s.x_ct0) else "demo"
-    if platform == "reddit":
-        return "ready" if (s.reddit_client_id and s.reddit_client_secret) else "demo"
-    if platform == "youtube":
-        return "ready" if s.yt_api_key else "demo"
+        return "connected" if (s.x_auth_token and s.x_ct0 and s.live_x_accounts) else "demo"
+    if platform == "reddit":  # the public RSS feed needs no credentials
+        return "connected" if s.live_reddit_subs else "demo"
+    if platform == "youtube":  # channel RSS for videos; the API key adds viewer comments
+        return "connected" if s.live_yt_channels else "demo"
     return "import"
 
 
@@ -148,9 +148,17 @@ async def trending_keywords(limit: int = 12):
     return await asyncio.to_thread(_trending_keywords, settings.db_path, min(limit, 50))
 
 
-@router.get("/live/telegram")
-async def live_telegram_feed():
-    """Real posts fetched now from the allowlisted public Telegram channels (cached)."""
-    from app.collectors.live_feed import live_telegram
+@router.get("/live")
+async def live_feed_all():
+    """Newest real posts across every live platform (cached per platform)."""
+    from app.collectors.live_feed import live_all
 
-    return await live_telegram()
+    return await live_all()
+
+
+@router.get("/live/{platform}")
+async def live_feed(platform: str):
+    """Real posts fetched now from a fixed allowlist of public sources on one platform (cached)."""
+    from app.collectors.live_feed import live
+
+    return await live(platform)

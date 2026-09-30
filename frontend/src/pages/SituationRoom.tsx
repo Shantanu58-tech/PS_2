@@ -8,7 +8,7 @@ import {
 } from 'lucide-react'
 import { useAlerts, useLineage, useReview, useSituation, useVolume } from '../hooks/useApi'
 import { Card, ChartOrTable, ChartTip, Empty, InfoPop, Legend, Loading, Meter, NextStep, PageHead } from '../components/ui'
-import LiveTelegram from '../components/LiveTelegram'
+import LiveFeed from '../components/LiveFeed'
 import IndiaMap, { canonState, rampCss, valueOf, type Metric } from '../components/IndiaMap'
 import { AXIS_TICK, ORGANIC, PLATFORM_LABEL, PLATFORM_SLOT, RAW } from '../lib/viz'
 import { LEVEL_LABEL } from '../lib/flow'
@@ -412,7 +412,7 @@ export default function SituationRoom() {
         <div>
           <div className="section-head"><h2 className="section-title">Trending now</h2></div>
           <div className="stack" style={{ gap: 16 }}>
-            <LiveTelegram compact />
+            <LiveFeed compact />
             <HotTopics sit={sit} />
           </div>
         </div>

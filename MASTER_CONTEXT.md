@@ -67,7 +67,7 @@ Around this sits an evidence pipeline:
 
 | PS | Requirement (abridged) | What we built | Where |
 |---|---|---|---|
-| **A** | Multi-platform ingestion of live posts, interactions and comments, with a time-stamped history. Essential: X, Telegram. Desirable: Instagram, Facebook. Appreciable: Reddit, YouTube | Collectors for **X (twscrape), Telegram (Telethon, connected and live), Reddit (PRAW), YouTube (Data API v3, incl. replies)**. **Instagram/Facebook** arrive via their official data export (CSV) through the same pipeline; the demo includes a synthetic IG/FB export sample. Backoff, circuit breaker and health checks. UTC timeline, reply threads, dedup. **Platforms page:** activity, mood, topics, accounts and source status for all six. **Live Telegram feed:** real posts fetched right now from public news channels | `backend/app/collectors/`, `app/pipeline/`, `/api/platforms`, `/api/live/telegram` |
+| **A** | Multi-platform ingestion of live posts, interactions and comments, with a time-stamped history. Essential: X, Telegram. Desirable: Instagram, Facebook. Appreciable: Reddit, YouTube | Collectors for **X (twscrape), Telegram (Telethon), Reddit (PRAW and RSS), YouTube (Data API v3 incl. replies, and channel RSS)**; **X, Telegram, YouTube and Reddit are live on the hosted site**. **Instagram/Facebook** arrive via their official data export (CSV) through the same pipeline; the demo includes a synthetic IG/FB export sample. Backoff, circuit breaker and health checks. UTC timeline, reply threads, dedup. **Platforms page:** activity, mood, topics, accounts and source status for all six. **Live feeds:** real posts fetched right now from fixed lists of public sources on four platforms | `backend/app/collectors/`, `app/pipeline/`, `/api/platforms`, `/api/live`, `/api/live/{platform}` |
 | **B** | NLP for nuanced emotions (sarcasm, anxiety, excitement, supportive, against) over the timeline | Five dimensions per post from zero-shot multilingual NLI plus multilingual sentiment; Hinglish handling. Hourly or daily timeline, all activity vs organic, **filterable by platform and by posts vs comment threads** | `app/nlp/`, `/api/timeline/*` |
 | **C** | Aggregate, anonymised demographics (age brackets, geography, language, professional interests) | Cohort-only counts: 36-state/UT gazetteer, bio-cue age brackets (minors excluded), interests, language. **k-anonymity (K=10) plus Laplace noise.** No per-account endpoint. **State-level impact map** on the first page, also k-anonymous | `app/analytics/demographics.py`, `app/analytics/situation.py` |
 | **D** | Identify, rank and **predict** rising trends and viral keywords over time | Windowed topic clustering with centroid matching; **Kleinberg bursts**; **rise score**; **gradient-boosting and Hawkes forecasts**; ranked signals; **viral hashtags** (peak hour vs usual rate); **hot topics**; **sector-wise impact** (9 sectors) | `app/analytics/{topics,trends,burst,forecast,signals,situation}.py` |
@@ -144,7 +144,7 @@ and dark is one click away. Every page fits a phone (checked by the test suite a
 
 **Landing page (`/`).** A government-portal front page: accessibility bar (skip link, text size,
 Hindi tagline), a 3D globe of India's conversation (three.js; red arcs are coordinated spread),
-counters, a live Telegram headline ticker, "How it works" and "Built for trust". While the free
+counters, a live social-media headline ticker (X, Telegram, YouTube, Reddit), "How it works" and "Built for trust". While the free
 server wakes up, a lamp with a flickering flame is shown instead of a blank page.
 
 | Step | Page | What it shows |
@@ -171,8 +171,10 @@ server wakes up, a lamp with a flickering flame is shown instead of a blank page
 - Critical Infrastructure is the only CRITICAL sector. The bigger cricket surge is organic.
 - Synchrony fingerprint: the group's median gap between posts is about 90 s and every post lands
   within a minute of another account's; for ordinary users on the same story it is 13.6%.
-- The live Telegram feed shows about 45–50 real posts from The Indian Express, Hindustan Times,
-  Mint and Moneycontrol, refreshed every 10 minutes.
+- The live feeds show roughly 40–50 real posts per platform from the last few hours: X (PIB, PIB Fact
+  Check, NDMA, ANI), Telegram (Indian Express, Hindustan Times, Mint, Moneycontrol), YouTube (NDTV,
+  India Today, PIB, The Hindu: new videos plus viewer comments) and Reddit (r/india, r/IndiaSpeaks,
+  r/indianews). Refreshed every 10 minutes.
 
 ---
 
@@ -196,7 +198,7 @@ server wakes up, a lamp with a flickering flame is shown instead of a blank page
 - **Supportive / against:** polarity from `cardiffnlp/twitter-xlm-roberta-base-sentiment`.
 - Per-label thresholds are tuned on the validation seed; the headline number is on the held-out seed.
 - Hinglish: script detection, a Hinglish lexicon, spelling-variant canonicalisation and emoji tokens.
-- The live Telegram feed uses the fast lexicon scorer (`lexicon-v1`) because the free server has no GPU.
+- The live feeds use the fast lexicon scorer (`lexicon-v1`) because the free server has no GPU.
 
 ### 5.3 Demographics and states (C)
 - **Geography:** a whole-word gazetteer match on profile location or bio (36 states/UTs).
@@ -313,19 +315,25 @@ positives: the detector over-weights co-posting for synchronized but genuine gro
 
 | Part of the site | Source | Real-time? |
 |---|---|---|
-| **Live Telegram feed** (landing ticker, Situation Room card, Telegram page) | Real public posts from The Indian Express, Hindustan Times, Mint and Moneycontrol, fetched through our connected Telegram account | **Yes.** Fetched on request, cached 10 min, scored live. Shown, not stored |
+| **Live feeds** (landing ticker, Situation Room card, each platform's page) | Real public posts, fetched from fixed lists of sources (visitors cannot choose them) | **Yes.** Fetched when someone looks, cached 10 min, scored live. Shown, not stored |
 | **Everything else** (situation report, trends, coordination, network, lineage, audience, ledger) | A synthetic 7-day scenario with ground truth, replayed through the real pipeline (collectors → ledger → analytics) | **No.** It is a recorded week, dated to the week before the bundle was built |
+
+**How each platform is fetched live** (all legitimate, all read-only):
+
+| Platform | Sources | Method |
+|---|---|---|
+| X | @PIB_India, @PIBFactCheck, @ndmaindia, @ANI | twscrape with a burner account's session cookies |
+| Telegram | Indian Express, Hindustan Times, Mint, Moneycontrol | Telethon, our logged-in session |
+| YouTube | NDTV, India Today, PIB India, The Hindu | the channel's official RSS feed for new videos; the Data API (our key) for viewer comments |
+| Reddit | r/india, r/IndiaSpeaks, r/indianews | the subreddits' official RSS feed, one combined request |
+| Instagram, Facebook | none live | Meta offers no public feed or free API for other people's pages; scraping breaks its terms. They come in through the official data export (the same pipeline); production would use Meta's Content Library for researchers |
 
 **Why the main story is synthetic.** To prove the detector works we need ground truth: which
 accounts really are coordinated, where the rumour really started. Real platform data never comes
-with those answers, and it would expose real people. Also:
-- X, Instagram and Facebook do not allow free scraping. X needs paid API access or session cookies;
-  Instagram and Facebook data comes through their official exports.
-- The free server has 0.1 CPU and no GPU, so it cannot run the transformer models continuously on a
-  live stream.
-
-The X, Reddit and YouTube collectors are built and tested, and switch on when their credentials are
-added; the Telegram collector is live today.
+with those answers, and it would expose real people. Also, the free server has 0.1 CPU and no GPU,
+so it cannot run the transformer models continuously on a live stream. So the live feeds show the
+collectors working against the real platforms today, and the synthetic week shows what the analysis
+finds.
 
 **Keeping the dates fresh.** The scenario is anchored to the time the demo bundle is built, so the
 incident sits in "the last 7 days". As real days pass the scenario stays where it was, so rebuild it
@@ -354,7 +362,7 @@ and we say it in the pitch.
 **Say:**
 - "One national picture: what is being pushed, by whom, and where it lands, then investigate, then evidence."
 - "Every view as all activity or organic only."
-- "Our Telegram collector is live: these are real posts from public news channels, fetched just now."
+- "Our collectors are live on four platforms: these are real posts from X, Telegram, YouTube and Reddit, fetched just now."
 - "The detector found all 60 planted accounts on a held-out scenario; simple baselines score F1 0.01 and 0.21."
 - "The rumour fires a high-priority signal 5 minutes before a volume alarm; the bigger organic cricket surge doesn't."
 - "1000 out of 1000 tampers caught; 100k records verified in 1.1 s; checkpoints anchored to Bitcoin."
@@ -374,7 +382,7 @@ and we say it in the pitch.
    Team MOGGERS.
    - Headline: *"A national situation room for social media: what is being pushed, by whom, and where
      it lands."*
-   - Chips: "5/5 PS components live" · "Telegram live" · "Every record hash-chained".
+   - Chips: "5/5 PS components live" · "4 platforms live" · "Every record hash-chained".
    - Screenshot: the Situation Room.
 2. **Solution in one picture.** The four-step flow (Situation → Detect → Investigate → Evidence).
    Add the traceability table (§2), one measured number per row (§6). Before/after: "volume alarm:
@@ -426,11 +434,11 @@ voice-over are in the shared doc.
 ---
 
 ## 11. Likely jury questions (with answers)
-- **"Is the data real?"** Two parts. The Telegram feed is real and live: posts from Indian news
-  channels, fetched now. The investigation storyline is a synthetic week replayed through the real
-  pipeline, because only a planted scenario has ground truth to measure the detector against, and it
-  profiles no real person. X, Reddit and YouTube collectors are built and tested and switch on with
-  credentials; Instagram and Facebook come through their official exports.
+- **"Is the data real?"** Two parts. The live feeds are real: posts from X, Telegram, YouTube and
+  Reddit, fetched now from public news and government sources. The investigation storyline is a
+  synthetic week replayed through the real pipeline, because only a planted scenario has ground truth
+  to measure the detector against, and it profiles no real person. Instagram and Facebook come through
+  their official exports: Meta has no public feed, and we don't scrape against its terms.
 - **"How do you know they're bots?"** We don't label bots. We score behaviour (synchronized
   near-duplicate posting plus scripted cadence) and show every factor. Held-out: all 60 accounts
   found; precision 0.71, because a legitimate fan swarm also looks coordinated.
@@ -450,9 +458,9 @@ voice-over are in the shared doc.
 
 ## 12. Limitations
 1. The storyline is synthetic and dated to when the bundle was built; rebuild it before a demo (§7).
-   Only Telegram is connected live on the hosted demo; X, Reddit and YouTube need their credentials there.
-2. The live Telegram feed is scored with the lexicon model and is shown, not stored, on the public
-   demo.
+   Instagram and Facebook have no live feed (no legitimate public source); they use the official export.
+2. The live feeds are scored with the lexicon model and are shown, not stored, on the public demo.
+   X access uses a burner account's session, which X can rate-limit or lock; log it out after the hackathon.
 3. Emotion is measured on synthetic labels with no gold set; sarcasm F1 is 0.17; the panic
    distortion is inverted.
 4. Coordination flags a legitimate fan swarm on the held-out seed (precision 0.71).

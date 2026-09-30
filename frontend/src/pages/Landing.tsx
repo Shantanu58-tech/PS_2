@@ -4,7 +4,8 @@ import {
   ArrowRight, Fingerprint, Globe2, Lock, PlayCircle, Radar, ShieldCheck, TrendingUp, Users, Workflow,
 } from 'lucide-react'
 import { useSituation } from '../hooks/useApi'
-import { useLiveTelegram } from '../components/LiveTelegram'
+import { useLive } from '../components/LiveFeed'
+import { PLATFORM_LABEL } from '../lib/viz'
 import { DeepastambhaMark, TAGLINE, TAGLINE_HI } from '../components/Brand'
 import { useAppStore } from '../store/app'
 import { STAGES } from '../lib/flow'
@@ -61,10 +62,17 @@ const STEP_TEXT = [
 export default function Landing() {
   const navigate = useNavigate()
   const { data: sit } = useSituation()
-  const { data: live } = useLiveTelegram()
+  const { data: live } = useLive('all')
   const setTourActive = useAppStore(s => s.setTourActive)
   const k = sit?.kpis
-  const headlines: any[] = (live?.posts ?? []).slice(0, 12)
+  // newest first, but take turns between platforms so one busy app does not fill the ticker
+  const headlines: any[] = (() => {
+    const by = new Map<string, any[]>()
+    for (const p of (live?.posts ?? []).filter((p: any) => p.kind !== 'comment')) by.set(p.platform, [...(by.get(p.platform) ?? []), p])
+    const out: any[] = []
+    for (let i = 0; out.length < 16 && [...by.values()].some(v => v.length > i); i++) for (const v of by.values()) if (v[i]) out.push(v[i])
+    return out.slice(0, 16)
+  })()
 
   return (
     <div className="landing">
@@ -111,13 +119,13 @@ export default function Landing() {
         </section>
 
         {headlines.length > 0 && (
-          <section className="ticker" aria-label="Live from Telegram">
-            <span className="ticker-label"><span className="live-pill">LIVE</span> Telegram</span>
+          <section className="ticker" aria-label="Live from social media">
+            <span className="ticker-label"><span className="live-pill">LIVE</span> Social media</span>
             <div className="ticker-track">
               <div className="ticker-run">
                 {[...headlines, ...headlines].map((p, i) => (
-                  <a key={i} href={p.link} target="_blank" rel="noreferrer">
-                    <b>{p.channel_title.replace(/[-–].*$/, '').trim()}</b> {p.text.slice(0, 110)}{p.text.length > 110 ? '…' : ''}
+                  <a key={p.platform + p.id + i} href={p.link} target="_blank" rel="noreferrer">
+                    <b>{PLATFORM_LABEL[p.platform]} · {p.source_title.replace(/\s*[-–|].*$/, '').trim()}</b> {p.text.slice(0, 110)}{p.text.length > 110 ? '…' : ''}
                   </a>
                 ))}
               </div>

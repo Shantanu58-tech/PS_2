@@ -73,6 +73,11 @@ class Settings(BaseSettings):
     tg_session_string: str = ""  # Telethon StringSession (hosted live mode)
     # public channels shown in the live Telegram feed (fixed allowlist; visitors cannot change it)
     live_tg_channels: str = "IndianExpress,hindustantimes,livemint,moneycontrolcom"
+    # live feeds: fixed allowlists of public sources (visitors cannot choose)
+    live_x_accounts: str = "PIB_India,PIBFactCheck,ndmaindia,ANI"
+    live_yt_channels: str = ("UCZFMm1mMw0F81Z37aaEzTUA,UCYPvAwZP8pZhSMW8qs7cVCw,"  # NDTV, India Today
+                             "UCGn6a5SI8SNlj7WylmPD6GQ,UCI_7rpgXm-AQY62ZaE87dIw")   # PIB India, The Hindu
+    live_reddit_subs: str = "india,IndiaSpeaks,indianews"
 
     @model_validator(mode="after")
     def _absolute_paths(self) -> "Settings":

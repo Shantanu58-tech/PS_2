@@ -239,3 +239,59 @@ def test_organic_graph_has_no_coordinated_accounts(analysed_db):
         flagged = {a for (a,) in c.execute("SELECT account_id FROM coord_accounts WHERE score >= 0.7")}
     assert flagged
     assert not flagged & set(build_graph(analysed_db, organic_only=True).nodes)
+
+
+REDDIT_RSS = b"""<?xml version="1.0" encoding="UTF-8"?><feed xmlns="http://www.w3.org/2005/Atom">
+<entry><author><name>/u/someone</name></author><category term="india" label="r/india"/>
+<content type="html">&lt;div&gt;&lt;p&gt;Dam gates opened after heavy rain, officials say stay calm&lt;/p&gt;&lt;/div&gt; submitted by /u/someone</content>
+<id>t3_abc123</id><link href="https://www.reddit.com/r/india/comments/abc123/x/"/>
+<updated>2026-09-30T10:00:00+00:00</updated><title>Flood alert in the district https://example.com/x</title></entry></feed>"""
+
+YT_RSS = b"""<?xml version="1.0" encoding="UTF-8"?><feed xmlns:yt="http://www.youtube.com/xml/schemas/2015"
+ xmlns:media="http://search.yahoo.com/mrss/" xmlns="http://www.w3.org/2005/Atom"><title>News Channel</title>
+<entry><yt:videoId>vid1</yt:videoId><title>Evening bulletin</title><published>2026-09-30T09:00:00+00:00</published>
+<media:group><media:description>Top stories tonight\nmore</media:description>
+<media:community><media:statistics views="1234"/></media:community></media:group></entry></feed>"""
+
+
+class _Resp:
+    def __init__(self, content=b"", js=None):
+        self.content, self._js = content, js
+
+    def json(self):
+        return self._js
+
+
+def test_live_reddit_rss_is_parsed_and_cleaned(monkeypatch):
+    from app.collectors import live_feed
+
+    monkeypatch.setattr(live_feed.settings, "live_reddit_subs", "india")
+    monkeypatch.setattr(live_feed, "_get", lambda url, **kw: _Resp(REDDIT_RSS))
+    d = live_feed._reddit_sync()
+    assert d["connected"] and len(d["posts"]) == 1
+    p = d["posts"][0]
+    assert p["platform"] == "reddit" and p["source"] == "india" and p["metrics"]["author"] == "u/someone"
+    assert "http" not in p["text"] and "submitted by" not in p["text"] and "Dam gates opened" in p["text"]
+    assert d["channels"][0]["posts"] == 1
+
+
+def test_live_youtube_videos_and_comments(monkeypatch):
+    from app.collectors import live_feed
+
+    monkeypatch.setattr(live_feed.settings, "live_yt_channels", "UCxyz")
+    monkeypatch.setattr(live_feed.settings, "yt_api_key", "k")
+    comments = {"items": [{"id": "c1", "snippet": {"totalReplyCount": 2, "topLevelComment": {"snippet": {
+        "textDisplay": "Is this true? Stay safe everyone", "publishedAt": "2026-09-30T09:30:00Z", "likeCount": 5}}}}]}
+    monkeypatch.setattr(live_feed, "_get", lambda url, **kw: _Resp(YT_RSS) if "feeds" in url else _Resp(js=comments))
+    d = live_feed._youtube_sync()
+    kinds = sorted(p["kind"] for p in d["posts"])
+    assert d["connected"] and kinds == ["comment", "video"]
+    video = next(p for p in d["posts"] if p["kind"] == "video")
+    assert video["metrics"]["views"] == 1234 and video["source_title"] == "News Channel"
+    comment = next(p for p in d["posts"] if p["kind"] == "comment")
+    assert comment["on"].startswith("Evening bulletin") and comment["metrics"]["likes"] == 5
+
+
+def test_live_unknown_platform_is_refused_cleanly(client):
+    j = client.get("/api/live/instagram").json()
+    assert j["connected"] is False and j["posts"] == []
