@@ -103,7 +103,7 @@ export default function Landing() {
             </p>
             <div className="row-wrap" style={{ gap: 12, marginTop: 26 }}>
               <button className="btn btn-primary hero-cta" onClick={() => navigate('/situation')}>Enter the Situation Room<ArrowRight size={16} /></button>
-              <button className="btn hero-ghost" onClick={() => { navigate('/situation'); setTourActive(true) }}><PlayCircle size={16} />Take the 3-minute tour</button>
+              <button className="btn hero-ghost" onClick={() => { navigate('/situation'); setTourActive(true) }}><PlayCircle size={16} />Take the guided tour</button>
             </div>
           </div>
           <div className="hero-visual">
@@ -167,7 +167,7 @@ export default function Landing() {
           <div className="row" style={{ gap: 10 }}><DeepastambhaMark size={34} /><span><b>DEEPASTAMBHA</b><br /><small>{TAGLINE}</small></span></div>
           <nav className="row-wrap" style={{ gap: 18 }}>
             <Link to="/situation">Situation Room</Link><Link to="/platforms">Platforms</Link>
-            <Link to="/coordination">Coordination</Link><Link to="/ledger">Evidence ledger</Link>
+            <Link to="/coordination">Coordinated groups</Link><Link to="/ledger">Evidence ledger</Link>
           </nav>
         </div>
       </footer>

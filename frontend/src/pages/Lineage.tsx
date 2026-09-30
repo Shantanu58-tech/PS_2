@@ -88,7 +88,7 @@ export default function Lineage() {
 
   return (
     <div>
-      <PageHead title="Lineage" sub="Where a story started and how it moved across platforms." />
+      <PageHead title="Origin & spread" sub="Where a story started and how it moved across platforms." />
       {topics.length === 0 ? <Empty>No lineage yet.</Empty> : (
         <div className="stack">
           <div className="row-wrap">

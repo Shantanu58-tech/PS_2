@@ -72,7 +72,7 @@ function SitRep({ sit }: { sit: any }) {
         <div className="hop-strip">
           <div className="spread" style={{ marginBottom: 6 }}>
             <b style={{ fontSize: 12.5, textTransform: 'uppercase', letterSpacing: '0.05em' }}>How it travelled</b>
-            <Link to={`/lineage?topic=${lead.topic_id}`} style={{ fontSize: 12 }}>Lineage →</Link>
+            <Link to={`/lineage?topic=${lead.topic_id}`} style={{ fontSize: 12 }}>Origin & spread →</Link>
           </div>
           {hops.length === 0 ? <Loading label="Tracing" /> : hops.map((h, i) => (
             <div key={h.platform} className="hop">

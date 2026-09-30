@@ -25,10 +25,10 @@ export const NAV: { group: string; items: Item[] }[] = [
     { path: '/timeline', label: 'Emotions', icon: <Activity size={18} /> },
   ] },
   { group: '3 · Investigate', items: [
-    { path: '/coordination', label: 'Coordination', icon: <Fingerprint size={18} />,
+    { path: '/coordination', label: 'Coordinated groups', icon: <Fingerprint size={18} />,
       count: s => s?.kpis.coordinated_accounts ? { text: `${s.kpis.coordinated_accounts} sync`, hot: true } : null },
     { path: '/network', label: 'Network', icon: <NetIcon size={18} /> },
-    { path: '/lineage', label: 'Lineage', icon: <GitBranch size={18} /> },
+    { path: '/lineage', label: 'Origin & spread', icon: <GitBranch size={18} /> },
     { path: '/audience', label: 'Audience', icon: <Users size={18} />, count: s => s ? { text: `${s.kpis.states_released} states` } : null },
   ] },
   { group: '4 · Evidence', items: [

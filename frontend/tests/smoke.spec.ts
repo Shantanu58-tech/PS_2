@@ -8,10 +8,10 @@ const ROUTES: [string, RegExp][] = [
   ['/timeline', /Emotions/],
   ['/platforms', /Platforms/],
   ['/trends', /Trends/],
-  ['/coordination', /Coordination/],
+  ['/coordination', /Coordinated groups/],
   ['/network', /Network/],
   ['/audience', /Audience/],
-  ['/lineage', /Lineage/],
+  ['/lineage', /Origin & spread/],
   ['/cases', /Cases/],
   ['/ledger', /Evidence ledger/],
   ['/search', /Search/],
@@ -47,7 +47,7 @@ test('situation room drills down in one click', async ({ page }) => {
   if (await skip.isVisible().catch(() => false)) await skip.click()
   await expect(page.getByText('Situation report · India')).toBeVisible()
   await page.getByRole('button', { name: /Investigate the group/ }).click()
-  await expect(page.locator('h1').first()).toHaveText(/Coordination/)
+  await expect(page.locator('h1').first()).toHaveText(/Coordinated groups/)
   await page.goto('/situation')
   await page.locator('.sector').first().click()
   await expect(page.locator('h1').first()).toHaveText(/Trends/)

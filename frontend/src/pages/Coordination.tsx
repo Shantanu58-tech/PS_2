@@ -73,7 +73,7 @@ export default function Coordination() {
 
   return (
     <div>
-      <PageHead title="Coordination" sub="Groups of accounts posting the same thing at the same time, and the evidence that it is not natural." />
+      <PageHead title="Coordinated groups" sub="Groups of accounts posting the same thing at the same time, and the evidence that it is not natural." />
       {clusters.length === 0 ? <Empty>No coordinated groups found.</Empty> : (
         <>
           {clusters.length > 1 && (

@@ -153,9 +153,9 @@ server wakes up, a lamp with a flickering flame is shown instead of a blank page
 | 2 | Platforms | All six apps, each with its own activity, mood, topics, accounts and posts; Telegram carries a Live badge and the full live feed |
 | 2 | Trends | Topics marked Likely coordinated or Organic, burst bands, forecast, top posts, AI summary (claims and rebuttals shown separately), viral hashtags; opens pre-filtered from a sector or topic |
 | 2 | Emotions | Opens on the flagged story. Five emotions over time, all activity vs organic, and a table comparing the story with the everyday level (in percentage points); filters for platform and posts vs comments |
-| 3 | Coordination | Group size, score, posts and time span; why it was flagged in plain words; **"Compared with ordinary users"** table; **synchrony fingerprint** (one row per account, one tick per post: the group's ticks line up, ordinary users' don't); timing chart; accounts; sample posts |
+| 3 | Coordinated groups | Group size, score, posts and time span; why it was flagged in plain words; **"Compared with ordinary users"** table; **synchrony fingerprint** (one row per account, one tick per post: the group's ticks line up, ordinary users' don't); timing chart; accounts; sample posts |
 | 3 | Network | Interaction map across apps, platform filters, time-lapse, account panel, top influencers, bridges, spread between groups, reach over time |
-| 3 | Lineage | Opens on the flagged story. First seen per platform, hand-offs, **what the posts do with the claim** (spreading / questioning / debunking / reacting; only spreading posts are traced), image copies grouped into one family with thumbnails |
+| 3 | Origin & spread | Opens on the flagged story. First seen per platform, hand-offs, **what the posts do with the claim** (spreading / questioning / debunking / reacting; only spreading posts are traced), image copies grouped into one family with thumbnails |
 | 3 | Audience | Scope selector (everyone, or the people posting about one story) and a line saying exactly what is counted ("about 3,950 accounts · 14 states · 23–30 Sept 2026"). India tile map, language donut, age columns in order, interest bars; "unknown" is a note, not a bar. Group counts only |
 | 4 | Cases | Evidence pack (brief) and draft §63 certificate |
 | 4 | Evidence ledger | Verify integrity, tamper test, signed seals, proof of inclusion (post number explained, "Random post" button), activity log |
@@ -422,11 +422,11 @@ voice-over are in the shared doc.
    Click the Critical Infrastructure sector card, which opens Trends filtered.
 2. **Live from Telegram:** real posts from Indian news channels, fetched now.
 3. **Trends:** the Likely coordinated badge and viral hashtags.
-4. **Investigate the group** (from the report): Coordination.
+4. **Investigate the group** (from the report): Coordinated groups.
 5. **Emotions and Audience:** the flagged story vs the everyday level; who is talking, by state and language.
 6. **Network:** press Play the week, then click @varunapur_updates (12,000 followers, picked up by
    66 accounts).
-7. **Lineage:** Telegram → X +12 min → Facebook; 319 posts spread it, 15 debunk it; the image family.
+7. **Origin & spread:** Telegram → X +12 min → Facebook; 319 posts spread it, 15 debunk it; the image family.
 8. Back on the Situation Room, press **Approve → case**. The case opens with the evidence pack and
    draft certificate.
 9. **Evidence ledger:** Verify integrity, then Run tamper simulation, which is caught at the exact record.

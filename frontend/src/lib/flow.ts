@@ -23,7 +23,7 @@ export const NEXT: Record<string, { to: string; label: string; why: string }> = 
   '/timeline': { to: '/coordination', label: 'Investigate: coordination', why: 'Remove the coordinated accounts and find out who they are.' },
   '/search': { to: '/trends', label: 'Trends', why: 'Place the posts you found inside their topic.' },
   '/coordination': { to: '/network', label: 'Network', why: 'See the group inside the wider network and who it reaches.' },
-  '/network': { to: '/lineage', label: 'Lineage: where it started', why: 'Trace the narrative back to the first post and platform.' },
+  '/network': { to: '/lineage', label: 'Origin & spread: where it started', why: 'Trace the narrative back to the first post and platform.' },
   '/lineage': { to: '/cases', label: 'Evidence: open a case', why: 'Package the findings with their ledger records.' },
   '/audience': { to: '/cases', label: 'Evidence: open a case', why: 'Package the findings with their ledger records.' },
   '/cases': { to: '/ledger', label: 'Verify the ledger', why: 'Prove none of the evidence has been changed since collection.' },
