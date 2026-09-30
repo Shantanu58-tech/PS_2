@@ -71,6 +71,8 @@ class Settings(BaseSettings):
     # configuration (PRD 12: public read-only demo mode).
     demo_readonly: bool = False
     tg_session_string: str = ""  # Telethon StringSession (hosted live mode)
+    # public channels shown in the live Telegram feed (fixed allowlist; visitors cannot change it)
+    live_tg_channels: str = "IndianExpress,hindustantimes,livemint,moneycontrolcom"
 
     @model_validator(mode="after")
     def _absolute_paths(self) -> "Settings":

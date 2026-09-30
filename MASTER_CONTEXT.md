@@ -1,36 +1,65 @@
-# DEEPASTAMBHA: Master Context
+# DEEPASTAMBHA: Master Context (final)
 
+**दीपस्तम्भ, "pillar of light"**: the temple lamp tower that keeps a light burning through the night.
 **Team MOGGERS · VIT Pune · Smart India Hackathon 2026**
 **Problem Statement 26152 "Social Media Analytics" · NTRO · Category: Software · Theme: Blockchain & Cybersecurity**
 
-**Live demo:** https://prahari-h849.onrender.com · **Code:** https://github.com/Shantanu58-tech/PS_2
+- **Live demo:** https://prahari-h849.onrender.com (the URL keeps the old project name; see §13)
+- **Code:** https://github.com/Shantanu58-tech/PS_2
+- **Walkthrough and video script:** shared doc "DEEPASTAMBHA — Demo Walkthrough & Video Script"
+- **Screen-recorded demo:** `demo_video/deepastambha_demo.mp4` (captioned, about 3 min; not in git)
 
-> The single reference for the team: what we built, how it works, what we measured,
-> how to demo it and how to pitch it. **Every number here comes from
-> `eval/reports/summary.json` (generated 2026-09-30).** Never put a number on a
-> slide that isn't in that file. Details: `docs/DECISIONS.md` (all design decisions),
-> `eval/reports/*.md` (all measurements), `PROJECT_STATUS.md` (what's left).
+> This is the single reference for the team: what we built, how it works, what we
+> measured, how to demo it and how to pitch it.
+>
+> - **Evaluation numbers** (§6) come only from `eval/reports/summary.json`
+>   (generated 2026-09-30). Never put a number on a slide that isn't in that file.
+> - **Numbers labelled "on the live demo"** are what the demo database shows on screen.
+>
+> More detail: `docs/DECISIONS.md` (every design decision, D-01…D-39), `eval/reports/*.md`
+> (every measurement), `docs/DIAGRAMS.md` (Mermaid diagrams and references).
 
 ---
 
-## 1. One-liner and thesis
+## 1. One-liner, name and thesis
 
-**One-liner:** DEEPASTAMBHA turns raw multi-platform social streams into evidence-grade
-intelligence. It shows what narrative is spreading, where it was first seen, who is
-amplifying it, whether that amplification is organic or coordinated, and it keeps every
-collected record in a tamper-evident, independently verifiable ledger.
+**One-liner.** DEEPASTAMBHA is a national situation room for social media. At a glance it shows:
+- what is happening across India;
+- which narratives are being pushed, and by which coordinated groups and accounts;
+- the impact, by sector and by state.
 
-**Thesis: coordination-adjusted analytics.** Every team will build the five PS
-components (collection, sentiment, demographics, trends, network). We tie them together
-with one idea: **every view can be shown raw or organic-only**, with coordinated
-accounts removed, so the analyst sees how much a campaign distorts trends, audience and
-influence. Around it sits an evidence pipeline: hash chain, signed Merkle checkpoints,
-Bitcoin time-anchoring (OpenTimestamps), tamper simulation, and a draft BSA §63 certificate.
+From that overview the analyst investigates who is behind a narrative and where it started, then
+secures the evidence in a tamper-evident, independently verifiable ledger.
+
+**Name and logo.** A *deepastambha* keeps a light burning all night: a watch that never sleeps. The
+emblem is a lamp tower inside a round seal:
+- **six lamps** on three tiers stand for the **six platforms** we watch;
+- the **saffron flame** with listening arcs is the watch;
+- a **green base line** completes the tricolour.
+
+We moved away from the earlier name "Prahari" because BSF, RPF and UP Police apps already use it,
+and so do several SIH 2026 teams. A search found no product named Deepastambha.
+
+**Thesis: coordination-adjusted analytics.** Every team will build the five PS components. We tie
+them together with one idea: **every view can be shown as all activity or organic only**, with
+coordinated accounts removed. The analyst then sees how much a campaign distorts trends, audience
+and influence.
+
+Around this sits an evidence pipeline:
+- hash chain;
+- signed Merkle checkpoints;
+- Bitcoin time-anchoring (OpenTimestamps);
+- tamper simulation;
+- analyst decisions recorded in the chain;
+- a draft BSA §63 certificate.
 
 **Primary user:** an NTRO cyber-intelligence analyst.
-**Pain points solved:** alert fatigue (few, explained Signal Cards); organic vs
-astroturf (coordination detector + organic-only toggle); cross-platform tracing
-(lineage); evidence that holds up (ledger + case brief).
+
+**Pain points solved:**
+- **Alert fatigue:** a few ranked, explained signals instead of many alarms.
+- **Organic vs astroturf:** the coordination detector plus the organic-only switch.
+- **Cross-platform tracing:** lineage.
+- **Evidence that holds up:** the ledger plus the case pack.
 
 ---
 
@@ -38,335 +67,401 @@ astroturf (coordination detector + organic-only toggle); cross-platform tracing
 
 | PS | Requirement (abridged) | What we built | Where |
 |---|---|---|---|
-| **A** | Multi-platform ingestion of live posts, interactions and comments; structured time-stamped history. Essential: X, Telegram. Desirable: Instagram, Facebook. Appreciable: Reddit, YouTube | Live collectors for **X (twscrape), Telegram (Telethon), Reddit (PRAW), YouTube (Data API v3, incl. replies)**; **IG/FB via official-export CSV import** (demo includes a synthetic IG/FB export sample); **Platforms page** with per-platform activity, mood, topics, accounts and source status; replay; backoff + circuit breaker + health; UTC timeline, reply threads, dedup | `backend/app/collectors/`, `app/pipeline/` |
-| **B** | NLP for nuanced emotions (sarcasm, anxiety, excitement, supportive, against) over the timeline | Five dimensions per post; zero-shot multilingual NLI + multilingual sentiment; Hinglish handling; hourly/daily timeline, raw vs organic; filter by platform and by posts vs comment threads | `app/nlp/`, `/api/timeline/*` |
-| **C** | Aggregate, anonymised demographics (age brackets, geography, language, professional interests) | Cohort-only counts; 36-state/UT gazetteer; bio-cue age brackets (minors excluded); interests; language; **k-anonymity K=10 + Laplace noise**; no per-account endpoint | `app/analytics/demographics.py` |
-| **D** | Identify, rank and **predict** rising trends and viral keywords chronologically | Windowed topic clustering with centroid matching; **Kleinberg bursts**; **rise score**; **gradient-boosting + Hawkes forecasts**; Signal Cards; **viral hashtags** (peak hour vs usual rate) | `app/analytics/{topics,trends,burst,forecast,signals}.py` |
-| **E** | Map relationships, find key opinion leaders, visualise spread between segments over time | Interaction graph; KOLs by **cascade influence** + PageRank + betweenness; bridge accounts; communities; **segment-to-segment spread** (coordinated group vs network communities, with anxiety per segment); spread frames; organic-only rank changes | `app/analytics/graph*.py` |
-| **Theme** | Blockchain & Cybersecurity | **SHA-256 hash chain, Ed25519-signed Merkle checkpoints, inclusion proofs, OpenTimestamps (Bitcoin) anchoring, tamper simulation, audit trail inside the chain, draft §63 certificate** | `app/ledger/`, `app/analytics/cases.py` |
+| **A** | Multi-platform ingestion of live posts, interactions and comments, with a time-stamped history. Essential: X, Telegram. Desirable: Instagram, Facebook. Appreciable: Reddit, YouTube | Collectors for **X (twscrape), Telegram (Telethon, connected and live), Reddit (PRAW), YouTube (Data API v3, incl. replies)**. **Instagram/Facebook** arrive via their official data export (CSV) through the same pipeline; the demo includes a synthetic IG/FB export sample. Backoff, circuit breaker and health checks. UTC timeline, reply threads, dedup. **Platforms page:** activity, mood, topics, accounts and source status for all six. **Live Telegram feed:** real posts fetched right now from public news channels | `backend/app/collectors/`, `app/pipeline/`, `/api/platforms`, `/api/live/telegram` |
+| **B** | NLP for nuanced emotions (sarcasm, anxiety, excitement, supportive, against) over the timeline | Five dimensions per post from zero-shot multilingual NLI plus multilingual sentiment; Hinglish handling. Hourly or daily timeline, all activity vs organic, **filterable by platform and by posts vs comment threads** | `app/nlp/`, `/api/timeline/*` |
+| **C** | Aggregate, anonymised demographics (age brackets, geography, language, professional interests) | Cohort-only counts: 36-state/UT gazetteer, bio-cue age brackets (minors excluded), interests, language. **k-anonymity (K=10) plus Laplace noise.** No per-account endpoint. **State-level impact map** on the first page, also k-anonymous | `app/analytics/demographics.py`, `app/analytics/situation.py` |
+| **D** | Identify, rank and **predict** rising trends and viral keywords over time | Windowed topic clustering with centroid matching; **Kleinberg bursts**; **rise score**; **gradient-boosting and Hawkes forecasts**; ranked signals; **viral hashtags** (peak hour vs usual rate); **hot topics**; **sector-wise impact** (9 sectors) | `app/analytics/{topics,trends,burst,forecast,signals,situation}.py` |
+| **E** | Map relationships, find key opinion leaders, show spread between segments over time | Interaction graph across apps, coloured by platform. **"Play the week"** time-lapse. Account panel with followers, activity per platform and connected accounts. KOLs by **cascade influence**, PageRank and betweenness; bridges; communities. **Segment-to-segment spread** with anxiety per segment. Rank changes in organic-only view | `app/analytics/graph*.py`, `/api/graph*` |
+| **Theme** | Blockchain & Cybersecurity | **SHA-256 hash chain, Ed25519-signed Merkle checkpoints, inclusion proofs, OpenTimestamps (Bitcoin) anchoring, tamper simulation.** Every analyst action (review decisions, cases, verification) is **written into the chain**. Draft §63 certificate | `app/ledger/`, `app/analytics/cases.py` |
 
 ---
 
 ## 3. Architecture
 
 ```
-            ┌──────────── Collectors ────────────┐
-            │ X · Telegram · Reddit · YouTube    │  backoff+jitter, circuit breaker,
-            │ IG/FB CSV import · Replay          │  health at /api/collectors
-            └──────────────┬─────────────────────┘
+            ┌──────────── Collectors ─────────────────┐
+            │ X · Telegram (live) · Reddit · YouTube  │  backoff+jitter, circuit breaker,
+            │ IG/FB official-export CSV · Replay      │  health at /api/collectors
+            └──────────────┬──────────────────────────┘
                            │ RawRecord
                            ▼
-   Ledger writer: canonical JSON → SHA-256 → chained entry hash → raw_records (append-only)
-                  every 100 entries: Merkle root, signed with Ed25519 → ledger_checkpoints
-                           │
+   SECURE  ledger writer: canonical JSON → SHA-256 → chained entry hash → raw_records (append-only)
+           every 100 entries: Merkle root, signed with Ed25519 → ledger_checkpoints → OpenTimestamps
                            ▼
-   Normaliser → SQLite (WAL, FTS5): posts · accounts · edges (account→account) · media (sha256+pHash)
-                           │
+   PREPARE normaliser → SQLite (WAL, FTS5): posts · accounts · edges (account→account) · media (sha256+pHash)
                            ▼
-   Analytics pipeline (each stage an idempotent recompute):
-     emotions → edge resolution → topics → coordination → series & bursts → topic classification
-     → demographics (raw + organic) → behaviour (experimental) → forecasts → Signal Cards → OTS anchor
-                           │
+   ANALYSE (each stage an idempotent recompute):
+     emotions → edges → topics → coordination → series & Kleinberg bursts → manufactured/organic
+     → demographics (all + organic) → behaviour → influence (KOLs) → segments → forecasts → signals → OTS
                            ▼
-   FastAPI (REST + SSE live progress)  ──►  React console (served from the same URL)
+   ALL ACTIVITY vs ORGANIC → PRIORITY SCORE → high? ALERT : lower in the queue
+                           ▼
+   ANALYST REVIEW: approve → CASE (evidence pack + draft certificate) · watchlist · dismiss
+                   (every decision written into the hash chain)
+                           ▼
+   FastAPI (REST + SSE live updates) ──► React console:
+   1 Situation Room → 2 Detect → 3 Investigate → 4 Evidence
 ```
 
-**Stack:** Python 3.11, FastAPI, SQLite (Postgres-portable schema), NetworkX (Neo4j via
-the `GraphStore` interface), PyTorch CPU + Hugging Face models, React + Vite + TypeScript +
-Recharts, Docker single image, GitHub Actions CI (pytest, ruff, mypy, gitleaks, build,
-Playwright).
+**Checks on the team's architecture diagram** (it is correct apart from these):
+1. Add "Trends & bursts" to the Analyse box.
+2. Signals below the threshold stay lower in the queue; "Watchlist" and "Dismiss" are analyst decisions.
+3. The evidence pack and the draft certificate are produced together when a case opens. Counsel
+   review is a human step after that.
+4. Only raw records (at Secure) and analyst actions are written to the Trust Layer, not priority scores.
 
-**Prototype → production** (slide 4): SQLite → Postgres/TimescaleDB; asyncio queue →
-Kafka; NetworkX → Neo4j (already behind an interface); FTS5 → Elasticsearch; embeddings →
-Milvus; hash-chain ledger → Hyperledger Fabric; research collectors → licensed feeds.
+**Stack.**
+- Backend: Python 3.11, FastAPI, SQLite (Postgres-portable schema), NetworkX (Neo4j via the
+  `GraphStore` interface), PyTorch CPU and Hugging Face models.
+- Frontend: React, Vite, TypeScript, Recharts, react-force-graph.
+- Packaging: one Docker image.
+- CI (GitHub Actions): pytest, ruff, mypy, gitleaks, build, Playwright.
+
+**Prototype → production** (slide 4):
+
+| Prototype | Production |
+|---|---|
+| SQLite | Postgres / TimescaleDB |
+| asyncio queue | Kafka |
+| NetworkX | Neo4j (already behind an interface) |
+| FTS5 | Elasticsearch |
+| Embeddings | Milvus |
+| Hash-chain ledger | Hyperledger Fabric |
+| Research collectors | Licensed feeds |
 
 ---
 
-## 4. Algorithms (for slide 3 and jury questions)
+## 4. The console: one connected flow
 
-### 4.1 Ledger (Theme)
-- `record_hash = SHA256(canonical_json(payload))` (sorted keys, UTF-8, no whitespace)
-- `entry_hash_n = SHA256(prev_entry_hash ‖ record_hash ‖ collected_at ‖ collector_id ‖ seq)`, genesis = 64 zeros
-- Every 100 entries: Merkle root over the entry hashes, **signed with Ed25519**
-- `verify` recomputes every record hash, chain link, **Merkle root** and signature
+The numbered bar under the masthead drives everything: **1 Situation Room → 2 Detect →
+3 Investigate → 4 Evidence**. The sidebar is grouped by the same four stages and shows live
+counts, every page is headed "Step n", and each page ends with a "Next in the flow" card.
+Every element on the first page is one click from its detail.
+
+The look follows the team's reference build: espresso masthead with a tricolour strip, sand
+canvas, copper accent. It is structured like a government portal but modern. Light is the default
+and dark is one click away.
+
+| Step | Page | What it shows |
+|---|---|---|
+| 1 | **Situation Room** | Auto-written situation report and a "How it travelled" strip. Four KPIs: posts secured, priority alerts, coordinated accounts, manufactured trends. **India state map** (exposure to pushed narratives, anxiety or posts; click a state). **Narratives being pushed**, with the coordinated group and its amplifiers. **Sector-wise impact matrix.** **Signals for analyst review** (Approve → case, Watchlist, Dismiss). **Live from Telegram.** Hot topics. Activity and amplification gap |
+| 2 | Platforms | All six sources with their status (Connected / API ready / official export) and per-platform activity, mood, topics, accounts and posts; the Telegram page shows the full live feed |
+| 2 | Trends | Topics marked manufactured or organic, burst bands, forecast, top posts, AI summary, viral hashtags; opens pre-filtered from a sector or topic |
+| 2 | Emotions | Five emotions over time, all activity vs organic, filtered by platform and by posts or comments |
+| 3 | Coordination | Why a group was flagged (posting in sync, predictable timing, clock-like rhythm, copy-paste text, robotic cadence), timing chart, accounts, sample posts |
+| 3 | Network | Interaction map across apps, platform filters, time-lapse, account panel, top influencers, bridges, spread between groups, reach over time |
+| 3 | Lineage | First seen per platform, hand-offs, image copies (pHash) |
+| 3 | Audience | Region, language, interests and age as group counts only |
+| 4 | Cases | Evidence pack (brief) and draft §63 certificate |
+| 4 | Evidence ledger | Verify integrity, tamper test, signed seals, proof of inclusion, activity log |
+
+**On the live demo** (from the demo database):
+- The situation report reads: "Dam Varunapur Evacuate", Critical Infrastructure, 93% of 347 posts
+  from a group of 72 accounts acting in sync.
+- It started on Telegram and went X (+12 min) → YouTube → Facebook → Reddit → Instagram.
+- 223 real users reacted with 59% anxiety, mostly in Maharashtra and Telangana.
+- Critical Infrastructure is the only CRITICAL sector. The bigger cricket surge is organic.
+- The live Telegram feed shows about 45–50 real posts from The Indian Express, Hindustan Times,
+  Mint and Moneycontrol, refreshed every few minutes.
+
+---
+
+## 5. Algorithms (for slide 3 and jury questions)
+
+### 5.1 Ledger (Theme)
+- `record_hash = SHA256(canonical_json(payload))` (sorted keys, UTF-8, no whitespace).
+- `entry_hash_n = SHA256(prev_entry_hash ‖ record_hash ‖ collected_at ‖ collector_id ‖ seq)`; the genesis hash is 64 zeros.
+- Every 100 entries, a Merkle root over the entry hashes is **signed with Ed25519**.
+- `verify` recomputes every record hash, chain link, **Merkle root** and signature.
 - **Inclusion proof:** a Merkle path plus the signed root. Anyone with the public key can verify one record.
-- **OpenTimestamps:** the newest checkpoint root is submitted to public calendars, then
-  `upgrade` fetches the Bitcoin attestation and `verify` checks it against the block
-  header. Anchoring the newest root timestamps the whole ledger up to that point, because
-  the entries are chained.
-- Append-only is enforced by SQLite triggers. The tamper simulation runs only on a
-  temporary copy. Analyst actions are written into the chain.
+- **OpenTimestamps:** the newest checkpoint root is stamped on public calendars and later upgraded
+  to a Bitcoin attestation. Because entries are chained, one anchor covers all earlier records.
+- SQLite triggers enforce append-only. The tamper simulation runs only on a temporary copy.
+- Analyst actions are written into the chain: signal review decisions, case creation, verify and
+  tamper runs.
 
-### 4.2 Emotion (B)
-- **Anxiety, excitement, sarcasm:** zero-shot NLI with `MoritzLaurer/mDeBERTa-v3-base-mnli-xnli`
-  (multilingual), using hypotheses such as "This message expresses or spreads fear, panic or alarm."
-- **Supportive / against:** `cardiffnlp/twitter-xlm-roberta-base-sentiment` (multilingual) polarity.
-- Per-label thresholds are tuned on the validation scenario seed; the headline is on the held-out seed.
-- Hinglish: script detection, a Hinglish lexicon (`data/lexicons/hinglish_words.txt`),
-  spelling-variant canonicalisation (nahi/nahin/nhi), emoji tokens.
-- Language: script rules + Hinglish detector + langdetect (seeded).
+### 5.2 Emotion (B)
+- **Anxiety, excitement, sarcasm:** zero-shot NLI with `MoritzLaurer/mDeBERTa-v3-base-mnli-xnli`,
+  which is multilingual.
+- **Supportive / against:** polarity from `cardiffnlp/twitter-xlm-roberta-base-sentiment`.
+- Per-label thresholds are tuned on the validation seed; the headline number is on the held-out seed.
+- Hinglish: script detection, a Hinglish lexicon, spelling-variant canonicalisation and emoji tokens.
+- The live Telegram feed uses the fast lexicon scorer (`lexicon-v1`) because the free server has no GPU.
 
-### 4.3 Demographics (C)
-- Geography: whole-word gazetteer match on location/bio (36 states/UTs with cities and aliases).
-  Interests: keyword taxonomy over bios. Age: bio cues (for example "B.Tech 2nd yr",
-  "retired", "born 1990") mapped to brackets; **minors are excluded**. Language: each
-  account's dominant post language.
-- **Privacy:** buckets with fewer than K=10 accounts are withheld (only the number of
-  withheld buckets is shown). Released counts get **Laplace(1/ε) noise**, ε=1, floored at
-  K. IDs are HMAC-pseudonymised. **No per-account endpoint exists** (tested).
+### 5.3 Demographics and states (C)
+- **Geography:** a whole-word gazetteer match on profile location or bio (36 states/UTs).
+- **Interests:** a keyword taxonomy over bios.
+- **Age:** bio cues mapped to brackets; **minors are excluded**.
+- **Language:** each account's dominant language.
+- **Privacy:**
+  - buckets or states backed by fewer than K=10 accounts are withheld;
+  - released counts get Laplace noise (ε=1);
+  - IDs are HMAC-pseudonymised;
+  - **no per-account endpoint exists**, and a test enforces that.
+- **State impact:** share of a state's posts that are **in a manufactured narrative or reply to
+  one**. Replies count because the coordinated accounts give no location, and the public reacts
+  through replies.
 
-### 4.4 Trends (D)
-- **Topics:** 24 h windows (by post time). Multilingual sentence embeddings
-  (paraphrase-multilingual-MiniLM-L12-v2) → agglomerative clustering (cosine,
-  deterministic). A new cluster joins an existing topic if centroid cosine ≥ 0.80, which
-  keeps topic identity across windows. Posts join if cosine to the centroid ≥ 0.55.
-  Labels come from c-TF-IDF.
-- **Kleinberg bursts (corrected form):** states i with rate αᵢ = sⁱ/ĝ; emission
-  σ(i,x) = −ln αᵢ + αᵢx; up-transition cost τ = (j−i)·γ·ln n; solved by Viterbi. γ is
-  the false-alarm control.
-- **Rise score** = 0.35·z(burst level) + 0.25·z(acceleration) + 0.20·z(novelty) + 0.20·z(unique-account growth).
-- **Forecast:** gradient boosting on lagged hourly counts, with an 80% band, plus an
-  **exponential-kernel Hawkes process** λ(t) = μ + Σα·e^(−β(t−tᵢ)) fitted by maximum
-  likelihood.
-- **Signal Card priority** P = 100·(0.35·B + 0.30·C + 0.20·S + 0.15·R): burst level, coordinated
-  share, anxiety shift, reach percentile. P ≥ 70 is high priority.
+### 5.4 Trends, sectors and signals (D)
+- **Topics:** 24 h windows; multilingual sentence embeddings (paraphrase-multilingual-MiniLM-L12-v2);
+  agglomerative clustering. A new cluster is matched to an existing topic when centroid cosine is
+  ≥ 0.80. Labels come from c-TF-IDF.
+- **Kleinberg bursts (corrected form):** αᵢ = sⁱ/ĝ; σ(i,x) = −ln αᵢ + αᵢx; τ = (j−i)·γ·ln n; solved
+  by Viterbi.
+- **Rise score** = 0.35·z(burst) + 0.25·z(acceleration) + 0.20·z(novelty) + 0.20·z(unique-account growth).
+- **Forecast:** gradient boosting on lagged hourly counts (80% band), plus an exponential-kernel
+  **Hawkes process** fitted by maximum likelihood.
+- **Priority** P = 100·(0.35·B + 0.30·C + 0.20·S + 0.15·R): burst level, coordinated share, anxiety
+  shift, reach. P ≥ 70 is high priority.
+- **Sectors:** each topic is assigned to one of 9 sectors by transparent keyword evidence. Levels:
 
-### 4.5 Network (E)
-- Directed interaction graph account→account (reply 1.0, forward 0.9, repost 0.8, mention 0.3).
-- **KOL influence** = 0.5·cascade (accounts who replied to, reposted or forwarded you, directly
-  or indirectly) + 0.3·PageRank + 0.2·betweenness, each normalised; plus an
-  originator/amplifier role.
-- Bridges: betweenness among nodes touching more than one community (greedy modularity).
-- Organic-only recompute shows rank changes ("who really influences vs who is pumped").
+  | Level | Rule |
+  |---|---|
+  | Critical | A manufactured topic with a high-priority signal |
+  | Elevated | A manufactured topic, or ≥ 10% coordinated |
+  | Watch | ≥ 2% coordinated, or burst level ≥ 3 |
+  | Quiet | No posts |
 
-### 4.6 Coordination detector (value feature V2)
-- **Unit = narrative cluster:** posts linked by near-identical text (cosine ≥ 0.90, same
-  hour), a shared hashtag (same 30 min window) or a repost/forward chain. This is robust even
-  when topic modelling fragments a campaign.
-- **Cluster test:** logistic combination of synchrony S, (1 − normalised entropy Hn of
-  log-binned gaps), max(0, −B) with Goh–Barabási burstiness B = (σ−μ)/(σ+μ), the
-  cross-account duplicate ratio, and the share of posts from accounts with scripted cadence.
-- **Per-account score:** co-posting (near-duplicate by a different account within 60 s),
-  regularity of the account's own gaps, repetition, and cluster duplication. Flag at ≥ 0.7.
-  Every signal is stored for the "why" panel.
+- **Hot topics / viral hashtags:** the busiest hour divided by the usual hourly rate over the whole window.
+
+### 5.5 Network (E)
+- Directed interaction graph, account → account. Edge weights: reply 1.0, forward 0.9, repost 0.8,
+  mention 0.3.
+- **KOL influence** = 0.5·cascade + 0.3·PageRank + 0.2·betweenness, each normalised.
+- **Bridges:** high betweenness among accounts that touch more than one community.
+- **Segments:** segment 0 is the coordinated group; segments 1–4 are the largest greedy-modularity
+  communities of everyone else. For a narrative we show when each segment was reached and its
+  anxiety.
+- **Account panel:** public profile fields, activity per platform, topics, and connected accounts in
+  both directions. No inferred demographics.
+
+### 5.6 Coordination detector
+- **Unit = narrative cluster:** posts linked by near-identical text (cosine ≥ 0.90, same hour), a
+  shared hashtag (same 30 min) or a repost/forward chain.
+- **Cluster test:** logistic combination of
+  - synchrony;
+  - (1 − normalised entropy of log-binned gaps);
+  - max(0, −B), where B is Goh–Barabási burstiness;
+  - the cross-account duplicate ratio;
+  - the share of posts from accounts with scripted cadence.
+- **Per-account score:** co-posting, regularity of the account's own timing, repetition. An account
+  is flagged at ≥ 0.7.
 - Wording guardrail: "behaviour consistent with scripted amplification". **Never "bot".**
 
-### 4.7 Lineage (V3)
-- Earliest *observed* post per platform, platform hand-offs, repost/forward chains
-  (Telegram forward headers), and image variants by **perceptual hash** (Hamming distance).
-
-### 4.8 LLM summaries (optional, B4)
-- Google Gemini. Posts are untrusted data: sanitised, fenced with a random nonce, JSON
-  schema enforced, and URLs/handles/hashtags must appear in the source posts. Known
-  injection phrases fail closed. There are 11 break tests. Disabled without a key.
+### 5.7 Lineage and LLM summaries
+- **Lineage:** earliest *observed* post per platform, hand-offs, Telegram forward chains, image
+  copies by perceptual hash.
+- **AI summaries (Gemini):** posts are treated as untrusted data. They are fenced with a nonce,
+  output must match a JSON schema, and output must be grounded in the source posts. 11 injection
+  break tests; the feature is disabled without a key.
 
 ---
 
-## 5. Demo scenario (fully synthetic, labelled SIMULATED)
-- 7 days (Nov 4–11 2024), **37,353 posts**, 3,000 background accounts, IST daily rhythm,
-  bursty human timing; English, Hinglish, Devanagari Hindi, a little Tamil and Bengali;
-  reply trees and mentions; 8 everyday topics.
-- **Planted rumour:** "Varunapur Dam has cracked, evacuate", a meme with a Hinglish overlay
-  posted on a Telegram channel at **day 4, 22:10 IST**, forwarded in Telegram, then amplified
-  on X **12 min later** by **60 coordinated accounts** posting template variants every
-  ~90 s ± 5 s (10 of them "aged" accounts that fool naive age/follower heuristics).
-- **Organic pickup:** 300 anxious replies and sarcastic debunks.
-- **Decoy:** a bigger cricket-win surge from genuine accounts plus a **legitimate fan-club
-  swarm** posting together at match moments (the hard false-positive test).
-- **Bridge:** one account linking the rumour and cricket communities.
-- **Image variants:** resize 60%, JPEG q30, crop 10%, watermark.
-- Ground truth: `replay/truth.json`. Seed 7 = demo/validation; seed 11 = held-out evaluation.
+## 6. Measured results (eval harness, `eval/reports/summary.json`)
 
----
-
-## 6. Measured results (eval harness, `eval/reports/`)
-
-Protocol: weights and thresholds are set on **seed 7**; headline numbers are on
-**held-out seed 11** where tuning was involved. The data is synthetic.
+Weights and thresholds are set on **seed 7**; headline numbers are on **held-out seed 11** wherever
+tuning was involved. The evaluation data is synthetic, with ground truth.
 
 | Area | Metric | Result |
 |---|---|---|
-| A | Ingest throughput (replay → ledger → DB) | **544 records/s** (37,353 records) |
-| B | Emotion macro-F1, held-out, synthetic labels | **0.63** (zero-shot NLI baseline 0.57; old classifier pipeline 0.28) |
+| A | Ingest throughput (replay → ledger → DB) | **544 records/s** |
+| B | Emotion macro-F1, held-out, synthetic labels | **0.63** (zero-shot baseline 0.57) |
 | B | Per label (held-out) | anxiety **0.80**, excitement **0.92**, sarcasm 0.17 |
-| B | Raw vs organic anxiety share, rumour window | 42.0% vs 60.8% (**×0.69, inverted; do not claim a panic distortion**) |
+| B | All vs organic anxiety share, rumour window | 42.0% vs 60.8% (×0.69, **inverted: do not claim a panic distortion**) |
 | C | Geography extraction accuracy / coverage | **100%** / 86.4% |
 | C | Released buckets below k | **0** |
 | D | Planted rumour alerted at high priority | **yes** (P = 72.9); decoy max P = 61.7 → **0 decoy high-priority alerts** |
-| D | Lead time vs naive keyword-volume baseline (online) | **5 min earlier** |
-| D | High-priority alerts/day: ours vs naive | **0.14 vs 35.0** |
+| D | Lead time vs naive keyword-volume alarm | **5 min earlier** |
+| D | High-priority alerts per day: ours vs naive | **0.14 vs 35.0** |
 | D | 6 h forecast MAE: naive / GBR / Hawkes | 3.51 / **1.41** / 1.83 |
 | E | Planted bridge account rank | **#1** |
-| V2 | Coordination, held-out: precision / recall / F1 | **0.71 / 1.00 / 0.83** |
-| V2 | Baselines F1: age-follower heuristic / exact-duplicate | 0.01 / 0.21 |
-| V2 | Validation seed (for reference) | P = R = F1 = 1.00 |
-| V2 | Decoy accounts flagged (held-out) | 25, all from the fan-club swarm |
-| V3 | Origin / migration | earliest observed = **Telegram**, X after **12.1 min** |
-| V3 | Image variants linked in scenario | **4/4** |
-| V3 | pHash suite (200 images × 6 transforms, 2,000 negatives) | recall **98.2%** at FPR **0.9%** (T=20) |
-| Theme | Single-character tamper detection | **1000 / 1000 (100%)** |
-| Theme | Full verification time, 100k records | **1.33 s** |
+| Coord | Held-out precision / recall / F1 | **0.71 / 1.00 / 0.83** |
+| Coord | Baselines F1: age-follower heuristic / exact duplicate | 0.01 / 0.21 |
+| Lineage | Origin / migration | earliest = **Telegram**, X after **12.1 min** |
+| Lineage | pHash suite (200 images × 6 transforms, 2,000 negatives) | recall **98.2%** at FPR **0.9%** |
+| Theme | Single-character tamper detection | **1000 / 1000** |
+| Theme | Full verification, 100k records | **1.33 s** |
 
-**Ablation (coordination, held-out):** removing the scripted-cadence share drops recall to
-0 (it is the key signal). Removing synchrony, entropy or cross-account duplication removes
-the fan-club false positives (precision 1.0), which shows the detector over-weights
-co-posting for synchronized but genuine groups.
+**Ablation (coordination, held-out).** Removing the scripted-cadence share drops recall to 0; it is
+the key signal. Removing synchrony, entropy or cross-account duplication removes the fan-club false
+positives: the detector over-weights co-posting for synchronized but genuine groups.
 
 ---
 
-## 7. What to say, and what not to say
+## 7. Demo data
+- **Scenario (for ground truth).** 7 days (Nov 4–11 2024) on X, Telegram, Reddit and YouTube, plus
+  a synthetic Instagram/Facebook official-export sample loaded through the real import path.
+  Records carry `synthetic=true`; the site does not display it, and we say it in the pitch.
+- **The planted story:**
+  - **Rumour:** "Varunapur Dam has cracked, evacuate", first posted by a Telegram channel at
+    22:10 IST on day 4.
+  - **Amplification:** 60 coordinated X accounts posting every ~90 s ± 5 s.
+  - **Real reaction:** anxious replies and debunks, and a Facebook residents' group share. The
+    district administration's debunk follows.
+  - **Decoy:** a bigger, genuine cricket surge with a legitimate fan-club swarm.
+  - **Bridge:** one account linking both communities.
+  - **Image copies:** resized, compressed, cropped and watermarked versions of the rumour photo.
+- **Real data:** the **live Telegram feed** fetches real posts from The Indian Express, Hindustan
+  Times, Mint and Moneycontrol through our connected account. They are scored live and refreshed
+  every few minutes. They are shown alongside the scenario, not mixed into its timeline.
+
+---
+
+## 8. What to say, and what not to say
 
 **Say:**
-- "Coordination-adjusted analytics: every view raw or organic-only."
-- "Detector found all 60 planted accounts on a held-out scenario; simple baselines score F1 0.01 and 0.21."
-- "The planted rumour fires a high-priority card 5 minutes before a volume alarm; the bigger organic cricket surge doesn't."
-- "1000 out of 1000 tampers caught; 100k records verified in 1.3 s; checkpoints anchored to Bitcoin via OpenTimestamps."
-- "Lineage finds the Telegram origin and the 12-minute jump to X, including edited image copies."
-- "Every number comes from our eval harness; limitations are listed in the app."
+- "One national picture: what is being pushed, by whom, and where it lands, then investigate, then evidence."
+- "Every view as all activity or organic only."
+- "Our Telegram collector is live: these are real posts from public news channels, fetched just now."
+- "The detector found all 60 planted accounts on a held-out scenario; simple baselines score F1 0.01 and 0.21."
+- "The rumour fires a high-priority signal 5 minutes before a volume alarm; the bigger organic cricket surge doesn't."
+- "1000 out of 1000 tampers caught; 100k records verified in 1.3 s; checkpoints anchored to Bitcoin."
+- "Every analyst decision is sealed in the same chain as the evidence."
 
 **Don't say:**
-- "Bots made it look X× more panicked." Our current pre-trained models measure 0.69 (inverted).
+- "Bots made it look X× more panicked." The measured ratio is inverted (0.69).
 - "Legally admissible." Say "designed to support BSA §63 documentation (draft for signature)".
 - "Bot detection." Say "behaviour consistent with scripted amplification".
-- "Accuracy on real data." All metrics are on synthetic scenarios with ground truth.
-- Any number that isn't in `summary.json`.
+- "Accuracy on real data." Every metric is on synthetic scenarios with ground truth.
+- Any number that isn't in `summary.json`, except the on-screen demo facts in §4.
 
 ---
 
-## 8. PPT: 6 slides (PRD §18.1; confirm against the official SIH template)
-
-**Slide 1: Title and hook.** PS 26152 · NTRO · Team MOGGERS · members. Headline: *"From
-noisy streams to evidence-grade intelligence, and who's really behind the noise."* Chips:
-"5/5 PS components live" · "Coordination-adjusted analytics" · "Every record
-hash-chained". Buttons: live prototype (https://prahari-h849.onrender.com) · demo video · GitHub (https://github.com/Shantanu58-tech/PS_2). Screenshot: Overview
-with the "Manufactured surge" Signal Card.
-
-**Slide 2: Solution in one picture.** Left: A→E + ledger strip. Middle: the traceability
-table with one measured number per row (§6). Right: a detection before/after, e.g.
-"volume alarm: 35 alerts/day, decoy triggered · ours: 0.14/day, rumour caught 5 min
-earlier, decoy ignored". Footer: "Scenario simulated; collectors live-capable."
-
-**Slide 3: Technical approach.** Pipeline diagram (§3); Kleinberg and Goh–Barabási
-formulas; the ledger flow (hash → chain → Merkle → Ed25519 → Bitcoin); the models used.
-
-**Slide 4: Feasibility.** Zero-cost stack; risks and mitigations (API breakage → replay
-plus pluggable collectors; ToS → official feeds in production; privacy → k-anon + DP;
-legal → draft + counsel); scaling path (§3).
-
-**Slide 5: Impact.** Alert fatigue cut (0.14 vs 35 alerts/day on the scenario);
-earlier detection (5 min); evidence readiness (verify, proofs, §63 draft); use cases:
-public-order rumours, influence operations; India-first multilingual design.
-
-**Slide 6: References.** Kleinberg 2002 (bursts); Goh & Barabási 2008 (burstiness);
-Hawkes 1971; mDeBERTa-v3 / XNLI; XLM-R (Conneau et al. 2020); Sentence-BERT; Merkle 1987;
-Ed25519 (Bernstein et al.); OpenTimestamps; perceptual hashing (pHash); BSA 2023 §63;
-k-anonymity (Sweeney 2002); differential privacy (Dwork 2006).
-
----
-
-## 9. Demo script (about 3 min)
-The full click-by-click walkthrough and the video script are in the shared doc
-"DEEPASTAMBHA — Demo Walkthrough & Video Script". The console follows one numbered flow, shown in the
-bar under the masthead: **1 Situation Room → 2 Detect → 3 Investigate → 4 Evidence**. Every page
-ends with a "Next in the flow" card, and every tile on the first page opens its detail in one click.
-
-1. **Situation Room** (first page): the auto-written situation report says what is being pushed
-   ("Dam Varunapur Evacuate", 93% coordinated), by whom (72 accounts in sync), where it travelled
-   (Telegram → X +12 min → YouTube → Facebook → Reddit → Instagram) and who reacted (223 users,
-   59% anxiety, Maharashtra and Telangana). Below: four KPIs, the India state map (exposure,
-   anxiety or posts; click a state), "Narratives being pushed" with the group and amplifiers, the
-   sector-wise impact matrix (Critical Infrastructure = CRITICAL), signals for analyst review
-   (Approve → case, Watchlist, Dismiss), hot topics and the amplification gap.
-2. **Detect**: Platforms (six sources), Trends (Manufactured vs Organic, bursts, forecast, viral
-   hashtags; opened from a sector it is filtered to that sector), Emotions (platform and comment filters).
-3. **Investigate**: Coordination (why the group was flagged), Network (colour by platform, **Play the
-   week** to watch it form, click any account for followers and cross-platform connections), Lineage,
-   Audience.
-4. **Evidence**: approve a signal → case with evidence pack and draft certificate; Evidence ledger
-   **Verify integrity** → **Run tamper simulation** is caught at the exact post.
-
-Console map: 1 · Situation (Situation Room) · 2 · Detect (Platforms, Trends, Emotions) · 3 · Investigate
-(Coordination, Network, Lineage, Audience) · 4 · Evidence (Cases, Evidence ledger). ☰ collapses the
-sidebar. Colours follow the team reference build (espresso masthead, sand canvas, copper accent) with a
-tricolour strip; light by default, dark toggle top right.
+## 9. PPT: 6 slides (confirm against the official SIH template)
+1. **Title and hook.** Deepastambha logo and name (दीपस्तम्भ, "pillar of light"), PS 26152 · NTRO ·
+   Team MOGGERS.
+   - Headline: *"A national situation room for social media: what is being pushed, by whom, and where
+     it lands."*
+   - Chips: "5/5 PS components live" · "Telegram live" · "Every record hash-chained".
+   - Screenshot: the Situation Room.
+2. **Solution in one picture.** The four-step flow (Situation → Detect → Investigate → Evidence).
+   Add the traceability table (§2), one measured number per row (§6). Before/after: "volume alarm:
+   35 alerts/day, decoy triggered · ours: 0.14/day, rumour caught 5 min earlier, decoy ignored".
+3. **Technical approach.**
+   - The architecture (§3) or the team's diagram with the four corrections.
+   - The Kleinberg and Goh–Barabási formulas.
+   - The ledger flow: hash → chain → Merkle → Ed25519 → Bitcoin.
+   - The models used.
+4. **Feasibility.**
+   - Zero-cost stack; free hosting kept awake 24/7.
+   - Risks and mitigations: API breakage → replay plus pluggable collectors; terms of service →
+     official feeds in production; privacy → k-anonymity and differential privacy; legal → draft
+     certificate plus counsel.
+   - Scaling path (§3).
+5. **Impact.**
+   - Alert fatigue cut (0.14 vs 35 per day).
+   - Earlier detection (5 min).
+   - State- and sector-level situational awareness.
+   - Evidence readiness.
+   - Use cases: public-order rumours, influence operations, disaster misinformation.
+   - India-first multilingual design.
+6. **References.**
+   - Kleinberg 2002; Goh & Barabási 2008; Hawkes 1971.
+   - mDeBERTa-v3 / XNLI; XLM-R; Sentence-BERT.
+   - Merkle 1987; Ed25519; OpenTimestamps; pHash.
+   - BSA 2023 §63.
+   - k-anonymity (Sweeney 2002); differential privacy (Dwork 2006).
+   - More in `docs/DIAGRAMS.md`.
 
 ---
 
-## 10. Likely jury questions (with answers)
-- **"Is the data real?"** The demo is synthetic so that we have ground truth to measure
-  against. The collectors are real (`scripts/check_collectors.py`) and run once credentials
-  are supplied.
-- **"How do you know it's a bot?"** We don't label bots. We score behaviour: synchronized
-  near-duplicate posting plus scripted cadence, and every factor is shown. Held-out: all 60
-  planted accounts found; precision 0.71, because a legitimate fan swarm looks coordinated
-  (listed as a limitation).
-- **"Why is sentiment weak?"** Pre-trained models misread Hinglish panic content; a debunk
-  saying "stop spreading panic" scores more anxious than the rumour. The fix is our planned
-  MuRIL fine-tune with an audited gold set. We report this rather than hide it.
+## 10. Demo (about 3 min)
+The captioned screen recording is in `demo_video/`. The click-by-click walkthrough and
+voice-over are in the shared doc.
+1. **Situation Room:** read the report. Switch the state map to anxiety and click Maharashtra.
+   Click the Critical Infrastructure sector card, which opens Trends filtered.
+2. **Live from Telegram:** real posts from Indian news channels, fetched now.
+3. **Trends:** the manufactured badge and viral hashtags.
+4. **Investigate the group** (from the report): Coordination.
+5. **Network:** press Play the week, then click the Telegram channel node (12,000 followers,
+   forwarded by 66 accounts on X).
+6. **Lineage:** Telegram → X +12 min → four more platforms.
+7. Back on the Situation Room, press **Approve → case**. The case opens with the evidence pack and
+   draft certificate.
+8. **Evidence ledger:** Verify integrity, then Run tamper simulation, which is caught at the exact record.
+
+---
+
+## 11. Likely jury questions (with answers)
+- **"Is the data real?"** The storyline is a synthetic scenario so that we can measure against
+  ground truth. The Telegram collector is live on the site: those posts are real and fetched now.
+  X, Reddit and YouTube collectors are built and tested; Instagram and Facebook come through their
+  official exports.
+- **"How do you know they're bots?"** We don't label bots. We score behaviour (synchronized
+  near-duplicate posting plus scripted cadence) and show every factor. Held-out: all 60 accounts
+  found; precision 0.71, because a legitimate fan swarm also looks coordinated.
+- **"Why is sentiment weak?"** Pre-trained models misread Hinglish panic content. We report it
+  openly; the fix is a MuRIL fine-tune on an audited gold set.
 - **"What makes it blockchain?"** A hash-chained append-only log with Ed25519-signed Merkle
-  checkpoints and optional Bitcoin anchoring via OpenTimestamps. There's no token or
-  consensus network; production could swap in Hyperledger Fabric behind the same interface.
-- **"Privacy?"** Aggregate cohorts only, k=10, Laplace noise, no per-account demographics
-  anywhere in the API (tested), and pseudonymised IDs.
-- **"Scale?"** SQLite and NetworkX for the prototype; each piece sits behind an interface
-  for Postgres, Kafka, Neo4j and Milvus. Verifying 100k records takes 1.3 s.
-- **"Instagram/Facebook?"** No free live API; we import official exports through the same
-  evidence pipeline, and say so openly.
+  checkpoints and Bitcoin anchoring via OpenTimestamps. There's no token; production could swap in
+  Hyperledger Fabric behind the same interface.
+- **"Privacy?"** Group counts only: k=10, Laplace noise, and no per-account demographics anywhere
+  (tested). States are reported only when at least 10 accounts back them.
+- **"How is the state map computed?"** Only from the location people write on their public
+  profile, aggregated. Impact counts posts in a pushed narrative or replies to one.
+- **"Scale?"** Each component sits behind an interface for Postgres, Kafka, Neo4j and Milvus.
+  Verifying 100k records takes 1.3 s.
 
 ---
 
-## 11. Limitations (shown in the app too)
-1. The demo data is synthetic; live collectors need credentials.
-2. Emotion: synthetic labels (about a dozen distinct texts), no gold set; sarcasm F1 0.17;
-   the panic distortion is inverted with pre-trained models.
-3. Coordination flags a legitimate fan swarm on the held-out seed (precision 0.71).
-4. Lineage gives the *earliest observed* origin, not necessarily the true one.
-5. Age coverage is low (bio cues only).
-6. The §63 certificate is a draft for counsel; no admissibility is claimed.
-7. Not built yet: JWT login, rate limiting, OCR, CLIP image search, ONNX, the UI overhaul.
-8. The old ledger private key is in the repo's first commit (treat it as compromised; see PROJECT_STATUS §6).
+## 12. Limitations
+1. The storyline is synthetic. Only Telegram is connected live on the hosted demo; X, Reddit and
+   YouTube need their credentials there.
+2. The live Telegram feed is scored with the lexicon model and is shown, not stored, on the public
+   demo.
+3. Emotion is measured on synthetic labels with no gold set; sarcasm F1 is 0.17; the panic
+   distortion is inverted.
+4. Coordination flags a legitimate fan swarm on the held-out seed (precision 0.71).
+5. Lineage gives the *earliest observed* origin, not necessarily the true one.
+6. Age coverage is low (bio cues only); sectors come from keyword rules.
+7. The §63 certificate is a draft for counsel; no admissibility is claimed.
+8. Not built yet: login/roles, rate limiting, OCR, CLIP image search, ONNX.
+9. An old ledger private key is in the repo's first commit; treat it as compromised.
 
 ---
 
-## 12. Repository map
+## 13. Deployment and repository
+- **Hosting.**
+  - Render free web service; the private demo database is downloaded from a Hugging Face bundle at
+    start-up.
+  - A Cloudflare cron Worker keeps it awake 24/7.
+  - Telegram, Gemini and HF credentials are Render secrets.
+  - Infrastructure names keep the old name so nothing breaks: `prahari-h849.onrender.com`,
+    `prahari-keepalive`, `ZOROxJODD/prahari-bundle`, `data/prahari.db`.
+  - TRIVENI runs on a separate account and is untouched.
+- **Repositories.** `Shantanu58-tech/PS_2` is canonical. `OMEExZORO/PS_2` is the deploy mirror. Both
+  always get the same commits.
+
 ```
-backend/app/collectors/   X, Telegram, Reddit, YouTube, CSV import, replay, health (backoff/breaker)
-backend/app/pipeline/     normalise, ingest (ledger first), analytics orchestrator, events (SSE), live scheduler
-backend/app/nlp/          emotion (NLI + sentiment), embeddings, language id, Hinglish
-backend/app/analytics/    topics, trends, burst, forecast, signals, coordination, graph(+store), lineage,
-                          demographics, behaviour (experimental), cases, summarize (Gemini)
+backend/app/collectors/   X, Telegram (+ live_feed), Reddit, YouTube, CSV import, replay, health
+backend/app/pipeline/     normalise, ingest (ledger first), analytics orchestrator, SSE events, live scheduler
+backend/app/nlp/          emotion (NLI + sentiment + lexicon), embeddings, language id, Hinglish
+backend/app/analytics/    topics, trends, burst, forecast, signals, coordination, graph (+store, segments),
+                          lineage, demographics, behaviour, situation (sectors/states/narratives), cases, summarize
 backend/app/ledger/       canonical, chain, merkle, sign, verify, proof, audit, ots
-backend/app/api/routers/  REST endpoints (see README / openapi at /docs)
-backend/eval/             eval harness (make eval) + calibration
-backend/scenario/         synthetic scenario generator
-backend/tests/            135 tests
-frontend/src/             React console; frontend/tests = Playwright smoke
-data/                     gazetteer, lexicons, public ledger key (secrets and DBs are gitignored)
-eval/reports/             summary.json + reports (the source of every number)
-docs/                     DECISIONS.md, APPROACH.md, ADRs, PRD notes
-scripts/                  fetch_models, check_collectors, update_readme_metrics, dev.ps1
+backend/app/api/routers/  REST endpoints (OpenAPI at /docs)
+backend/eval/             eval harness + calibration
+backend/tests/            153 tests
+frontend/src/             React console (SituationRoom, Platforms, Trends, …); frontend/tests = Playwright
+scenario/                 synthetic scenario + IG/FB export sample generator
+scripts/                  fetch_models, check_collectors, telegram_login (two-step), dev.ps1
+docs/                     DECISIONS.md, DIAGRAMS.md, APPROACH.md, ADRs
+eval/reports/             summary.json + reports (the source of every evaluation number)
 ```
 
-## 13. How to run
-Hosted demo (no install): https://prahari-h849.onrender.com. The first visit after a restart can take about 30 s while the demo database downloads.
-
-```bash
-make setup && cp .env.example backend/.env
-make models        # ~3 GB of pre-trained models into ./models
-make scenario      # synthetic scenario
-make demo          # http://localhost:8000 → Start Replay
-make test / make eval / make verify / make check-collectors
-```
-Windows: `scripts\dev.ps1 <target>`. Docker: `docker compose up --build`.
+**Run locally:** `make setup && cp .env.example backend/.env`, then `make models`, `make scenario`,
+`make demo` (http://localhost:8000 → Load data). Tests and evaluation: `make test`, `make eval`,
+`make verify`. On Windows use `scripts\dev.ps1 <target>`. Telegram login:
+`python scripts/telegram_login.py --phone …`, then `--code …`.
 
 ## 14. Glossary
-- **Organic-only:** metrics recomputed without accounts whose coordination score is ≥ 0.7.
-- **Signal Card:** a ranked, explained alert (one per topic).
+- **Organic only:** metrics recomputed without accounts whose coordination score is ≥ 0.7.
+- **Signal:** a ranked, explained alert (one per topic), reviewed by an analyst.
+- **Exposure (state map):** the share of a state's posts that are in, or reply to, a pushed narrative.
 - **Kleinberg burst:** a period where a stream's best-fit rate state is elevated.
-- **Burstiness B:** −1 for clock-like posting, about 0 for random (Poisson), toward +1 for very bursty posting.
-- **Normalised entropy Hn:** how spread out the inter-post gaps are across time scales (low = scheduled).
-- **Cascade influence:** the number of accounts that directly or indirectly re-shared or replied to you.
-- **Merkle checkpoint:** one hash summarising 100 ledger entries, signed so no one can alter them later.
-- **OpenTimestamps:** free proof that a hash existed at a time, anchored in Bitcoin.
+- **Burstiness B:** −1 clock-like, about 0 random, toward +1 very bursty.
+- **Cascade influence:** the accounts that directly or indirectly re-shared or replied to you.
+- **Merkle checkpoint / seal:** one signed hash summarising 100 ledger entries.
+- **OpenTimestamps:** a free proof that a hash existed at a time, anchored in Bitcoin.
 - **pHash:** a perceptual image fingerprint; a small Hamming distance means the same image after edits.
 - **k-anonymity / DP:** no group smaller than k is released; counts carry calibrated noise.

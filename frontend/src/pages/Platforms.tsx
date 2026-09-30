@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { Database, FileUp, MessageSquare, MessagesSquare, Repeat2, Users } from 'lucide-react'
 import { usePlatform, usePlatforms, useVolume } from '../hooks/useApi'
+import LiveTelegram from '../components/LiveTelegram'
 import { Card, ChartOrTable, ChartTip, Empty, InfoPop, Kpi, Legend, NextStep, PageHead, StatusBadge } from '../components/ui'
 import { AXIS_TICK, EMOTIONS, EMOTION_LABEL, EMOTION_SLOT, ORGANIC, PLATFORMS, PLATFORM_LABEL, PLATFORM_SLOT, RAW } from '../lib/viz'
 import { ist, istDay, istShort, num, pct } from '../lib/fmt'
@@ -101,6 +102,7 @@ function OnePlatform({ p, row }: { p: string; row: any }) {
   if (!row?.posts) return <Empty>No posts from {PLATFORM_LABEL[p]} yet.</Empty>
   return (
     <div className="stack">
+      {p === 'telegram' && <LiveTelegram />}
       <div className="grid g-4">
         <Kpi icon={<MessageSquare size={20} />} label="Posts" value={num(row.posts)} foot={`${istDay(row.first_post)} – ${istDay(row.last_post)}`} />
         <Kpi icon={<Users size={20} />} label="Accounts" value={num(row.accounts)} foot="active in this period" />

@@ -123,3 +123,5 @@
 .nav-link .count { white-space: nowrap; flex-shrink: 0; }
 .sector .lvl { align-self: flex-start; }
 .kpi-card .foot > * { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.live-pill { font-size: 10px; font-weight: 800; letter-spacing: 0.08em; padding: 1px 6px; border-radius: 4px; background: var(--critical); color: #fff; animation: pulse 2s infinite ease-in-out; }

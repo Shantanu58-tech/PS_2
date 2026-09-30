@@ -140,3 +140,11 @@ def _trending_keywords(db_path: str, limit: int) -> dict:
 async def trending_keywords(limit: int = 12):
     """Viral hashtags (biggest spike over their usual rate) and most-used hashtags."""
     return await asyncio.to_thread(_trending_keywords, settings.db_path, min(limit, 50))
+
+
+@router.get("/live/telegram")
+async def live_telegram_feed():
+    """Real posts fetched now from the allowlisted public Telegram channels (cached)."""
+    from app.collectors.live_feed import live_telegram
+
+    return await live_telegram()

@@ -184,3 +184,16 @@ def test_network_nodes_carry_platform_and_details(client):
     assert d["account_id"] == node and d["platforms"]
     assert not {"state", "age", "location_text", "inferred_state"} & set(d)
     assert client.get("/api/graph/node/does-not-exist").status_code == 404
+
+
+def test_live_telegram_feed_is_safe_without_a_session(client):
+    j = client.get("/api/live/telegram").json()
+    assert j["connected"] is False and j["posts"] == []  # tests never hold real credentials
+
+
+def test_live_feed_channels_come_only_from_config():
+    from app.collectors.live_feed import _strict_sector, channels
+
+    assert channels() and all(not c.startswith("@") for c in channels())
+    assert _strict_sector("Dam breach: evacuate the reservoir area now") == "infra"
+    assert _strict_sector("A quiet birthday at home") == "other"
