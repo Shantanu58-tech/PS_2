@@ -39,6 +39,7 @@ async def lifespan(app: FastAPI):
             lambda: tp.list_topics(limit=8, sort="rising"), lambda: tp.list_topics(limit=30, sort="coordinated"),
             lin.lineage_overview, lambda: g.get_graph(organic_only=False, max_nodes=300),
             lambda: g.get_segment_spread(), lambda: g.get_spread(),
+            lambda: g.get_graph(organic_only=True, max_nodes=300),  # the "Organic only" switch
         ]
         for step in steps:
             try:
