@@ -284,15 +284,15 @@ def _reddit_sync() -> dict[str, Any]:
         for s in srcs:
             s["posts"] = sum(1 for p in posts if p["source"].lower() == s["username"].lower())
         return {"connected": True, "channels": srcs, "posts": posts}
-    # no app key: the public RSS feed, one combined request per refresh (works from home and
-    # office networks; Reddit blocks it from cloud servers)
+    # no app key: the public RSS feed, one combined request per refresh (Reddit rate-limits
+    # anonymous requests, so a refusal is reported and retried after TTL_ERROR)
     try:
         resp = _get(f"https://www.reddit.com/r/{'+'.join(subs)}/new/.rss", limit=40)
     except Exception as exc:
         code = getattr(getattr(exc, "response", None), "status_code", None)
         return {"connected": False, "channels": [],
-                "reason": f"Reddit refused the public feed from this server (HTTP {code}); "
-                          "it needs a Reddit app key (REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET)."}
+                "reason": f"Reddit refused the public feed just now (HTTP {code}); it retries in two minutes. "
+                          "A Reddit app key (REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET) makes it reliable."}
     root = ET.fromstring(resp.content)
     posts: list[dict[str, Any]] = []
     for e in root.findall("a:entry", _ATOM):
