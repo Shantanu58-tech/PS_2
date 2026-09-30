@@ -38,6 +38,8 @@ GET_ENDPOINTS = [
     "/api/graph?max_nodes=40", "/api/influencers?limit=5", "/api/graph/spread", "/api/coordination/clusters",
     "/api/behaviour", "/api/lineage", "/api/lineage/images", "/api/demographics", "/api/alerts",
     "/api/ledger/status", "/api/collectors", "/api/search?q=dam", "/api/traceability", "/api/pipeline/status",
+    "/api/platforms", "/api/platforms/x", "/api/keywords/trending", "/api/graph/segment-spread",
+    "/api/timeline/emotions?kind=comments", "/api/timeline/emotions?kind=posts&platform=x",
 ]
 
 
@@ -115,3 +117,34 @@ def test_demo_readonly_blocks_writes_but_allows_demo_actions(client):
         assert client.get("/healthz").json()["demo_readonly"] is True
     finally:
         settings.demo_readonly = False
+
+
+def test_platforms_cover_all_six_ps_sources(client):
+    j = client.get("/api/platforms").json()
+    names = [p["platform"] for p in j["platforms"]]
+    assert names == ["x", "telegram", "instagram", "facebook", "reddit", "youtube"]
+    tiers = {p["platform"]: p["tier"] for p in j["platforms"]}
+    assert tiers["x"] == tiers["telegram"] == "essential"
+    assert tiers["instagram"] == tiers["facebook"] == "desirable"
+    assert all(p["connection"] in ("connected", "ready", "import", "demo") for p in j["platforms"])
+    assert client.get("/api/platforms/myspace").status_code == 404
+
+
+def test_trending_keywords_rank_hashtags(client):
+    j = client.get("/api/keywords/trending?limit=5").json()
+    assert j["top"] and all(k["keyword"].startswith("#") for k in j["top"])
+    assert [k["posts"] for k in j["top"]] == sorted((k["posts"] for k in j["top"]), reverse=True)
+
+
+def test_comment_filter_splits_emotion_timeline(client):
+    n = lambda kind: sum(b["n"] for b in client.get(f"/api/timeline/emotions?bucket=1d&kind={kind}").json()["buckets"])
+    assert n("posts") + n("comments") == n("all")
+
+
+def test_segment_spread_after_segments_stage(client, analysed_db):
+    from app.analytics.graph import compute_segments
+
+    compute_segments(analysed_db)
+    j = client.get("/api/graph/segment-spread").json()
+    assert j["segments"][0]["label"] == "Coordinated group"
+    assert j["summary"] == sorted(j["summary"], key=lambda r: r["first_seen"])

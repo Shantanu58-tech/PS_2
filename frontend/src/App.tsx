@@ -8,6 +8,7 @@ import CommandCenter from './pages/CommandCenter'
 // Route-level code splitting: only the landing page ships in the first bundle.
 const TimelineEmotions = lazy(() => import('./pages/TimelineEmotions'))
 const Trends = lazy(() => import('./pages/Trends'))
+const Platforms = lazy(() => import('./pages/Platforms'))
 const Coordination = lazy(() => import('./pages/Coordination'))
 const Network = lazy(() => import('./pages/Network'))
 const Audience = lazy(() => import('./pages/Audience'))
@@ -46,8 +47,10 @@ function GuidedTour() {
   const STEPS = [
     { route: '/', organic: false, title: 'A signal fires',
       body: 'The top signal is a manufactured surge: a dam-crack rumour pushed by accounts acting in sync. Open "Why it fired" to see what drove its priority.' },
+    { route: '/platforms', organic: false, title: 'Six platforms, one view',
+      body: 'X and Telegram, Instagram and Facebook, Reddit and YouTube. Pick any platform to see its activity, mood, top topics and most active accounts.' },
     { route: '/trends', organic: false, title: 'Manufactured vs organic',
-      body: 'The rumour is marked Manufactured, while the bigger cricket buzz stays Organic. Shaded bands are bursts; the dashed line is the forecast.' },
+      body: 'The rumour is marked Manufactured, while the bigger cricket buzz stays Organic. Shaded bands are bursts, the dashed line is the forecast, and trending hashtags sit at the bottom.' },
     { route: '/coordination', organic: false, title: 'Accounts acting in sync',
       body: 'This group posts copy-paste text within seconds of each other, on a clock-like rhythm. PRAHARI flags the pattern for review; it never calls anyone a bot.' },
     { route: '/timeline', organic: true, title: 'Organic only',
@@ -55,7 +58,7 @@ function GuidedTour() {
     { route: '/lineage', organic: false, title: 'Where it started',
       body: 'The rumour first appeared on Telegram and jumped to X minutes later. Cropped and re-compressed copies of its image are matched automatically.' },
     { route: '/network', organic: false, title: 'Who spreads it',
-      body: 'Accounts acting in sync carry a red ring. Flip to Organic only to see who genuinely drives the conversation.' },
+      body: 'Accounts acting in sync carry a red ring. Scroll down to see the rumour hop from the coordinated group into other communities, getting more anxious as it goes.' },
     { route: '/ledger', organic: false, title: 'Tamper-proof evidence',
       body: 'Click Verify integrity, then run the Tamper test: changing a single character in a copy is caught at that exact post.' },
     { route: '/cases', organic: false, title: 'Build a case',
@@ -102,6 +105,7 @@ export default function App() {
           <Route path="/" element={<CommandCenter />} />
           <Route path="/timeline" element={<TimelineEmotions />} />
           <Route path="/trends" element={<Trends />} />
+          <Route path="/platforms" element={<Platforms />} />
           <Route path="/coordination" element={<Coordination />} />
           <Route path="/network" element={<Network />} />
           <Route path="/audience" element={<Audience />} />

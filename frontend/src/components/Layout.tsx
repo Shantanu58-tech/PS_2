@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import {
-  Activity, FileText, Fingerprint, GitBranch, Info, LayoutDashboard, Menu, Moon, Network as NetIcon,
+  Activity, FileText, Fingerprint, GitBranch, Globe2, Info, LayoutDashboard, Menu, Moon, Network as NetIcon,
   PlayCircle, Search as SearchIcon, ShieldCheck, Sun, TrendingUp, Users,
 } from 'lucide-react'
 import { useAppStore } from '../store/app'
@@ -13,6 +13,7 @@ import { PrahariLogo } from './Brand'
 export const NAV: { group: string; items: { path: string; label: string; icon: ReactNode }[] }[] = [
   { group: 'Monitor', items: [
     { path: '/', label: 'Overview', icon: <LayoutDashboard size={19} /> },
+    { path: '/platforms', label: 'Platforms', icon: <Globe2 size={19} /> },
     { path: '/trends', label: 'Trends', icon: <TrendingUp size={19} /> },
     { path: '/timeline', label: 'Emotions', icon: <Activity size={19} /> },
   ] },
@@ -49,20 +50,22 @@ function TopSearch() {
 }
 
 export default function Layout({ children }: { children: ReactNode }) {
-  const { organicOnly, setOrganicOnly, theme, setTheme, navOpen, setNavOpen, setTourActive, setShowBriefing } = useAppStore()
+  const { organicOnly, setOrganicOnly, theme, setTheme, navOpen, setNavOpen, navCollapsed, setNavCollapsed, setTourActive, setShowBriefing } = useAppStore()
+  const toggleNav = () => (window.matchMedia('(max-width: 760px)').matches ? setNavOpen(!navOpen) : setNavCollapsed(!navCollapsed))
   const location = useLocation()
   useEffect(() => setNavOpen(false), [location.pathname, setNavOpen])
 
   return (
-    <div className="shell">
-      <aside className={`sidebar ${navOpen ? 'open' : ''}`} aria-label="Primary navigation">
-        <div className="brand"><Link to="/"><PrahariLogo size={38} /></Link></div>
+    <div className={`shell ${navCollapsed ? 'collapsed' : ''}`}>
+      <div className={`nav-backdrop ${navOpen ? 'open' : ''}`} onClick={() => setNavOpen(false)} aria-hidden="true" />
+      <aside id="primary-nav" className={`sidebar ${navOpen ? 'open' : ''}`} aria-label="Primary navigation">
+        <div className="brand"><Link to="/" aria-label="PRAHARI home"><PrahariLogo size={36} compact={navCollapsed && !navOpen} /></Link></div>
         <nav className="nav">
           {NAV.map(g => (
             <div key={g.group}>
               <div className="nav-group">{g.group}</div>
               {g.items.map(n => (
-                <NavLink key={n.path} to={n.path} end={n.path === '/'} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                <NavLink key={n.path} to={n.path} end={n.path === '/'} title={n.label} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
                   {n.icon}<span>{n.label}</span>
                 </NavLink>
               ))}
@@ -70,10 +73,10 @@ export default function Layout({ children }: { children: ReactNode }) {
           ))}
         </nav>
         <div className="sidebar-foot stack" style={{ gap: 2 }}>
-          <button className="nav-link" style={{ border: 0, background: 'transparent', cursor: 'pointer', font: 'inherit', textAlign: 'left' }} onClick={() => setTourActive(true)}>
+          <button className="nav-link" style={{ border: 0, background: 'transparent', cursor: 'pointer', font: 'inherit', textAlign: 'left' }} title="Guided tour" onClick={() => setTourActive(true)}>
             <PlayCircle size={19} /><span>Guided tour</span>
           </button>
-          <button className="nav-link" style={{ border: 0, background: 'transparent', cursor: 'pointer', font: 'inherit', textAlign: 'left' }} onClick={() => setShowBriefing(true)}>
+          <button className="nav-link" style={{ border: 0, background: 'transparent', cursor: 'pointer', font: 'inherit', textAlign: 'left' }} title="About PRAHARI" onClick={() => setShowBriefing(true)}>
             <Info size={19} /><span>About PRAHARI</span>
           </button>
         </div>
@@ -81,7 +84,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <main className="main" id="main">
         <header className="topbar">
           <div className="topbar-inner">
-            <button className="icon-btn mobile-only" aria-label="Open navigation" onClick={() => setNavOpen(!navOpen)}><Menu size={18} /></button>
+            <button className="hamburger" aria-label="Toggle menu" aria-controls="primary-nav" aria-expanded={navCollapsed ? navOpen : !navCollapsed} onClick={toggleNav}><Menu size={21} /></button>
             <TopSearch />
             <span style={{ marginLeft: 'auto' }} />
             <Seg label="Which accounts to count" value={organicOnly ? 'organic' : 'raw'} onChange={v => setOrganicOnly(v === 'organic')} options={[

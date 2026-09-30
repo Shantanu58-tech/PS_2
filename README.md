@@ -23,7 +23,7 @@ Every collected record is hash-chained into an append-only evidence ledger.
 
 | PS | Requirement | Implementation | Code |
 |---|---|---|---|
-| A | Multi-platform collection and a time-stamped history | X and Telegram (essential), Reddit and YouTube (appreciable) live collectors with backoff and a circuit breaker; Instagram/Facebook via export import (desirable); append-only UTC timeline, reply threads | `app/collectors/`, `app/pipeline/` |
+| A | Multi-platform collection and a time-stamped history | X and Telegram (essential), Reddit and YouTube (appreciable) live collectors with backoff and a circuit breaker; Instagram/Facebook via official-export import (desirable; `scenario/meta_export_sample.py` writes a synthetic sample); Platforms page; append-only UTC timeline, reply threads | `app/collectors/`, `app/pipeline/` |
 | B | Multi-dimensional sentiment over time | Anxiety, excitement and sarcasm from zero-shot multilingual NLI (mDeBERTa-v3 XNLI); supportive/against from multilingual XLM-R sentiment; per-label thresholds tuned on a validation seed; hourly/daily timeline, raw vs organic | `app/nlp/` |
 | C | Aggregate, anonymised demographics | Cohort-only age bracket, geography (36-state gazetteer), language and interests; k-anonymity (K=10) plus Laplace noise; no per-account endpoint | `app/analytics/demographics.py` |
 | D | Real-time trend and topic detection, ranking, prediction | Windowed topic clustering with centroid matching, Kleinberg bursts, rise score, gradient-boosting + Hawkes forecasts, Signal Cards | `app/analytics/{topics,trends,burst,forecast,signals}.py` |

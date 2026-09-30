@@ -82,7 +82,8 @@ def rows_to_records(rows: Iterator[dict[str, str]], platform: str, source: str) 
             "parent_post_id": _pick(row, FIELDS["parent_post_id"]),
             "metrics": {_METRIC_KEYS.get(k.lower().strip(), k.lower().strip()): v for k, v in row.items()
                         if k and k.lower().strip().replace(" ", "_") in METRICS and v},
-            "synthetic": False,
+            # Real exports are not synthetic; the bundled demo sample marks itself.
+            "synthetic": (_pick(row, ["synthetic"]) or "").lower() in ("1", "true", "yes"),
             "import_source": source,
         }
         yield RawRecord(platform=platform, collector_id=f"import_csv:{platform}",

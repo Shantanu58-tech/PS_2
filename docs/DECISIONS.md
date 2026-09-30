@@ -291,3 +291,23 @@ in `eval/reports/`. Records still carry `synthetic=true` in the data layer, and
 the backend endpoints for collectors, evaluation and traceability are unchanged.
 This deliberately departs from CLAUDE.md rule 7 (SIMULATED banner) at the
 team's request.
+
+### D-36 Platform views, viral hashtags, segment spread, IG/FB demo sample
+- **Platforms page** (`/api/platforms`, `/api/platforms/{p}`): one view per source with its connection
+  state (connected / API ready / official export / sample data), activity, mood, top topics, most active
+  accounts and latest posts. The Emotions page filters by platform and by posts vs comment threads
+  (`kind=posts|comments` on `/api/timeline/emotions` and `/api/timeline/compare`).
+- **Viral hashtags** (`/api/keywords/trending`): each hashtag's busiest hour divided by its usual hourly
+  rate over the whole period (peak ≥ 10 posts), plus most-used. A trailing-window growth ranking was tried
+  first but is uninformative when the data ends on a quiet day.
+- **Segment spread** (`/api/graph/segment-spread`, analytics stage `segments`): segment 0 is the
+  coordinated group; segments 1–4 are the largest greedy-modularity communities of the remaining
+  interaction graph, named by their members' dominant platform. Short-lived narratives use 10-minute
+  buckets. Precomputed like `influence_cache` because community detection is too slow per request on the
+  free server.
+- **Instagram/Facebook demo data**: `scenario/meta_export_sample.py` writes a fictional Meta-export-style CSV
+  (about 1,000 rows each, every row `synthetic=true`), ingested through the real import path
+  (`app/collectors/import_csv.py`, ledger → normaliser → analytics). The importer now honours a `synthetic`
+  column so sample rows stay labelled; real exports default to `synthetic=false`.
+- **UI**: hamburger (☰) toggle collapses the sidebar to icons on desktop and opens a drawer on mobile; the
+  logo was simplified to a flat shield with a single eye.

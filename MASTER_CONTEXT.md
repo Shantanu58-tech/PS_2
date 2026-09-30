@@ -38,11 +38,11 @@ astroturf (coordination detector + organic-only toggle); cross-platform tracing
 
 | PS | Requirement (abridged) | What we built | Where |
 |---|---|---|---|
-| **A** | Multi-platform ingestion of live posts, interactions and comments; structured time-stamped history. Essential: X, Telegram. Desirable: Instagram, Facebook. Appreciable: Reddit, YouTube | Live collectors for **X (twscrape), Telegram (Telethon), Reddit (PRAW), YouTube (Data API v3, incl. replies)**; **IG/FB via export CSV import**; replay; backoff + circuit breaker + health; UTC timeline, reply threads, dedup | `backend/app/collectors/`, `app/pipeline/` |
-| **B** | NLP for nuanced emotions (sarcasm, anxiety, excitement, supportive, against) over the timeline | Five dimensions per post; zero-shot multilingual NLI + multilingual sentiment; Hinglish handling; hourly/daily timeline, raw vs organic | `app/nlp/`, `/api/timeline/*` |
+| **A** | Multi-platform ingestion of live posts, interactions and comments; structured time-stamped history. Essential: X, Telegram. Desirable: Instagram, Facebook. Appreciable: Reddit, YouTube | Live collectors for **X (twscrape), Telegram (Telethon), Reddit (PRAW), YouTube (Data API v3, incl. replies)**; **IG/FB via official-export CSV import** (demo includes a synthetic IG/FB export sample); **Platforms page** with per-platform activity, mood, topics, accounts and source status; replay; backoff + circuit breaker + health; UTC timeline, reply threads, dedup | `backend/app/collectors/`, `app/pipeline/` |
+| **B** | NLP for nuanced emotions (sarcasm, anxiety, excitement, supportive, against) over the timeline | Five dimensions per post; zero-shot multilingual NLI + multilingual sentiment; Hinglish handling; hourly/daily timeline, raw vs organic; filter by platform and by posts vs comment threads | `app/nlp/`, `/api/timeline/*` |
 | **C** | Aggregate, anonymised demographics (age brackets, geography, language, professional interests) | Cohort-only counts; 36-state/UT gazetteer; bio-cue age brackets (minors excluded); interests; language; **k-anonymity K=10 + Laplace noise**; no per-account endpoint | `app/analytics/demographics.py` |
-| **D** | Identify, rank and **predict** rising trends and viral keywords chronologically | Windowed topic clustering with centroid matching; **Kleinberg bursts**; **rise score**; **gradient-boosting + Hawkes forecasts**; Signal Cards | `app/analytics/{topics,trends,burst,forecast,signals}.py` |
-| **E** | Map relationships, find key opinion leaders, visualise spread between segments over time | Interaction graph; KOLs by **cascade influence** + PageRank + betweenness; bridge accounts; communities; spread frames; organic-only rank changes | `app/analytics/graph*.py` |
+| **D** | Identify, rank and **predict** rising trends and viral keywords chronologically | Windowed topic clustering with centroid matching; **Kleinberg bursts**; **rise score**; **gradient-boosting + Hawkes forecasts**; Signal Cards; **viral hashtags** (peak hour vs usual rate) | `app/analytics/{topics,trends,burst,forecast,signals}.py` |
+| **E** | Map relationships, find key opinion leaders, visualise spread between segments over time | Interaction graph; KOLs by **cascade influence** + PageRank + betweenness; bridge accounts; communities; **segment-to-segment spread** (coordinated group vs network communities, with anxiety per segment); spread frames; organic-only rank changes | `app/analytics/graph*.py` |
 | **Theme** | Blockchain & Cybersecurity | **SHA-256 hash chain, Ed25519-signed Merkle checkpoints, inclusion proofs, OpenTimestamps (Bitcoin) anchoring, tamper simulation, audit trail inside the chain, draft §63 certificate** | `app/ledger/`, `app/analytics/cases.py` |
 
 ---
@@ -268,19 +268,23 @@ k-anonymity (Sweeney 2002); differential privacy (Dwork 2006).
 The full click-by-click walkthrough and the video script are in the shared doc
 "PRAHARI — Demo Walkthrough & Video Script". Short version:
 
-1. **About PRAHARI** pop-up → **Take the guided tour** (8 steps), or explore on your own.
+1. **About PRAHARI** pop-up → **Take the guided tour** (9 steps), or explore on your own.
 2. **Overview**: the top signal "Dam Varunapur Evacuate" is a *Manufactured surge*; open **Why it fired**.
    The cricket buzz is bigger but *Organic*.
-3. **Trends**: Manufactured vs Organic badges, burst band, dashed forecast.
-4. **Coordination**: why the group was flagged (posting in sync, copy-paste text, robotic cadence).
-5. Flip **All activity / Organic only** in the top bar: Emotions and Network change.
-6. **Lineage**: first seen on Telegram, on X 12 minutes later; image copies matched.
-7. **Evidence ledger**: **Verify integrity** passes → **Run tamper simulation** is caught at the exact post.
-8. **Cases**: start a case → evidence pack + draft certificate.
+3. **Platforms**: all six sources side by side; open Telegram, then Facebook (official export).
+4. **Trends**: Manufactured vs Organic badges, burst band, dashed forecast; **Viral hashtags** at the bottom.
+5. **Coordination**: why the group was flagged (posting in sync, copy-paste text, robotic cadence).
+6. Flip **All activity / Organic only** in the top bar: Emotions and Network change. On Emotions, filter
+   by platform and switch to **Comments**.
+7. **Network**: red rings, then **How it spread between groups** (anxiety rises as it spreads).
+8. **Lineage**: Telegram → X (+12 min) → YouTube → Facebook → Reddit → Instagram; image copies matched.
+9. **Evidence ledger**: **Verify integrity** passes → **Run tamper simulation** is caught at the exact post.
+10. **Cases**: start a case → evidence pack + draft certificate.
 
-Console map: Monitor (Overview, Trends, Emotions) · Investigate (Coordination, Network, Lineage,
-Audience) · Evidence (Cases, Evidence ledger). Search sits in the top bar. Light theme by default,
-dark toggle top right. Problem-statement mapping and evaluation numbers live in the PPT, not the site.
+Console map: Monitor (Overview, Platforms, Trends, Emotions) · Investigate (Coordination, Network,
+Lineage, Audience) · Evidence (Cases, Evidence ledger). The ☰ button collapses the sidebar to icons.
+Search sits in the top bar. Light theme by default, dark toggle top right. Problem-statement mapping
+and evaluation numbers live in the PPT, not the site.
 
 ---
 

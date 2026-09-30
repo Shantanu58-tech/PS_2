@@ -2,7 +2,7 @@ import asyncio
 
 from fastapi import APIRouter
 
-from app.analytics.graph import graph_payload, spread_frames
+from app.analytics.graph import graph_payload, segment_spread, spread_frames
 from app.analytics.graph_store import get_graph_store
 from app.api.deps import fetch_all
 from app.config import settings
@@ -45,7 +45,7 @@ async def get_influencers(limit: int = 20, organic_only: bool = False):
 async def get_spread(topic_id: int | None = None):
     if topic_id is None:
         top = await fetch_all(
-            "SELECT topic_id FROM topics ORDER BY coordinated_share DESC, "
+            "SELECT topic_id FROM topics ORDER BY nature='manufactured' DESC, "
             "(SELECT COUNT(*) FROM topic_assign ta WHERE ta.topic_id=topics.topic_id) DESC LIMIT 1")
         if not top:
             return {"topic_id": None, "frames": []}
@@ -57,3 +57,16 @@ async def get_spread(topic_id: int | None = None):
 @router.post("/graph/sync")
 async def sync_graph_store():
     return await asyncio.to_thread(get_graph_store().sync, settings.db_path)
+
+
+@router.get("/graph/segment-spread")
+async def get_segment_spread(topic_id: int | None = None):
+    """How a topic moved between audience segments over time (PS E)."""
+    if topic_id is None:
+        top = await fetch_all(
+            "SELECT topic_id FROM topics ORDER BY nature='manufactured' DESC, "
+            "(SELECT COUNT(*) FROM topic_assign ta WHERE ta.topic_id=topics.topic_id) DESC LIMIT 1")
+        if not top:
+            return {"topic_id": None, "segments": [], "frames": [], "summary": []}
+        topic_id = top[0]["topic_id"]
+    return await asyncio.to_thread(segment_spread, settings.db_path, topic_id)

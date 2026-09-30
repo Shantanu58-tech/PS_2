@@ -46,3 +46,6 @@ frontend/playwright-report/
 backend/replay/
 backend/.render_*
 **/.wrangler/
+
+# Telegram two-step login state (contains a partial session)
+backend/.tg_login_pending.json

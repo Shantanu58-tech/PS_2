@@ -28,10 +28,16 @@ export const useAlerts = () => q<any>(['alerts'], `${API}/alerts`, { refetchInte
 export const useTopics = (sort = 'volume', limit = 50) => q<any>(['topics', sort, limit], `${API}/topics?sort=${sort}&limit=${limit}`)
 export const useTopic = (id?: number) => useQuery<any>({ queryKey: ['topic', id], queryFn: () => getJSON(`${API}/topics/${id}`), enabled: id != null })
 export const useTopicSeries = (id?: number) => useQuery<any>({ queryKey: ['series', id], queryFn: () => getJSON(`${API}/topics/${id}/series`), enabled: id != null })
-export const useEmotions = (organic: boolean, bucket = '1h', topicId?: number) =>
-  q<any>(['emotions', organic, bucket, topicId], `${API}/timeline/emotions?bucket=${bucket}&organic_only=${organic}${topicId != null ? `&topic_id=${topicId}` : ''}`)
-export const useVolume = (bucket = '1h') => q<any>(['volume', bucket], `${API}/timeline/volume?bucket=${bucket}`)
-export const useCompare = (topicId?: number) => q<any>(['compare', topicId], `${API}/timeline/compare${topicId != null ? `?topic_id=${topicId}` : ''}`)
+export const useEmotions = (organic: boolean, bucket = '1h', topicId?: number, platform = '', kind = 'all') =>
+  q<any>(['emotions', organic, bucket, topicId, platform, kind],
+    `${API}/timeline/emotions?bucket=${bucket}&organic_only=${organic}&kind=${kind}${topicId != null ? `&topic_id=${topicId}` : ''}${platform ? `&platform=${platform}` : ''}`)
+export const useVolume = (bucket = '1h', platform = '') => q<any>(['volume', bucket, platform], `${API}/timeline/volume?bucket=${bucket}${platform ? `&platform=${platform}` : ''}`)
+export const usePlatforms = () => q<any>(['platforms'], `${API}/platforms`, { refetchInterval: 60000 })
+export const usePlatform = (p?: string) => useQuery<any>({ queryKey: ['platform', p], queryFn: () => getJSON(`${API}/platforms/${p}`), enabled: !!p, placeholderData: keepPreviousData })
+export const useKeywords = () => q<any>(['keywords'], `${API}/keywords/trending?limit=10`)
+export const useSegmentSpread = (topicId?: number) => q<any>(['segment-spread', topicId], `${API}/graph/segment-spread${topicId != null ? `?topic_id=${topicId}` : ''}`)
+export const useCompare = (topicId?: number, platform = '', kind = 'all') => q<any>(['compare', topicId, platform, kind],
+  `${API}/timeline/compare?kind=${kind}${topicId != null ? `&topic_id=${topicId}` : ''}${platform ? `&platform=${platform}` : ''}`)
 export const useGraph = (organic: boolean, maxNodes = 220) => q<any>(['graph', organic, maxNodes], `${API}/graph?organic_only=${organic}&max_nodes=${maxNodes}`)
 export const useInfluencers = (organic: boolean, limit = 15) => q<any>(['influencers', organic, limit], `${API}/influencers?organic_only=${organic}&limit=${limit}`)
 export const useSpread = (topicId?: number) => q<any>(['spread', topicId], `${API}/graph/spread${topicId != null ? `?topic_id=${topicId}` : ''}`)

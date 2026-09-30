@@ -171,3 +171,84 @@ def compute_influence(db_path: str, top_n: int = 50) -> dict:
                          (v, json.dumps(payload), now))
         conn.commit()
     return {v: G.number_of_nodes() for v, G in views.items()}
+
+
+def compute_segments(db_path: str, top_k: int = 4) -> dict:
+    """Split the audience into segments for "spread between segments" (PS E):
+    segment 0 is the coordinated group; the rest are the largest network
+    communities (greedy modularity) of the remaining accounts, named by the
+    platform most of their members post on."""
+    from collections import Counter
+    from datetime import datetime, timezone
+
+    names = {"x": "X", "telegram": "Telegram", "reddit": "Reddit", "youtube": "YouTube",
+             "instagram": "Instagram", "facebook": "Facebook"}
+    G = build_graph(db_path)
+    now = datetime.now(timezone.utc).isoformat()
+    with sqlite3.connect(db_path) as conn:
+        coord = {a for (a,) in conn.execute("SELECT account_id FROM coord_accounts WHERE score >= 0.7")}
+        home = {a: p for a, p, _ in conn.execute(
+            "SELECT author_id, platform, COUNT(*) AS n FROM posts GROUP BY 1, 2 ORDER BY n")}
+        U = G.to_undirected()
+        U.remove_nodes_from([n for n in list(U) if n in coord])
+        comms = sorted(nx.community.greedy_modularity_communities(U, weight="weight"), key=len, reverse=True)             if len(U) else []
+        member = {a: 0 for a in coord}
+        for i, c in enumerate(comms):
+            for n in c:
+                member[n] = i + 1 if i < top_k else -1
+        labels = [(0, "Coordinated group", len(coord), now)] if coord else []
+        for i, c in enumerate(comms[:top_k]):
+            plat = Counter(home.get(n) for n in c if home.get(n)).most_common(1)
+            where = names.get(plat[0][0], plat[0][0]) if plat else "mixed"
+            labels.append((i + 1, f"Community {'ABCDEFGH'[i]} · mostly {where}", len(c), now))
+        conn.execute("DELETE FROM account_segments")
+        conn.execute("DELETE FROM segment_labels")
+        conn.executemany("INSERT INTO account_segments (account_id, segment) VALUES (?,?)", member.items())
+        conn.executemany("INSERT INTO segment_labels (segment, label, size, computed_at) VALUES (?,?,?,?)", labels)
+        conn.commit()
+    return {"segments": len(labels), "accounts": len(member)}
+
+
+def segment_spread(db_path: str, topic_id: int) -> dict:
+    """Posts per hour on one topic, split by audience segment, plus when each
+    segment was first reached and how anxious it was."""
+    from datetime import datetime
+
+    with sqlite3.connect(db_path) as conn:
+        labels = {s: (lab, size) for s, lab, size in conn.execute("SELECT segment, label, size FROM segment_labels")}
+        lo, hi = conn.execute(
+            "SELECT MIN(p.created_at), MAX(p.created_at) FROM topic_assign ta JOIN posts p "
+            "ON p.platform=ta.platform AND p.post_id=ta.post_id WHERE ta.topic_id=?", (topic_id,)).fetchone()
+        span_h = ((datetime.fromisoformat(hi.replace("Z", "+00:00")) - datetime.fromisoformat(lo.replace("Z", "+00:00")))
+                  .total_seconds() / 3600) if lo and hi else 0
+        # Short-lived narratives get 10-minute buckets so the hand-offs are visible.
+        bucket = ("strftime('%Y-%m-%dT%H:', p.created_at) || printf('%02d', "
+                  "(CAST(strftime('%M', p.created_at) AS INTEGER) / 10) * 10) || ':00Z'") if span_h < 12             else "strftime('%Y-%m-%dT%H:00:00Z', p.created_at)"
+        rows = conn.execute(
+            f"SELECT {bucket} AS h, COALESCE(s.segment, -1), "
+            "COUNT(*), AVG(pe.anxiety), MIN(p.created_at) "
+            "FROM topic_assign ta JOIN posts p ON p.platform=ta.platform AND p.post_id=ta.post_id "
+            "LEFT JOIN account_segments s ON s.account_id=p.author_id "
+            "LEFT JOIN post_emotions pe ON pe.platform=p.platform AND pe.post_id=p.post_id "
+            "WHERE ta.topic_id=? GROUP BY 1, 2 ORDER BY 1", (topic_id,)).fetchall()
+    frames: dict[str, dict] = {}
+    summary: dict[int, dict] = {}
+    for h, seg, n, anx, first in rows:
+        key = f"s{seg}" if seg in labels else "other"
+        frames.setdefault(h, {"hour": h})
+        frames[h][key] = frames[h].get(key, 0) + n
+        s = summary.setdefault(seg if seg in labels else -1, {"posts": 0, "anx_sum": 0.0, "first_seen": first})
+        s["posts"] += n
+        s["anx_sum"] += (anx or 0.0) * n
+        s["first_seen"] = min(s["first_seen"], first)
+    segments = [{"key": f"s{i}", "label": lab, "size": size} for i, (lab, size) in sorted(labels.items())]
+    segments.append({"key": "other", "label": "Other users", "size": None})
+    out_summary = []
+    for seg, s in summary.items():
+        key = f"s{seg}" if seg in labels else "other"
+        out_summary.append({"key": key, "label": labels[seg][0] if seg in labels else "Other users",
+                            "first_seen": s["first_seen"], "posts": s["posts"],
+                            "anxiety": round(s["anx_sum"] / s["posts"], 3) if s["posts"] else None})
+    out_summary.sort(key=lambda r: r["first_seen"])
+    return {"topic_id": topic_id, "bucket": "10m" if span_h < 12 else "1h", "segments": segments,
+            "frames": list(frames.values()), "summary": out_summary}

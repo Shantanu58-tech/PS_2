@@ -14,12 +14,18 @@ async def emotions_timeline(
     topic_id: int | None = None,
     organic_only: bool = False,
     platform: str | None = None,
+    kind: str = Query("all", pattern="^(all|posts|comments)$"),
 ):
+    """kind: all, posts (original posts and reposts) or comments (replies and comment threads)."""
     clauses: list[str] = []
     params: list[object] = []
     if platform:
         clauses.append("p.platform=?")
         params.append(platform)
+    if kind == "comments":
+        clauses.append("p.kind IN ('reply', 'comment')")
+    elif kind == "posts":
+        clauses.append("p.kind NOT IN ('reply', 'comment')")
     if organic_only:
         clauses.append(ORGANIC_CLAUSE)
     if topic_id is not None:
@@ -59,11 +65,22 @@ async def volume_timeline(bucket: str = Query("1h", pattern="^(1h|1d)$"), platfo
 
 
 @router.get("/timeline/compare")
-async def raw_vs_organic(topic_id: int | None = None):
+async def raw_vs_organic(
+    topic_id: int | None = None,
+    platform: str | None = None,
+    kind: str = Query("all", pattern="^(all|posts|comments)$"),
+):
     """Mean affect with and without coordinated accounts - the 'distortion'."""
     topic_clause = ("AND EXISTS (SELECT 1 FROM topic_assign ta WHERE ta.platform=p.platform "
                     "AND ta.post_id=p.post_id AND ta.topic_id=?)") if topic_id is not None else ""
-    params = [topic_id] if topic_id is not None else []
+    params: list[object] = [topic_id] if topic_id is not None else []
+    if platform:
+        topic_clause += " AND p.platform=?"
+        params.append(platform)
+    if kind == "comments":
+        topic_clause += " AND p.kind IN ('reply', 'comment')"
+    elif kind == "posts":
+        topic_clause += " AND p.kind NOT IN ('reply', 'comment')"
     out = {}
     for label, extra in (("raw", ""), ("organic", f"AND {ORGANIC_CLAUSE}")):
         row = await fetch_all(

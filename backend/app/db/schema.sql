@@ -257,6 +257,18 @@ CREATE TABLE IF NOT EXISTS influence_cache (
     computed_at TEXT NOT NULL
 );
 
+-- Audience segments (network communities) for "spread between segments" (PS E).
+CREATE TABLE IF NOT EXISTS account_segments (
+    account_id TEXT PRIMARY KEY,
+    segment INTEGER NOT NULL
+);
+CREATE TABLE IF NOT EXISTS segment_labels (
+    segment INTEGER PRIMARY KEY,
+    label TEXT NOT NULL,
+    size INTEGER NOT NULL,
+    computed_at TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS summaries (
     scope TEXT NOT NULL,
     scope_id TEXT NOT NULL,

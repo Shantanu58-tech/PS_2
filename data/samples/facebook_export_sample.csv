@@ -1,0 +1,1087 @@
+id,username,type,text,created_time,parent_id,likes,comments,shares,synthetic
+fb_0_140,fb_anil_19,status,Metro is faster than road today #DelhiTraffic,2024-11-04 01:08:57,,209,14,10,true
+fb_0_96,fb_meena_233,status,Festival market is so crowded #Festival,2024-11-04 01:20:31,,308,35,8,true
+fb_0_30,fb_kavita_61,status,Who else watched the match today? #INDvsAUS,2024-11-04 01:21:34,,165,18,21,true
+fb_0_123,fb_pooja_229,status,Metro is faster than road today #DelhiTraffic,2024-11-04 02:26:39,,220,3,11,true
+fb_0_141,fb_sunita_28,status,Proud of Team India #TeamIndia,2024-11-04 02:30:01,,503,31,30,true
+fb_0_53,fb_deepak_222,status,"Avoid the highway, huge jam #TrafficJam",2024-11-04 02:37:50,,315,40,23,true
+fb_0_123_c127,fb_pooja_82,comment,Same in our area,2024-11-04 02:55:28,fb_0_123,18,0,0,true
+fb_0_96_c98,fb_kavita_174,comment,Same in our area,2024-11-04 03:12:25,fb_0_96,10,0,0,true
+fb_0_72,fb_suresh_201,status,Petrol price went up again in our area #PetrolPrice,2024-11-04 03:17:00,,305,1,12,true
+fb_0_53_c56,fb_rajesh_80,comment,Very nice,2024-11-04 03:25:32,fb_0_53,17,0,0,true
+fb_0_136,fb_rajesh_38,status,Who else watched the match today? #INDvsAUS,2024-11-04 03:47:30,,465,1,0,true
+fb_0_123_c126,fb_pooja_79,comment,Happy Diwali to all,2024-11-04 03:47:52,fb_0_123,12,0,0,true
+fb_0_72_c75,fb_suresh_156,comment,Thanks for sharing,2024-11-04 03:53:27,fb_0_72,20,0,0,true
+fb_0_51,fb_meena_257,status,Metro is faster than road today #DelhiTraffic,2024-11-04 04:05:24,,103,1,29,true
+fb_0_9,fb_anil_198,status,Metro is faster than road today #DelhiTraffic,2024-11-04 04:21:08,,345,38,19,true
+fb_0_141_c143,fb_suresh_196,comment,Very nice,2024-11-04 04:34:00,fb_0_141,2,0,0,true
+fb_0_72_c74,fb_pooja_24,comment,True,2024-11-04 04:44:30,fb_0_72,9,0,0,true
+fb_0_96_c99,fb_suresh_260,comment,Very nice,2024-11-04 04:56:56,fb_0_96,11,0,0,true
+fb_0_133,fb_rajesh_65,status,Who else watched the match today? #INDvsAUS,2024-11-04 04:58:17,,140,13,15,true
+fb_0_58,fb_pooja_43,status,Diesel costlier this week #DieselPrice,2024-11-04 04:58:28,,260,5,8,true
+fb_0_72_c73,fb_anil_166,comment,Same in our area,2024-11-04 04:59:21,fb_0_72,4,0,0,true
+fb_0_136_c138,fb_pooja_25,comment,Hope it improves,2024-11-04 05:00:22,fb_0_136,9,0,0,true
+fb_0_58_c59,fb_pooja_93,comment,Very nice,2024-11-04 05:00:31,fb_0_58,14,0,0,true
+fb_0_123_c125,fb_pooja_10,comment,Happy Diwali to all,2024-11-04 05:12:29,fb_0_123,12,0,0,true
+fb_0_96_c97,fb_pooja_43,comment,True,2024-11-04 05:21:17,fb_0_96,15,0,0,true
+fb_0_141_c142,fb_kavita_50,comment,Hope it improves,2024-11-04 05:24:59,fb_0_141,0,0,0,true
+fb_0_30_c32,fb_meena_143,comment,Agreed,2024-11-04 05:25:09,fb_0_30,9,0,0,true
+fb_0_30_c31,fb_suresh_153,comment,True,2024-11-04 05:42:50,fb_0_30,14,0,0,true
+fb_0_136_c139,fb_deepak_251,comment,Hope it improves,2024-11-04 05:47:14,fb_0_136,20,0,0,true
+fb_0_9_c10,fb_suresh_288,comment,Very nice,2024-11-04 05:47:45,fb_0_9,2,0,0,true
+fb_0_106,fb_rajesh_53,status,Who else watched the match today? #INDvsAUS,2024-11-04 05:48:20,,489,33,21,true
+fb_0_136_c137,fb_kavita_210,comment,True,2024-11-04 05:52:46,fb_0_136,4,0,0,true
+fb_0_53_c54,fb_deepak_116,comment,Thanks for sharing,2024-11-04 05:53:00,fb_0_53,11,0,0,true
+fb_0_96_c100,fb_sunita_126,comment,Hope it improves,2024-11-04 05:54:49,fb_0_96,16,0,0,true
+fb_0_33,fb_rajesh_282,status,Diesel costlier this week #DieselPrice,2024-11-04 05:55:34,,148,24,22,true
+fb_0_9_c12,fb_kavita_167,comment,Thanks for sharing,2024-11-04 06:01:00,fb_0_9,3,0,0,true
+fb_0_9_c11,fb_anil_189,comment,True,2024-11-04 06:12:12,fb_0_9,17,0,0,true
+fb_0_58_c60,fb_meena_114,comment,Sahi baat,2024-11-04 06:12:47,fb_0_58,13,0,0,true
+fb_0_123_c124,fb_meena_16,comment,True,2024-11-04 06:16:30,fb_0_123,18,0,0,true
+fb_0_33_c37,fb_deepak_23,comment,Same in our area,2024-11-04 06:25:53,fb_0_33,14,0,0,true
+fb_0_9_c13,fb_sunita_173,comment,Thanks for sharing,2024-11-04 06:27:31,fb_0_9,11,0,0,true
+fb_0_53_c55,fb_rajesh_53,comment,Happy Diwali to all,2024-11-04 06:40:17,fb_0_53,20,0,0,true
+fb_0_106_c108,fb_kavita_200,comment,Hope it improves,2024-11-04 06:48:39,fb_0_106,17,0,0,true
+fb_0_89,fb_sunita_242,status,Society Diwali celebration photos #Diwali,2024-11-04 06:49:32,,18,1,4,true
+fb_0_53_c57,fb_pooja_51,comment,Agreed,2024-11-04 06:49:50,fb_0_53,1,0,0,true
+fb_0_6,fb_kavita_221,status,Diesel costlier this week #DieselPrice,2024-11-04 06:54:10,,521,29,9,true
+fb_0_110,fb_pooja_199,status,"Avoid the highway, huge jam #TrafficJam",2024-11-04 07:19:53,,526,21,17,true
+fb_0_33_c35,fb_anil_100,comment,Same in our area,2024-11-04 07:21:22,fb_0_33,16,0,0,true
+fb_0_14,fb_pooja_82,status,Petrol price went up again in our area #PetrolPrice,2024-11-04 07:25:56,,546,28,11,true
+fb_0_6_c8,fb_pooja_51,comment,Happy Diwali to all,2024-11-04 07:30:08,fb_0_6,9,0,0,true
+fb_0_89_c91,fb_sunita_99,comment,True,2024-11-04 07:32:20,fb_0_89,13,0,0,true
+fb_0_85,fb_meena_139,status,Petrol price went up again in our area #PetrolPrice,2024-11-04 07:48:21,,127,35,0,true
+fb_0_133_c135,fb_meena_246,comment,Agreed,2024-11-04 08:08:33,fb_0_133,5,0,0,true
+fb_0_14_c15,fb_pooja_132,comment,Same in our area,2024-11-04 08:19:17,fb_0_14,14,0,0,true
+fb_0_85_c87,fb_suresh_225,comment,True,2024-11-04 08:20:51,fb_0_85,3,0,0,true
+fb_0_38,fb_suresh_178,status,Power cut since morning due to storm #Rain,2024-11-04 08:23:02,,29,39,24,true
+fb_0_51_c52,fb_deepak_227,comment,Agreed,2024-11-04 08:32:28,fb_0_51,20,0,0,true
+fb_0_14_c17,fb_anil_14,comment,Hope it improves,2024-11-04 08:33:25,fb_0_14,10,0,0,true
+fb_0_110_c111,fb_sunita_18,comment,True,2024-11-04 08:33:36,fb_0_110,2,0,0,true
+fb_0_110_c113,fb_suresh_235,comment,Happy Diwali to all,2024-11-04 09:00:57,fb_0_110,19,0,0,true
+fb_0_106_c109,fb_rajesh_146,comment,Hope it improves,2024-11-04 09:06:32,fb_0_106,12,0,0,true
+fb_0_38_c39,fb_suresh_205,comment,Same in our area,2024-11-04 09:12:42,fb_0_38,15,0,0,true
+fb_0_58_c61,fb_rajesh_58,comment,Same in our area,2024-11-04 09:17:45,fb_0_58,3,0,0,true
+fb_0_0,fb_deepak_281,status,Proud of Team India #TeamIndia,2024-11-04 09:18:53,,277,30,24,true
+fb_0_33_c36,fb_sunita_126,comment,Thanks for sharing,2024-11-04 09:24:42,fb_0_33,12,0,0,true
+fb_0_89_c93,fb_pooja_24,comment,True,2024-11-04 09:33:23,fb_0_89,13,0,0,true
+fb_0_0_c1,fb_suresh_239,comment,Agreed,2024-11-04 09:37:06,fb_0_0,12,0,0,true
+fb_0_144,fb_kavita_192,status,Society Diwali celebration photos #Diwali,2024-11-04 09:40:36,,505,6,12,true
+fb_0_22,fb_suresh_292,status,Petrol price went up again in our area #PetrolPrice,2024-11-04 09:44:20,,455,20,18,true
+fb_0_89_c92,fb_suresh_225,comment,Very nice,2024-11-04 09:46:09,fb_0_89,10,0,0,true
+fb_0_46,fb_suresh_288,status,"Avoid the highway, huge jam #TrafficJam",2024-11-04 09:50:25,,176,18,21,true
+fb_0_33_c34,fb_sunita_237,comment,Hope it improves,2024-11-04 09:51:49,fb_0_33,14,0,0,true
+fb_0_133_c134,fb_meena_96,comment,Sahi baat,2024-11-04 09:57:19,fb_0_133,14,0,0,true
+fb_0_0_c3,fb_sunita_240,comment,Hope it improves,2024-11-04 10:08:31,fb_0_0,3,0,0,true
+fb_0_148,fb_deepak_193,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-04 10:13:53,,305,40,24,true
+fb_0_85_c88,fb_pooja_207,comment,Very nice,2024-11-04 10:21:11,fb_0_85,0,0,0,true
+fb_0_101,fb_rajesh_123,status,Power cut since morning due to storm #Rain,2024-11-04 10:31:17,,478,16,30,true
+fb_0_94,fb_deepak_57,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-04 10:33:44,,440,4,18,true
+fb_0_128,fb_sunita_99,status,Power cut since morning due to storm #Rain,2024-11-04 10:35:13,,582,20,1,true
+fb_0_106_c107,fb_rajesh_22,comment,Same in our area,2024-11-04 10:35:50,fb_0_106,12,0,0,true
+fb_0_128_c129,fb_deepak_190,comment,True,2024-11-04 10:48:35,fb_0_128,8,0,0,true
+fb_0_85_c86,fb_suresh_41,comment,Agreed,2024-11-04 10:53:18,fb_0_85,9,0,0,true
+fb_0_65,fb_suresh_262,status,Proud of Team India #TeamIndia,2024-11-04 10:53:58,,449,37,24,true
+fb_0_89_c90,fb_meena_113,comment,True,2024-11-04 10:54:26,fb_0_89,17,0,0,true
+fb_0_101_c103,fb_rajesh_65,comment,Agreed,2024-11-04 10:56:59,fb_0_101,5,0,0,true
+fb_0_38_c40,fb_pooja_207,comment,Thanks for sharing,2024-11-04 11:01:22,fb_0_38,4,0,0,true
+fb_0_153,fb_anil_273,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-04 11:08:53,,298,0,4,true
+fb_0_65_c69,fb_deepak_285,comment,True,2024-11-04 11:19:46,fb_0_65,11,0,0,true
+fb_0_153_c154,fb_sunita_30,comment,Same in our area,2024-11-04 11:20:05,fb_0_153,20,0,0,true
+fb_0_101_c105,fb_sunita_204,comment,Happy Diwali to all,2024-11-04 11:25:08,fb_0_101,20,0,0,true
+fb_0_24,fb_pooja_54,status,Who else watched the match today? #INDvsAUS,2024-11-04 11:26:42,,35,37,29,true
+fb_0_110_c112,fb_deepak_285,comment,Thanks for sharing,2024-11-04 11:30:14,fb_0_110,8,0,0,true
+fb_0_14_c16,fb_kavita_84,comment,Sahi baat,2024-11-04 11:30:50,fb_0_14,1,0,0,true
+fb_0_24_c26,fb_anil_90,comment,Agreed,2024-11-04 11:33:24,fb_0_24,7,0,0,true
+fb_0_148_c149,fb_suresh_26,comment,Sahi baat,2024-11-04 11:47:21,fb_0_148,7,0,0,true
+fb_0_18,fb_sunita_254,status,Festival market is so crowded #Festival,2024-11-04 11:48:40,,204,34,5,true
+fb_0_6_c7,fb_meena_264,comment,Sahi baat,2024-11-04 11:48:45,fb_0_6,5,0,0,true
+fb_0_65_c66,fb_pooja_243,comment,Very nice,2024-11-04 11:49:04,fb_0_65,13,0,0,true
+fb_0_22_c23,fb_kavita_186,comment,Happy Diwali to all,2024-11-04 11:59:59,fb_0_22,5,0,0,true
+fb_0_94_c95,fb_anil_142,comment,Happy Diwali to all,2024-11-04 12:01:58,fb_0_94,18,0,0,true
+fb_0_19,fb_pooja_132,status,Petrol price went up again in our area #PetrolPrice,2024-11-04 12:06:05,,177,32,27,true
+fb_0_0_c2,fb_kavita_236,comment,Same in our area,2024-11-04 12:19:24,fb_0_0,5,0,0,true
+fb_0_153_c155,fb_kavita_84,comment,Very nice,2024-11-04 12:21:50,fb_0_153,12,0,0,true
+fb_0_148_c151,fb_anil_14,comment,Hope it improves,2024-11-04 12:32:57,fb_0_148,17,0,0,true
+fb_0_145,fb_pooja_258,status,Society Diwali celebration photos #Diwali,2024-11-04 12:42:14,,120,38,15,true
+fb_0_128_c131,fb_kavita_228,comment,Happy Diwali to all,2024-11-04 12:54:49,fb_0_128,18,0,0,true
+fb_0_156,fb_kavita_270,status,Diesel costlier this week #DieselPrice,2024-11-04 12:55:48,,147,6,7,true
+fb_0_62,fb_suresh_231,status,Power cut since morning due to storm #Rain,2024-11-04 12:59:41,,25,14,6,true
+fb_0_4,fb_suresh_225,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-04 13:08:24,,320,29,27,true
+fb_0_148_c152,fb_suresh_297,comment,Thanks for sharing,2024-11-04 13:21:37,fb_0_148,15,0,0,true
+fb_0_19_c21,fb_sunita_56,comment,Thanks for sharing,2024-11-04 13:29:39,fb_0_19,9,0,0,true
+fb_0_4_c5,fb_meena_1,comment,True,2024-11-04 13:38:16,fb_0_4,2,0,0,true
+fb_0_101_c104,fb_pooja_184,comment,Very nice,2024-11-04 13:58:51,fb_0_101,6,0,0,true
+fb_0_128_c132,fb_suresh_162,comment,True,2024-11-04 14:02:26,fb_0_128,5,0,0,true
+fb_0_47,fb_sunita_223,status,Festival market is so crowded #Festival,2024-11-04 14:02:34,,195,6,4,true
+fb_0_62_c64,fb_anil_273,comment,Hope it improves,2024-11-04 14:08:22,fb_0_62,13,0,0,true
+fb_0_65_c67,fb_sunita_208,comment,Same in our area,2024-11-04 14:12:55,fb_0_65,17,0,0,true
+fb_0_148_c150,fb_anil_290,comment,Hope it improves,2024-11-04 14:48:07,fb_0_148,18,0,0,true
+fb_0_47_c50,fb_pooja_93,comment,Same in our area,2024-11-04 14:52:37,fb_0_47,18,0,0,true
+fb_0_128_c130,fb_kavita_133,comment,Very nice,2024-11-04 15:16:32,fb_0_128,16,0,0,true
+fb_0_29,fb_sunita_173,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-04 15:22:37,,136,21,11,true
+fb_0_47_c49,fb_deepak_222,comment,Hope it improves,2024-11-04 15:27:17,fb_0_47,3,0,0,true
+fb_0_24_c25,fb_anil_75,comment,Very nice,2024-11-04 15:29:01,fb_0_24,2,0,0,true
+fb_0_101_c102,fb_deepak_104,comment,Thanks for sharing,2024-11-04 15:30:32,fb_0_101,20,0,0,true
+fb_0_156_c159,fb_anil_189,comment,Agreed,2024-11-04 15:35:07,fb_0_156,15,0,0,true
+fb_0_24_c27,fb_suresh_225,comment,True,2024-11-04 15:36:06,fb_0_24,14,0,0,true
+fb_0_47_c48,fb_kavita_88,comment,Thanks for sharing,2024-11-04 15:39:15,fb_0_47,20,0,0,true
+fb_0_65_c68,fb_kavita_110,comment,Happy Diwali to all,2024-11-04 15:39:54,fb_0_65,7,0,0,true
+fb_0_19_c20,fb_rajesh_148,comment,Thanks for sharing,2024-11-04 15:41:37,fb_0_19,19,0,0,true
+fb_0_41,fb_meena_241,status,Society Diwali celebration photos #Diwali,2024-11-04 15:41:48,,204,15,11,true
+fb_0_24_c28,fb_anil_272,comment,Same in our area,2024-11-04 15:45:42,fb_0_24,6,0,0,true
+fb_0_145_c146,fb_deepak_23,comment,Hope it improves,2024-11-04 16:02:24,fb_0_145,8,0,0,true
+fb_0_119,fb_deepak_112,status,Proud of Team India #TeamIndia,2024-11-04 16:11:11,,479,0,14,true
+fb_0_80,fb_suresh_164,status,Festival market is so crowded #Festival,2024-11-04 16:30:02,,389,25,16,true
+fb_0_70,fb_meena_6,status,Festival market is so crowded #Festival,2024-11-04 16:39:07,,501,40,5,true
+fb_0_114,fb_pooja_94,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-04 16:44:31,,176,5,4,true
+fb_0_62_c63,fb_sunita_18,comment,Sahi baat,2024-11-04 16:47:15,fb_0_62,13,0,0,true
+fb_0_76,fb_suresh_153,status,Who else watched the match today? #INDvsAUS,2024-11-04 16:55:44,,379,11,19,true
+fb_0_41_c42,fb_meena_48,comment,Very nice,2024-11-04 17:06:02,fb_0_41,20,0,0,true
+fb_0_41_c43,fb_sunita_62,comment,Happy Diwali to all,2024-11-04 17:07:48,fb_0_41,18,0,0,true
+fb_0_156_c158,fb_pooja_229,comment,Thanks for sharing,2024-11-04 17:09:23,fb_0_156,9,0,0,true
+fb_0_145_c147,fb_meena_1,comment,Happy Diwali to all,2024-11-04 17:10:59,fb_0_145,7,0,0,true
+fb_0_80_c84,fb_pooja_141,comment,Sahi baat,2024-11-04 17:17:32,fb_0_80,16,0,0,true
+fb_0_41_c44,fb_anil_296,comment,Same in our area,2024-11-04 17:17:53,fb_0_41,0,0,0,true
+fb_0_119_c121,fb_suresh_206,comment,Very nice,2024-11-04 17:24:51,fb_0_119,18,0,0,true
+fb_0_114_c116,fb_sunita_268,comment,Thanks for sharing,2024-11-04 17:29:17,fb_0_114,17,0,0,true
+fb_0_156_c157,fb_meena_264,comment,Hope it improves,2024-11-04 17:41:25,fb_0_156,4,0,0,true
+fb_0_114_c118,fb_rajesh_154,comment,True,2024-11-04 18:06:14,fb_0_114,12,0,0,true
+fb_0_76_c78,fb_anil_267,comment,Happy Diwali to all,2024-11-04 18:27:10,fb_0_76,14,0,0,true
+fb_0_80_c83,fb_anil_78,comment,Happy Diwali to all,2024-11-04 18:28:11,fb_0_80,19,0,0,true
+fb_0_76_c79,fb_suresh_196,comment,True,2024-11-04 19:07:27,fb_0_76,7,0,0,true
+fb_0_114_c115,fb_rajesh_271,comment,Same in our area,2024-11-04 19:09:05,fb_0_114,3,0,0,true
+fb_0_80_c81,fb_anil_142,comment,True,2024-11-04 19:26:45,fb_0_80,20,0,0,true
+fb_0_41_c45,fb_rajesh_154,comment,Very nice,2024-11-04 19:40:09,fb_0_41,4,0,0,true
+fb_0_119_c122,fb_kavita_50,comment,Happy Diwali to all,2024-11-04 19:44:42,fb_0_119,18,0,0,true
+fb_0_80_c82,fb_pooja_229,comment,Very nice,2024-11-04 20:52:29,fb_0_80,6,0,0,true
+fb_0_119_c120,fb_meena_0,comment,True,2024-11-04 20:59:23,fb_0_119,7,0,0,true
+fb_0_70_c71,fb_sunita_240,comment,Thanks for sharing,2024-11-04 21:01:47,fb_0_70,13,0,0,true
+fb_0_76_c77,fb_pooja_256,comment,Hope it improves,2024-11-04 21:24:29,fb_0_76,3,0,0,true
+fb_0_114_c117,fb_meena_114,comment,Sahi baat,2024-11-04 21:35:40,fb_0_114,9,0,0,true
+fb_1_208,fb_deepak_227,status,Power cut since morning due to storm #Rain,2024-11-05 01:12:22,,382,19,15,true
+fb_1_258,fb_meena_168,status,Petrol price went up again in our area #PetrolPrice,2024-11-05 01:15:55,,322,14,3,true
+fb_1_202,fb_rajesh_249,status,Proud of Team India #TeamIndia,2024-11-05 01:42:05,,37,25,20,true
+fb_1_164,fb_pooja_93,status,Power cut since morning due to storm #Rain,2024-11-05 02:33:41,,536,20,26,true
+fb_1_202_c204,fb_rajesh_95,comment,Happy Diwali to all,2024-11-05 02:38:09,fb_1_202,14,0,0,true
+fb_1_208_c209,fb_pooja_293,comment,Same in our area,2024-11-05 02:43:22,fb_1_208,20,0,0,true
+fb_1_174,fb_meena_232,status,Who else watched the match today? #INDvsAUS,2024-11-05 03:00:40,,421,40,14,true
+fb_1_250,fb_anil_298,status,Diesel costlier this week #DieselPrice,2024-11-05 03:20:38,,136,31,13,true
+fb_1_289,fb_suresh_156,status,Power cut since morning due to storm #Rain,2024-11-05 03:46:29,,488,25,4,true
+fb_1_259,fb_anil_47,status,Festival market is so crowded #Festival,2024-11-05 03:54:02,,497,13,24,true
+fb_1_245,fb_rajesh_176,status,Proud of Team India #TeamIndia,2024-11-05 04:16:04,,194,4,30,true
+fb_1_236,fb_pooja_171,status,Power cut since morning due to storm #Rain,2024-11-05 04:28:45,,82,30,10,true
+fb_1_236_c237,fb_anil_106,comment,Sahi baat,2024-11-05 04:36:43,fb_1_236,15,0,0,true
+fb_1_259_c260,fb_rajesh_154,comment,Same in our area,2024-11-05 04:38:43,fb_1_259,19,0,0,true
+fb_1_259_c261,fb_sunita_237,comment,Happy Diwali to all,2024-11-05 04:46:01,fb_1_259,11,0,0,true
+fb_1_229,fb_sunita_126,status,Who else watched the match today? #INDvsAUS,2024-11-05 04:46:06,,36,12,22,true
+fb_1_286,fb_pooja_299,status,Power cut since morning due to storm #Rain,2024-11-05 05:04:28,,459,9,9,true
+fb_1_220,fb_meena_232,status,Festival market is so crowded #Festival,2024-11-05 05:19:14,,576,21,8,true
+fb_1_234,fb_sunita_60,status,Proud of Team India #TeamIndia,2024-11-05 05:23:10,,154,32,16,true
+fb_1_250_c251,fb_meena_1,comment,Hope it improves,2024-11-05 05:27:32,fb_1_250,1,0,0,true
+fb_1_236_c238,fb_kavita_250,comment,Same in our area,2024-11-05 05:30:04,fb_1_236,16,0,0,true
+fb_1_179,fb_meena_246,status,Festival market is so crowded #Festival,2024-11-05 05:31:06,,390,39,29,true
+fb_1_217,fb_rajesh_98,status,Who else watched the match today? #INDvsAUS,2024-11-05 05:44:55,,179,26,23,true
+fb_1_286_c288,fb_rajesh_98,comment,Happy Diwali to all,2024-11-05 05:45:43,fb_1_286,6,0,0,true
+fb_1_250_c252,fb_sunita_259,comment,True,2024-11-05 05:51:09,fb_1_250,18,0,0,true
+fb_1_164_c165,fb_pooja_94,comment,Sahi baat,2024-11-05 06:06:07,fb_1_164,12,0,0,true
+fb_1_161,fb_pooja_79,status,Power cut since morning due to storm #Rain,2024-11-05 06:16:19,,139,19,17,true
+fb_1_221,fb_suresh_164,status,Petrol price went up again in our area #PetrolPrice,2024-11-05 06:16:54,,442,16,28,true
+fb_1_224,fb_suresh_260,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-05 06:28:35,,439,16,2,true
+fb_1_202_c203,fb_deepak_190,comment,Happy Diwali to all,2024-11-05 06:37:29,fb_1_202,8,0,0,true
+fb_1_229_c231,fb_deepak_179,comment,Happy Diwali to all,2024-11-05 06:39:23,fb_1_229,1,0,0,true
+fb_1_268,fb_kavita_200,status,"Avoid the highway, huge jam #TrafficJam",2024-11-05 06:47:14,,439,16,11,true
+fb_1_271,fb_rajesh_122,status,Who else watched the match today? #INDvsAUS,2024-11-05 06:52:19,,156,3,30,true
+fb_1_268_c269,fb_deepak_46,comment,Happy Diwali to all,2024-11-05 06:54:17,fb_1_268,3,0,0,true
+fb_1_229_c232,fb_rajesh_98,comment,Same in our area,2024-11-05 06:54:49,fb_1_229,15,0,0,true
+fb_1_191,fb_meena_232,status,Festival market is so crowded #Festival,2024-11-05 06:56:43,,376,24,3,true
+fb_1_217_c219,fb_meena_49,comment,Very nice,2024-11-05 07:01:56,fb_1_217,16,0,0,true
+fb_1_274,fb_sunita_119,status,Society Diwali celebration photos #Diwali,2024-11-05 07:11:57,,376,7,11,true
+fb_1_175,fb_rajesh_102,status,Who else watched the match today? #INDvsAUS,2024-11-05 07:21:00,,448,22,25,true
+fb_1_221_c223,fb_meena_139,comment,Thanks for sharing,2024-11-05 07:22:06,fb_1_221,3,0,0,true
+fb_1_229_c230,fb_sunita_121,comment,Thanks for sharing,2024-11-05 07:27:42,fb_1_229,15,0,0,true
+fb_1_253,fb_anil_69,status,Proud of Team India #TeamIndia,2024-11-05 07:28:59,,505,11,4,true
+fb_1_279,fb_meena_257,status,Society Diwali celebration photos #Diwali,2024-11-05 07:32:34,,236,28,10,true
+fb_1_221_c222,fb_sunita_12,comment,Very nice,2024-11-05 07:42:54,fb_1_221,16,0,0,true
+fb_1_289_c290,fb_pooja_24,comment,Hope it improves,2024-11-05 07:54:44,fb_1_289,20,0,0,true
+fb_1_259_c262,fb_anil_284,comment,Same in our area,2024-11-05 07:55:47,fb_1_259,3,0,0,true
+fb_1_253_c255,fb_anil_142,comment,Very nice,2024-11-05 07:56:19,fb_1_253,3,0,0,true
+fb_1_279_c280,fb_pooja_293,comment,Sahi baat,2024-11-05 08:01:28,fb_1_279,19,0,0,true
+fb_1_224_c225,fb_kavita_228,comment,Happy Diwali to all,2024-11-05 08:01:29,fb_1_224,16,0,0,true
+fb_1_263,fb_sunita_60,status,Diesel costlier this week #DieselPrice,2024-11-05 08:03:15,,534,33,18,true
+fb_1_271_c273,fb_rajesh_123,comment,Happy Diwali to all,2024-11-05 08:10:15,fb_1_271,15,0,0,true
+fb_1_180,fb_anil_290,status,Proud of Team India #TeamIndia,2024-11-05 08:11:39,,439,16,15,true
+fb_1_224_c226,fb_meena_264,comment,Agreed,2024-11-05 08:12:57,fb_1_224,19,0,0,true
+fb_1_229_c233,fb_meena_96,comment,Agreed,2024-11-05 08:19:59,fb_1_229,1,0,0,true
+fb_1_236_c239,fb_sunita_60,comment,Happy Diwali to all,2024-11-05 08:21:28,fb_1_236,7,0,0,true
+fb_1_175_c178,fb_anil_149,comment,True,2024-11-05 08:26:49,fb_1_175,10,0,0,true
+fb_1_289_c291,fb_kavita_128,comment,Thanks for sharing,2024-11-05 08:39:52,fb_1_289,16,0,0,true
+fb_1_263_c266,fb_pooja_293,comment,Agreed,2024-11-05 08:43:41,fb_1_263,13,0,0,true
+fb_1_175_c177,fb_anil_197,comment,True,2024-11-05 08:50:18,fb_1_175,9,0,0,true
+fb_1_224_c227,fb_meena_134,comment,Thanks for sharing,2024-11-05 08:52:18,fb_1_224,10,0,0,true
+fb_1_268_c270,fb_sunita_202,comment,Happy Diwali to all,2024-11-05 09:03:00,fb_1_268,18,0,0,true
+fb_1_180_c182,fb_rajesh_80,comment,Hope it improves,2024-11-05 09:10:31,fb_1_180,0,0,0,true
+fb_1_180_c181,fb_sunita_202,comment,True,2024-11-05 09:22:41,fb_1_180,20,0,0,true
+fb_1_217_c218,fb_meena_59,comment,Sahi baat,2024-11-05 09:30:46,fb_1_217,4,0,0,true
+fb_1_191_c192,fb_anil_35,comment,Very nice,2024-11-05 09:33:20,fb_1_191,18,0,0,true
+fb_1_286_c287,fb_meena_224,comment,Same in our area,2024-11-05 09:37:06,fb_1_286,5,0,0,true
+fb_1_234_c235,fb_meena_49,comment,Thanks for sharing,2024-11-05 09:41:45,fb_1_234,4,0,0,true
+fb_1_210,fb_pooja_244,status,Power cut since morning due to storm #Rain,2024-11-05 09:58:36,,389,5,27,true
+fb_1_253_c254,fb_suresh_206,comment,Thanks for sharing,2024-11-05 10:01:03,fb_1_253,13,0,0,true
+fb_1_263_c267,fb_rajesh_215,comment,True,2024-11-05 10:14:04,fb_1_263,17,0,0,true
+fb_1_253_c256,fb_suresh_235,comment,Sahi baat,2024-11-05 10:20:48,fb_1_253,16,0,0,true
+fb_1_274_c278,fb_anil_66,comment,True,2024-11-05 10:41:20,fb_1_274,0,0,0,true
+fb_1_274_c276,fb_kavita_110,comment,True,2024-11-05 10:49:52,fb_1_274,14,0,0,true
+fb_1_175_c176,fb_anil_272,comment,Sahi baat,2024-11-05 10:51:25,fb_1_175,4,0,0,true
+fb_1_224_c228,fb_meena_68,comment,Same in our area,2024-11-05 10:54:28,fb_1_224,19,0,0,true
+fb_1_263_c265,fb_meena_3,comment,Happy Diwali to all,2024-11-05 10:57:21,fb_1_263,13,0,0,true
+fb_1_274_c277,fb_anil_296,comment,Happy Diwali to all,2024-11-05 11:08:50,fb_1_274,19,0,0,true
+fb_1_263_c264,fb_anil_75,comment,Agreed,2024-11-05 11:20:44,fb_1_263,18,0,0,true
+fb_1_271_c272,fb_anil_238,comment,Sahi baat,2024-11-05 11:25:26,fb_1_271,7,0,0,true
+fb_1_184,fb_deepak_157,status,Festival market is so crowded #Festival,2024-11-05 11:33:40,,529,8,9,true
+fb_1_274_c275,fb_suresh_235,comment,Thanks for sharing,2024-11-05 12:02:27,fb_1_274,13,0,0,true
+fb_1_246,fb_rajesh_22,status,"Avoid the highway, huge jam #TrafficJam",2024-11-05 12:15:56,,18,33,29,true
+fb_1_253_c257,fb_anil_273,comment,Thanks for sharing,2024-11-05 12:25:41,fb_1_253,6,0,0,true
+fb_1_184_c186,fb_pooja_244,comment,Thanks for sharing,2024-11-05 12:27:18,fb_1_184,8,0,0,true
+fb_1_281,fb_sunita_265,status,Diesel costlier this week #DieselPrice,2024-11-05 12:38:54,,68,20,27,true
+fb_1_184_c185,fb_kavita_228,comment,Happy Diwali to all,2024-11-05 13:01:24,fb_1_184,18,0,0,true
+fb_1_205,fb_meena_68,status,Power cut since morning due to storm #Rain,2024-11-05 13:08:41,,577,4,6,true
+fb_1_193,fb_anil_211,status,Festival market is so crowded #Festival,2024-11-05 13:09:41,,586,26,20,true
+fb_1_240,fb_meena_172,status,"Avoid the highway, huge jam #TrafficJam",2024-11-05 13:13:59,,106,12,25,true
+fb_1_246_c247,fb_meena_224,comment,Very nice,2024-11-05 13:39:57,fb_1_246,0,0,0,true
+fb_1_215,fb_kavita_105,status,Festival market is so crowded #Festival,2024-11-05 13:49:35,,549,31,19,true
+fb_1_171,fb_suresh_276,status,Society Diwali celebration photos #Diwali,2024-11-05 13:54:07,,455,6,2,true
+fb_1_281_c282,fb_deepak_9,comment,True,2024-11-05 13:55:32,fb_1_281,19,0,0,true
+fb_1_240_c244,fb_rajesh_154,comment,Agreed,2024-11-05 14:11:53,fb_1_240,5,0,0,true
+fb_1_166,fb_anil_290,status,Diesel costlier this week #DieselPrice,2024-11-05 14:34:52,,284,16,19,true
+fb_1_171_c172,fb_suresh_205,comment,Thanks for sharing,2024-11-05 14:44:21,fb_1_171,2,0,0,true
+fb_1_240_c242,fb_rajesh_53,comment,Agreed,2024-11-05 14:44:31,fb_1_240,20,0,0,true
+fb_1_193_c194,fb_rajesh_122,comment,Hope it improves,2024-11-05 14:49:52,fb_1_193,12,0,0,true
+fb_1_246_c248,fb_kavita_210,comment,Very nice,2024-11-05 14:55:20,fb_1_246,8,0,0,true
+fb_1_187,fb_anil_211,status,"Avoid the highway, huge jam #TrafficJam",2024-11-05 14:57:35,,283,34,26,true
+fb_1_211,fb_pooja_15,status,Metro is faster than road today #DelhiTraffic,2024-11-05 15:02:12,,324,31,6,true
+fb_1_162,fb_suresh_235,status,"Avoid the highway, huge jam #TrafficJam",2024-11-05 15:03:02,,500,7,6,true
+fb_1_183,fb_kavita_175,status,Festival market is so crowded #Festival,2024-11-05 15:05:01,,128,35,20,true
+fb_1_205_c207,fb_pooja_51,comment,Sahi baat,2024-11-05 15:05:05,fb_1_205,19,0,0,true
+fb_1_166_c170,fb_suresh_156,comment,Sahi baat,2024-11-05 15:06:08,fb_1_166,9,0,0,true
+fb_1_197,fb_sunita_121,status,Proud of Team India #TeamIndia,2024-11-05 15:13:39,,307,28,28,true
+fb_1_281_c284,fb_suresh_63,comment,Sahi baat,2024-11-05 15:27:56,fb_1_281,5,0,0,true
+fb_1_197_c198,fb_pooja_209,comment,True,2024-11-05 15:28:20,fb_1_197,2,0,0,true
+fb_1_240_c243,fb_suresh_196,comment,Happy Diwali to all,2024-11-05 15:36:31,fb_1_240,10,0,0,true
+fb_1_205_c206,fb_sunita_185,comment,Very nice,2024-11-05 15:49:22,fb_1_205,20,0,0,true
+fb_1_215_c216,fb_kavita_101,comment,Very nice,2024-11-05 15:50:15,fb_1_215,0,0,0,true
+fb_1_160,fb_rajesh_83,status,Who else watched the match today? #INDvsAUS,2024-11-05 15:58:55,,408,35,21,true
+fb_1_187_c190,fb_rajesh_45,comment,Same in our area,2024-11-05 16:32:01,fb_1_187,6,0,0,true
+fb_1_240_c241,fb_suresh_162,comment,Sahi baat,2024-11-05 16:40:01,fb_1_240,13,0,0,true
+fb_1_211_c213,fb_sunita_240,comment,Same in our area,2024-11-05 16:41:24,fb_1_211,0,0,0,true
+fb_1_281_c283,fb_suresh_89,comment,Sahi baat,2024-11-05 16:52:07,fb_1_281,14,0,0,true
+fb_1_195,fb_kavita_228,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-05 16:59:29,,513,36,16,true
+fb_1_197_c200,fb_anil_78,comment,Very nice,2024-11-05 17:03:22,fb_1_197,4,0,0,true
+fb_1_187_c188,fb_suresh_191,comment,Same in our area,2024-11-05 17:06:51,fb_1_187,0,0,0,true
+fb_1_281_c285,fb_suresh_156,comment,Thanks for sharing,2024-11-05 17:09:19,fb_1_281,16,0,0,true
+fb_1_246_c249,fb_anil_69,comment,Happy Diwali to all,2024-11-05 17:14:23,fb_1_246,6,0,0,true
+fb_1_195_c196,fb_deepak_27,comment,Thanks for sharing,2024-11-05 17:18:15,fb_1_195,9,0,0,true
+fb_1_211_c212,fb_deepak_281,comment,Same in our area,2024-11-05 17:30:01,fb_1_211,1,0,0,true
+fb_1_166_c167,fb_pooja_93,comment,Thanks for sharing,2024-11-05 17:40:02,fb_1_166,11,0,0,true
+fb_1_166_c168,fb_sunita_77,comment,Same in our area,2024-11-05 18:03:53,fb_1_166,0,0,0,true
+fb_1_211_c214,fb_pooja_132,comment,Very nice,2024-11-05 18:22:33,fb_1_211,4,0,0,true
+fb_1_171_c173,fb_meena_3,comment,True,2024-11-05 18:26:58,fb_1_171,12,0,0,true
+fb_1_166_c169,fb_sunita_62,comment,Same in our area,2024-11-05 18:28:50,fb_1_166,0,0,0,true
+fb_1_197_c201,fb_anil_283,comment,Sahi baat,2024-11-05 18:30:38,fb_1_197,7,0,0,true
+fb_1_187_c189,fb_suresh_239,comment,Hope it improves,2024-11-05 18:36:40,fb_1_187,2,0,0,true
+fb_1_197_c199,fb_kavita_88,comment,Same in our area,2024-11-05 18:41:00,fb_1_197,12,0,0,true
+fb_1_162_c163,fb_deepak_157,comment,Same in our area,2024-11-05 19:33:57,fb_1_162,1,0,0,true
+fb_2_396,fb_sunita_265,status,Metro is faster than road today #DelhiTraffic,2024-11-06 01:01:49,,583,37,5,true
+fb_2_415,fb_kavita_133,status,Society Diwali celebration photos #Diwali,2024-11-06 01:02:22,,334,8,13,true
+fb_2_401,fb_pooja_103,status,Metro is faster than road today #DelhiTraffic,2024-11-06 01:06:47,,425,13,23,true
+fb_2_401_c402,fb_meena_118,comment,Very nice,2024-11-06 01:21:02,fb_2_401,10,0,0,true
+fb_2_401_c404,fb_anil_197,comment,True,2024-11-06 01:35:59,fb_2_401,3,0,0,true
+fb_2_309,fb_kavita_44,status,Petrol price went up again in our area #PetrolPrice,2024-11-06 01:40:16,,327,9,0,true
+fb_2_328,fb_rajesh_5,status,Petrol price went up again in our area #PetrolPrice,2024-11-06 01:49:38,,158,24,17,true
+fb_2_396_c397,fb_rajesh_4,comment,True,2024-11-06 01:56:20,fb_2_396,7,0,0,true
+fb_2_396_c400,fb_pooja_256,comment,Happy Diwali to all,2024-11-06 02:03:11,fb_2_396,9,0,0,true
+fb_2_295,fb_kavita_133,status,Petrol price went up again in our area #PetrolPrice,2024-11-06 02:06:11,,218,6,26,true
+fb_2_309_c310,fb_sunita_30,comment,Thanks for sharing,2024-11-06 02:20:39,fb_2_309,9,0,0,true
+fb_2_360,fb_sunita_173,status,Society Diwali celebration photos #Diwali,2024-11-06 02:31:15,,547,16,11,true
+fb_2_396_c398,fb_rajesh_115,comment,Thanks for sharing,2024-11-06 02:40:33,fb_2_396,10,0,0,true
+fb_2_415_c416,fb_pooja_184,comment,Sahi baat,2024-11-06 02:40:56,fb_2_415,0,0,0,true
+fb_2_396_c399,fb_kavita_200,comment,Agreed,2024-11-06 02:46:52,fb_2_396,4,0,0,true
+fb_2_367,fb_meena_130,status,Metro is faster than road today #DelhiTraffic,2024-11-06 03:06:35,,180,0,24,true
+fb_2_401_c403,fb_anil_198,comment,Same in our area,2024-11-06 03:10:25,fb_2_401,18,0,0,true
+fb_2_309_c312,fb_pooja_79,comment,Very nice,2024-11-06 03:17:23,fb_2_309,4,0,0,true
+fb_2_317,fb_meena_168,status,Proud of Team India #TeamIndia,2024-11-06 03:25:52,,419,1,17,true
+fb_2_295_c296,fb_deepak_281,comment,Happy Diwali to all,2024-11-06 03:45:34,fb_2_295,7,0,0,true
+fb_2_307,fb_rajesh_123,status,Metro is faster than road today #DelhiTraffic,2024-11-06 03:47:08,,528,32,15,true
+fb_2_318,fb_rajesh_215,status,Proud of Team India #TeamIndia,2024-11-06 03:52:54,,326,3,4,true
+fb_2_309_c313,fb_pooja_229,comment,Thanks for sharing,2024-11-06 03:54:58,fb_2_309,5,0,0,true
+fb_2_366,fb_kavita_210,status,Power cut since morning due to storm #Rain,2024-11-06 03:57:39,,441,12,0,true
+fb_2_407,fb_sunita_289,status,Metro is faster than road today #DelhiTraffic,2024-11-06 04:38:20,,406,15,8,true
+fb_2_415_c417,fb_pooja_258,comment,Very nice,2024-11-06 04:44:22,fb_2_415,15,0,0,true
+fb_2_304,fb_rajesh_22,status,Who else watched the match today? #INDvsAUS,2024-11-06 04:44:43,,393,22,18,true
+fb_2_394,fb_pooja_199,status,Who else watched the match today? #INDvsAUS,2024-11-06 05:18:07,,546,40,16,true
+fb_2_318_c319,fb_suresh_63,comment,Sahi baat,2024-11-06 05:38:26,fb_2_318,20,0,0,true
+fb_2_309_c311,fb_meena_55,comment,Thanks for sharing,2024-11-06 05:38:53,fb_2_309,13,0,0,true
+fb_2_314,fb_anil_69,status,Diesel costlier this week #DieselPrice,2024-11-06 05:50:53,,567,15,12,true
+fb_2_321,fb_suresh_262,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-06 05:51:55,,324,3,11,true
+fb_2_394_c395,fb_sunita_202,comment,Same in our area,2024-11-06 05:55:59,fb_2_394,10,0,0,true
+fb_2_295_c297,fb_anil_149,comment,Very nice,2024-11-06 06:02:47,fb_2_295,1,0,0,true
+fb_2_318_c320,fb_anil_78,comment,Happy Diwali to all,2024-11-06 06:12:10,fb_2_318,1,0,0,true
+fb_2_379,fb_meena_114,status,Petrol price went up again in our area #PetrolPrice,2024-11-06 06:15:24,,255,28,22,true
+fb_2_351,fb_meena_168,status,Power cut since morning due to storm #Rain,2024-11-06 06:17:03,,147,11,25,true
+fb_2_328_c329,fb_rajesh_80,comment,Hope it improves,2024-11-06 06:40:13,fb_2_328,8,0,0,true
+fb_2_321_c323,fb_sunita_185,comment,Happy Diwali to all,2024-11-06 07:15:30,fb_2_321,2,0,0,true
+fb_2_346,fb_meena_49,status,Power cut since morning due to storm #Rain,2024-11-06 07:25:11,,332,11,20,true
+fb_2_343,fb_rajesh_146,status,Who else watched the match today? #INDvsAUS,2024-11-06 07:25:15,,17,33,13,true
+fb_2_379_c381,fb_deepak_73,comment,Same in our area,2024-11-06 07:25:17,fb_2_379,10,0,0,true
+fb_2_346_c349,fb_sunita_56,comment,Sahi baat,2024-11-06 07:29:03,fb_2_346,11,0,0,true
+fb_2_379_c382,fb_sunita_33,comment,True,2024-11-06 07:48:39,fb_2_379,15,0,0,true
+fb_2_407_c408,fb_deepak_76,comment,Sahi baat,2024-11-06 07:48:45,fb_2_407,5,0,0,true
+fb_2_384,fb_sunita_13,status,"Avoid the highway, huge jam #TrafficJam",2024-11-06 07:54:22,,209,22,13,true
+fb_2_307_c308,fb_anil_283,comment,Hope it improves,2024-11-06 08:15:33,fb_2_307,14,0,0,true
+fb_2_301,fb_suresh_156,status,Power cut since morning due to storm #Rain,2024-11-06 08:16:12,,122,25,20,true
+fb_2_379_c380,fb_meena_257,comment,Happy Diwali to all,2024-11-06 08:27:31,fb_2_379,20,0,0,true
+fb_2_392,fb_pooja_147,status,Metro is faster than road today #DelhiTraffic,2024-11-06 08:29:31,,359,1,2,true
+fb_2_314_c316,fb_meena_48,comment,True,2024-11-06 08:41:59,fb_2_314,19,0,0,true
+fb_2_314_c315,fb_kavita_44,comment,Sahi baat,2024-11-06 08:53:30,fb_2_314,14,0,0,true
+fb_2_384_c386,fb_rajesh_277,comment,Very nice,2024-11-06 08:56:31,fb_2_384,0,0,0,true
+fb_2_321_c324,fb_suresh_156,comment,True,2024-11-06 09:20:40,fb_2_321,13,0,0,true
+fb_2_304_c305,fb_sunita_223,comment,Sahi baat,2024-11-06 09:24:05,fb_2_304,7,0,0,true
+fb_2_407_c409,fb_pooja_229,comment,Very nice,2024-11-06 09:27:07,fb_2_407,14,0,0,true
+fb_2_374,fb_meena_49,status,Diesel costlier this week #DieselPrice,2024-11-06 09:33:52,,576,31,3,true
+fb_2_405,fb_rajesh_248,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-06 09:39:44,,91,39,1,true
+fb_2_301_c303,fb_suresh_165,comment,Very nice,2024-11-06 09:39:53,fb_2_301,19,0,0,true
+fb_2_321_c322,fb_suresh_206,comment,Sahi baat,2024-11-06 09:40:25,fb_2_321,17,0,0,true
+fb_2_343_c345,fb_pooja_293,comment,Thanks for sharing,2024-11-06 09:47:38,fb_2_343,14,0,0,true
+fb_2_326,fb_suresh_276,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-06 09:51:49,,422,35,17,true
+fb_2_321_c325,fb_suresh_20,comment,Agreed,2024-11-06 09:55:17,fb_2_321,16,0,0,true
+fb_2_343_c344,fb_pooja_287,comment,Hope it improves,2024-11-06 10:25:16,fb_2_343,9,0,0,true
+fb_2_346_c350,fb_suresh_178,comment,Hope it improves,2024-11-06 10:25:18,fb_2_346,3,0,0,true
+fb_2_346_c348,fb_sunita_138,comment,Sahi baat,2024-11-06 11:07:00,fb_2_346,19,0,0,true
+fb_2_384_c385,fb_rajesh_107,comment,Sahi baat,2024-11-06 11:09:54,fb_2_384,6,0,0,true
+fb_2_370,fb_pooja_117,status,Who else watched the match today? #INDvsAUS,2024-11-06 11:13:51,,237,14,3,true
+fb_2_338,fb_deepak_227,status,Festival market is so crowded #Festival,2024-11-06 11:21:39,,595,19,16,true
+fb_2_418,fb_suresh_41,status,Proud of Team India #TeamIndia,2024-11-06 11:24:21,,470,13,26,true
+fb_2_298,fb_rajesh_58,status,"Avoid the highway, huge jam #TrafficJam",2024-11-06 11:27:45,,25,10,18,true
+fb_2_418_c420,fb_pooja_287,comment,True,2024-11-06 11:27:54,fb_2_418,5,0,0,true
+fb_2_375,fb_anil_189,status,Petrol price went up again in our area #PetrolPrice,2024-11-06 11:43:02,,87,39,21,true
+fb_2_346_c347,fb_anil_14,comment,Happy Diwali to all,2024-11-06 11:45:48,fb_2_346,7,0,0,true
+fb_2_301_c302,fb_anil_283,comment,Very nice,2024-11-06 11:49:33,fb_2_301,6,0,0,true
+fb_2_292,fb_rajesh_195,status,Power cut since morning due to storm #Rain,2024-11-06 11:54:40,,140,8,28,true
+fb_2_292_c294,fb_meena_172,comment,Very nice,2024-11-06 11:57:22,fb_2_292,13,0,0,true
+fb_2_338_c342,fb_rajesh_122,comment,Same in our area,2024-11-06 12:35:16,fb_2_338,10,0,0,true
+fb_2_292_c293,fb_suresh_235,comment,Same in our area,2024-11-06 12:37:36,fb_2_292,20,0,0,true
+fb_2_375_c377,fb_meena_216,comment,Happy Diwali to all,2024-11-06 12:40:29,fb_2_375,14,0,0,true
+fb_2_298_c300,fb_anil_220,comment,Same in our area,2024-11-06 12:41:55,fb_2_298,17,0,0,true
+fb_2_370_c371,fb_pooja_299,comment,True,2024-11-06 12:52:30,fb_2_370,10,0,0,true
+fb_2_383,fb_suresh_239,status,Petrol price went up again in our area #PetrolPrice,2024-11-06 12:55:03,,414,4,18,true
+fb_2_370_c373,fb_rajesh_80,comment,Sahi baat,2024-11-06 13:09:13,fb_2_370,14,0,0,true
+fb_2_338_c340,fb_anil_220,comment,True,2024-11-06 13:26:50,fb_2_338,16,0,0,true
+fb_2_375_c376,fb_meena_241,comment,Happy Diwali to all,2024-11-06 13:37:30,fb_2_375,4,0,0,true
+fb_2_405_c406,fb_sunita_18,comment,Thanks for sharing,2024-11-06 13:47:49,fb_2_405,19,0,0,true
+fb_2_338_c339,fb_suresh_276,comment,Sahi baat,2024-11-06 13:48:37,fb_2_338,6,0,0,true
+fb_2_393,fb_meena_2,status,Festival market is so crowded #Festival,2024-11-06 14:02:09,,116,30,25,true
+fb_2_338_c341,fb_rajesh_176,comment,Thanks for sharing,2024-11-06 14:05:15,fb_2_338,6,0,0,true
+fb_2_368,fb_meena_163,status,"Avoid the highway, huge jam #TrafficJam",2024-11-06 14:32:23,,63,27,8,true
+fb_2_418_c421,fb_rajesh_277,comment,Same in our area,2024-11-06 14:33:38,fb_2_418,19,0,0,true
+fb_2_352,fb_anil_32,status,Metro is faster than road today #DelhiTraffic,2024-11-06 14:33:45,,557,20,7,true
+fb_2_334,fb_deepak_76,status,"Avoid the highway, huge jam #TrafficJam",2024-11-06 14:35:52,,347,30,22,true
+fb_2_410,fb_rajesh_111,status,Who else watched the match today? #INDvsAUS,2024-11-06 14:41:53,,495,19,29,true
+fb_2_306,fb_meena_264,status,Diesel costlier this week #DieselPrice,2024-11-06 14:50:57,,185,36,27,true
+fb_2_352_c356,fb_deepak_135,comment,Sahi baat,2024-11-06 14:57:29,fb_2_352,17,0,0,true
+fb_2_352_c355,fb_anil_273,comment,Agreed,2024-11-06 14:58:07,fb_2_352,17,0,0,true
+fb_2_334_c336,fb_suresh_63,comment,Happy Diwali to all,2024-11-06 15:00:37,fb_2_334,18,0,0,true
+fb_2_357,fb_suresh_131,status,Society Diwali celebration photos #Diwali,2024-11-06 15:01:57,,356,26,0,true
+fb_2_370_c372,fb_pooja_243,comment,Thanks for sharing,2024-11-06 15:12:50,fb_2_370,15,0,0,true
+fb_2_410_c412,fb_sunita_64,comment,True,2024-11-06 15:17:13,fb_2_410,7,0,0,true
+fb_2_410_c413,fb_pooja_67,comment,Agreed,2024-11-06 15:31:52,fb_2_410,5,0,0,true
+fb_2_298_c299,fb_kavita_270,comment,True,2024-11-06 15:34:44,fb_2_298,18,0,0,true
+fb_2_327,fb_suresh_52,status,Petrol price went up again in our area #PetrolPrice,2024-11-06 15:43:02,,454,39,25,true
+fb_2_334_c337,fb_sunita_204,comment,Sahi baat,2024-11-06 15:47:13,fb_2_334,20,0,0,true
+fb_2_418_c419,fb_anil_69,comment,True,2024-11-06 16:07:21,fb_2_418,14,0,0,true
+fb_2_375_c378,fb_pooja_147,comment,True,2024-11-06 16:12:11,fb_2_375,17,0,0,true
+fb_2_387,fb_pooja_256,status,Petrol price went up again in our area #PetrolPrice,2024-11-06 16:17:33,,39,19,0,true
+fb_2_361,fb_meena_234,status,Diesel costlier this week #DieselPrice,2024-11-06 16:19:44,,243,11,29,true
+fb_2_330,fb_meena_118,status,Proud of Team India #TeamIndia,2024-11-06 16:22:09,,313,35,23,true
+fb_2_352_c353,fb_rajesh_53,comment,Agreed,2024-11-06 16:26:59,fb_2_352,13,0,0,true
+fb_2_410_c414,fb_meena_3,comment,Very nice,2024-11-06 16:32:50,fb_2_410,6,0,0,true
+fb_2_357_c358,fb_meena_130,comment,Agreed,2024-11-06 16:53:23,fb_2_357,18,0,0,true
+fb_2_387_c390,fb_rajesh_8,comment,Happy Diwali to all,2024-11-06 17:01:44,fb_2_387,1,0,0,true
+fb_2_361_c365,fb_rajesh_277,comment,Agreed,2024-11-06 17:05:20,fb_2_361,14,0,0,true
+fb_2_357_c359,fb_sunita_30,comment,Same in our area,2024-11-06 17:48:23,fb_2_357,16,0,0,true
+fb_2_334_c335,fb_deepak_190,comment,Agreed,2024-11-06 17:51:09,fb_2_334,1,0,0,true
+fb_2_387_c391,fb_rajesh_80,comment,Happy Diwali to all,2024-11-06 17:52:45,fb_2_387,8,0,0,true
+fb_2_410_c411,fb_anil_296,comment,Sahi baat,2024-11-06 17:57:27,fb_2_410,17,0,0,true
+fb_2_330_c331,fb_anil_17,comment,Sahi baat,2024-11-06 18:34:08,fb_2_330,4,0,0,true
+fb_2_330_c332,fb_meena_230,comment,Thanks for sharing,2024-11-06 19:11:51,fb_2_330,16,0,0,true
+fb_2_352_c354,fb_anil_273,comment,Very nice,2024-11-06 19:20:56,fb_2_352,8,0,0,true
+fb_2_361_c363,fb_kavita_128,comment,Hope it improves,2024-11-06 19:26:17,fb_2_361,18,0,0,true
+fb_2_368_c369,fb_rajesh_123,comment,True,2024-11-06 19:26:37,fb_2_368,6,0,0,true
+fb_2_330_c333,fb_sunita_169,comment,Agreed,2024-11-06 19:56:17,fb_2_330,15,0,0,true
+fb_2_387_c389,fb_sunita_268,comment,Hope it improves,2024-11-06 20:01:53,fb_2_387,11,0,0,true
+fb_2_387_c388,fb_meena_55,comment,Agreed,2024-11-06 20:11:47,fb_2_387,12,0,0,true
+fb_2_361_c364,fb_kavita_101,comment,True,2024-11-06 20:37:41,fb_2_361,0,0,0,true
+fb_2_361_c362,fb_rajesh_140,comment,Sahi baat,2024-11-06 21:14:11,fb_2_361,15,0,0,true
+fb_3_508,fb_anil_32,status,Power cut since morning due to storm #Rain,2024-11-07 01:07:10,,109,38,18,true
+fb_3_439,fb_sunita_240,status,"Avoid the highway, huge jam #TrafficJam",2024-11-07 01:24:51,,547,19,9,true
+fb_3_547,fb_anil_70,status,Who else watched the match today? #INDvsAUS,2024-11-07 01:56:42,,565,9,27,true
+fb_3_550,fb_suresh_262,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-07 01:58:46,,137,35,29,true
+fb_3_550_c551,fb_sunita_99,comment,Sahi baat,2024-11-07 02:12:32,fb_3_550,11,0,0,true
+fb_3_469,fb_rajesh_38,status,Power cut since morning due to storm #Rain,2024-11-07 02:22:48,,535,22,3,true
+fb_3_547_c548,fb_meena_257,comment,Hope it improves,2024-11-07 02:31:03,fb_3_547,14,0,0,true
+fb_3_517,fb_deepak_76,status,Proud of Team India #TeamIndia,2024-11-07 02:31:09,,51,39,13,true
+fb_3_503,fb_pooja_256,status,"Avoid the highway, huge jam #TrafficJam",2024-11-07 02:37:48,,38,24,14,true
+fb_3_451,fb_rajesh_107,status,Metro is faster than road today #DelhiTraffic,2024-11-07 02:50:57,,78,26,16,true
+fb_3_503_c504,fb_deepak_9,comment,Thanks for sharing,2024-11-07 02:52:58,fb_3_503,3,0,0,true
+fb_3_517_c518,fb_anil_106,comment,Thanks for sharing,2024-11-07 02:55:02,fb_3_517,15,0,0,true
+fb_3_470,fb_suresh_260,status,"Avoid the highway, huge jam #TrafficJam",2024-11-07 03:00:02,,487,37,23,true
+fb_3_492,fb_rajesh_154,status,Power cut since morning due to storm #Rain,2024-11-07 03:11:04,,255,19,2,true
+fb_3_522,fb_rajesh_123,status,Power cut since morning due to storm #Rain,2024-11-07 03:31:53,,451,7,20,true
+fb_3_470_c472,fb_kavita_61,comment,Hope it improves,2024-11-07 03:33:39,fb_3_470,1,0,0,true
+fb_3_503_c507,fb_kavita_174,comment,Thanks for sharing,2024-11-07 03:34:09,fb_3_503,18,0,0,true
+fb_3_547_c549,fb_deepak_222,comment,Hope it improves,2024-11-07 03:36:06,fb_3_547,16,0,0,true
+fb_3_503_c505,fb_rajesh_45,comment,Thanks for sharing,2024-11-07 03:37:10,fb_3_503,20,0,0,true
+fb_3_492_c496,fb_suresh_235,comment,True,2024-11-07 03:47:57,fb_3_492,16,0,0,true
+fb_3_517_c519,fb_rajesh_65,comment,Very nice,2024-11-07 04:00:23,fb_3_517,3,0,0,true
+fb_3_492_c494,fb_meena_172,comment,Happy Diwali to all,2024-11-07 04:31:30,fb_3_492,9,0,0,true
+fb_3_464,fb_kavita_110,status,Diesel costlier this week #DieselPrice,2024-11-07 04:56:48,,173,6,10,true
+fb_3_503_c506,fb_kavita_44,comment,Very nice,2024-11-07 04:57:55,fb_3_503,13,0,0,true
+fb_3_517_c520,fb_anil_290,comment,Happy Diwali to all,2024-11-07 04:59:55,fb_3_517,12,0,0,true
+fb_3_492_c495,fb_pooja_82,comment,Hope it improves,2024-11-07 05:01:50,fb_3_492,2,0,0,true
+fb_3_425,fb_kavita_210,status,Petrol price went up again in our area #PetrolPrice,2024-11-07 05:02:57,,436,33,5,true
+fb_3_524,fb_kavita_210,status,Diesel costlier this week #DieselPrice,2024-11-07 05:04:21,,372,35,2,true
+fb_3_478,fb_deepak_57,status,"Avoid the highway, huge jam #TrafficJam",2024-11-07 05:13:38,,346,15,17,true
+fb_3_524_c526,fb_meena_230,comment,True,2024-11-07 05:22:08,fb_3_524,2,0,0,true
+fb_3_514,fb_rajesh_215,status,Metro is faster than road today #DelhiTraffic,2024-11-07 05:24:32,,554,14,5,true
+fb_3_529,fb_suresh_263,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-07 05:25:30,,108,6,11,true
+fb_3_464_c467,fb_meena_6,comment,Happy Diwali to all,2024-11-07 05:27:07,fb_3_464,2,0,0,true
+fb_3_508_c510,fb_deepak_23,comment,Same in our area,2024-11-07 05:38:46,fb_3_508,3,0,0,true
+fb_3_478_c481,fb_sunita_91,comment,Agreed,2024-11-07 05:39:20,fb_3_478,3,0,0,true
+fb_3_508_c509,fb_pooja_93,comment,Sahi baat,2024-11-07 05:41:24,fb_3_508,14,0,0,true
+fb_3_478_c480,fb_rajesh_215,comment,Agreed,2024-11-07 05:49:35,fb_3_478,7,0,0,true
+fb_3_425_c426,fb_anil_69,comment,Very nice,2024-11-07 05:49:40,fb_3_425,20,0,0,true
+fb_3_470_c473,fb_meena_120,comment,Very nice,2024-11-07 05:59:18,fb_3_470,17,0,0,true
+fb_3_444,fb_anil_211,status,Power cut since morning due to storm #Rain,2024-11-07 06:07:54,,7,9,4,true
+fb_3_550_c552,fb_pooja_92,comment,Very nice,2024-11-07 06:34:30,fb_3_550,6,0,0,true
+fb_3_451_c452,fb_rajesh_36,comment,True,2024-11-07 06:41:14,fb_3_451,3,0,0,true
+fb_3_524_c528,fb_meena_114,comment,Agreed,2024-11-07 06:47:58,fb_3_524,19,0,0,true
+fb_3_451_c453,fb_kavita_182,comment,Happy Diwali to all,2024-11-07 06:55:34,fb_3_451,15,0,0,true
+fb_3_470_c471,fb_kavita_167,comment,True,2024-11-07 07:09:29,fb_3_470,2,0,0,true
+fb_3_514_c515,fb_meena_151,comment,Happy Diwali to all,2024-11-07 07:14:50,fb_3_514,12,0,0,true
+fb_3_524_c525,fb_deepak_136,comment,Happy Diwali to all,2024-11-07 07:16:06,fb_3_524,16,0,0,true
+fb_3_458,fb_meena_120,status,Proud of Team India #TeamIndia,2024-11-07 07:21:41,,110,18,19,true
+fb_3_483,fb_pooja_243,status,"Avoid the highway, huge jam #TrafficJam",2024-11-07 07:22:58,,596,15,2,true
+fb_3_492_c493,fb_sunita_12,comment,Agreed,2024-11-07 07:28:14,fb_3_492,9,0,0,true
+fb_3_483_c487,fb_anil_298,comment,Happy Diwali to all,2024-11-07 07:28:43,fb_3_483,4,0,0,true
+fb_3_524_c527,fb_rajesh_74,comment,Agreed,2024-11-07 07:34:34,fb_3_524,8,0,0,true
+fb_3_483_c486,fb_meena_216,comment,Thanks for sharing,2024-11-07 07:40:36,fb_3_483,10,0,0,true
+fb_3_522_c523,fb_deepak_136,comment,Very nice,2024-11-07 07:42:29,fb_3_522,17,0,0,true
+fb_3_423,fb_meena_59,status,Petrol price went up again in our area #PetrolPrice,2024-11-07 08:06:32,,579,24,8,true
+fb_3_444_c445,fb_suresh_188,comment,Same in our area,2024-11-07 08:08:56,fb_3_444,12,0,0,true
+fb_3_478_c479,fb_meena_3,comment,Thanks for sharing,2024-11-07 08:16:24,fb_3_478,19,0,0,true
+fb_3_542,fb_deepak_275,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-07 08:42:08,,55,3,14,true
+fb_3_556,fb_suresh_178,status,Who else watched the match today? #INDvsAUS,2024-11-07 08:42:28,,189,21,7,true
+fb_3_440,fb_rajesh_36,status,Society Diwali celebration photos #Diwali,2024-11-07 08:44:38,,451,28,11,true
+fb_3_440_c442,fb_meena_68,comment,Happy Diwali to all,2024-11-07 08:52:07,fb_3_440,17,0,0,true
+fb_3_464_c465,fb_suresh_165,comment,Hope it improves,2024-11-07 08:52:57,fb_3_464,5,0,0,true
+fb_3_478_c482,fb_pooja_147,comment,Very nice,2024-11-07 08:53:49,fb_3_478,12,0,0,true
+fb_3_483_c484,fb_suresh_231,comment,Agreed,2024-11-07 09:14:48,fb_3_483,13,0,0,true
+fb_3_427,fb_rajesh_107,status,Diesel costlier this week #DieselPrice,2024-11-07 09:23:41,,549,10,6,true
+fb_3_422,fb_rajesh_8,status,Society Diwali celebration photos #Diwali,2024-11-07 09:29:15,,589,19,2,true
+fb_3_447,fb_anil_298,status,Petrol price went up again in our area #PetrolPrice,2024-11-07 09:32:58,,317,23,13,true
+fb_3_553,fb_kavita_61,status,Power cut since morning due to storm #Rain,2024-11-07 09:35:05,,505,26,20,true
+fb_3_529_c531,fb_kavita_186,comment,Very nice,2024-11-07 09:42:14,fb_3_529,1,0,0,true
+fb_3_464_c466,fb_anil_78,comment,Very nice,2024-11-07 09:43:14,fb_3_464,12,0,0,true
+fb_3_545,fb_anil_283,status,Festival market is so crowded #Festival,2024-11-07 09:45:12,,540,30,4,true
+fb_3_440_c443,fb_kavita_44,comment,Sahi baat,2024-11-07 10:10:28,fb_3_440,11,0,0,true
+fb_3_529_c530,fb_rajesh_38,comment,True,2024-11-07 10:12:41,fb_3_529,7,0,0,true
+fb_3_537,fb_anil_106,status,Petrol price went up again in our area #PetrolPrice,2024-11-07 10:13:38,,328,35,16,true
+fb_3_542_c543,fb_suresh_39,comment,Thanks for sharing,2024-11-07 10:31:01,fb_3_542,12,0,0,true
+fb_3_447_c450,fb_meena_113,comment,Happy Diwali to all,2024-11-07 10:55:43,fb_3_447,15,0,0,true
+fb_3_501,fb_suresh_260,status,Proud of Team India #TeamIndia,2024-11-07 10:58:36,,368,15,24,true
+fb_3_423_c424,fb_kavita_133,comment,Hope it improves,2024-11-07 10:59:39,fb_3_423,13,0,0,true
+fb_3_556_c557,fb_anil_125,comment,Thanks for sharing,2024-11-07 11:02:30,fb_3_556,18,0,0,true
+fb_3_501_c502,fb_kavita_44,comment,Hope it improves,2024-11-07 11:09:44,fb_3_501,12,0,0,true
+fb_3_427_c428,fb_pooja_94,comment,Thanks for sharing,2024-11-07 11:22:07,fb_3_427,15,0,0,true
+fb_3_542_c544,fb_deepak_187,comment,True,2024-11-07 11:22:57,fb_3_542,20,0,0,true
+fb_3_440_c441,fb_pooja_256,comment,Very nice,2024-11-07 11:24:37,fb_3_440,12,0,0,true
+fb_3_521,fb_deepak_179,status,Metro is faster than road today #DelhiTraffic,2024-11-07 11:29:45,,42,16,16,true
+fb_3_553_c555,fb_pooja_181,comment,Hope it improves,2024-11-07 11:42:48,fb_3_553,9,0,0,true
+fb_3_553_c554,fb_anil_149,comment,Same in our area,2024-11-07 11:53:08,fb_3_553,17,0,0,true
+fb_3_429,fb_meena_163,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-07 12:06:33,,226,4,18,true
+fb_3_447_c449,fb_pooja_103,comment,Very nice,2024-11-07 12:08:53,fb_3_447,7,0,0,true
+fb_3_483_c485,fb_sunita_237,comment,Hope it improves,2024-11-07 12:19:10,fb_3_483,20,0,0,true
+fb_3_429_c431,fb_sunita_289,comment,True,2024-11-07 12:39:51,fb_3_429,11,0,0,true
+fb_3_516,fb_pooja_244,status,Who else watched the match today? #INDvsAUS,2024-11-07 13:12:05,,275,40,9,true
+fb_3_436,fb_meena_113,status,Society Diwali celebration photos #Diwali,2024-11-07 13:30:11,,503,27,13,true
+fb_3_511,fb_suresh_297,status,Proud of Team India #TeamIndia,2024-11-07 13:34:44,,370,31,2,true
+fb_3_545_c546,fb_rajesh_74,comment,True,2024-11-07 13:45:12,fb_3_545,13,0,0,true
+fb_3_537_c539,fb_anil_69,comment,Sahi baat,2024-11-07 13:49:13,fb_3_537,17,0,0,true
+fb_3_537_c538,fb_rajesh_80,comment,Thanks for sharing,2024-11-07 14:02:03,fb_3_537,11,0,0,true
+fb_3_447_c448,fb_rajesh_145,comment,Hope it improves,2024-11-07 14:08:35,fb_3_447,11,0,0,true
+fb_3_537_c541,fb_anil_166,comment,Happy Diwali to all,2024-11-07 14:31:34,fb_3_537,6,0,0,true
+fb_3_537_c540,fb_suresh_239,comment,Thanks for sharing,2024-11-07 14:34:10,fb_3_537,2,0,0,true
+fb_3_532,fb_anil_35,status,"Avoid the highway, huge jam #TrafficJam",2024-11-07 14:41:43,,400,27,9,true
+fb_3_497,fb_rajesh_154,status,Power cut since morning due to storm #Rain,2024-11-07 14:43:58,,498,35,22,true
+fb_3_429_c432,fb_rajesh_123,comment,Hope it improves,2024-11-07 14:46:23,fb_3_429,10,0,0,true
+fb_3_488,fb_kavita_133,status,Proud of Team India #TeamIndia,2024-11-07 14:54:24,,548,38,15,true
+fb_3_459,fb_kavita_84,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-07 14:56:57,,142,39,16,true
+fb_3_429_c433,fb_suresh_191,comment,Hope it improves,2024-11-07 14:57:00,fb_3_429,17,0,0,true
+fb_3_497_c499,fb_meena_16,comment,Happy Diwali to all,2024-11-07 15:01:56,fb_3_497,15,0,0,true
+fb_3_454,fb_pooja_244,status,Proud of Team India #TeamIndia,2024-11-07 15:15:41,,265,9,29,true
+fb_3_459_c462,fb_suresh_162,comment,Happy Diwali to all,2024-11-07 15:19:29,fb_3_459,12,0,0,true
+fb_3_429_c430,fb_deepak_9,comment,Agreed,2024-11-07 15:29:25,fb_3_429,18,0,0,true
+fb_3_488_c489,fb_anil_47,comment,Very nice,2024-11-07 15:30:30,fb_3_488,4,0,0,true
+fb_3_436_c438,fb_kavita_253,comment,Agreed,2024-11-07 15:45:25,fb_3_436,11,0,0,true
+fb_3_459_c463,fb_meena_130,comment,Happy Diwali to all,2024-11-07 15:45:29,fb_3_459,3,0,0,true
+fb_3_511_c512,fb_kavita_88,comment,Thanks for sharing,2024-11-07 16:03:31,fb_3_511,10,0,0,true
+fb_3_488_c491,fb_anil_197,comment,Happy Diwali to all,2024-11-07 16:07:49,fb_3_488,10,0,0,true
+fb_3_497_c500,fb_suresh_201,comment,Agreed,2024-11-07 16:21:50,fb_3_497,6,0,0,true
+fb_3_446,fb_meena_224,status,Petrol price went up again in our area #PetrolPrice,2024-11-07 16:27:03,,243,21,22,true
+fb_3_474,fb_anil_180,status,Who else watched the match today? #INDvsAUS,2024-11-07 16:30:00,,486,15,19,true
+fb_3_459_c461,fb_rajesh_107,comment,Sahi baat,2024-11-07 16:31:01,fb_3_459,1,0,0,true
+fb_3_454_c457,fb_meena_114,comment,Happy Diwali to all,2024-11-07 16:37:00,fb_3_454,0,0,0,true
+fb_3_468,fb_pooja_82,status,Society Diwali celebration photos #Diwali,2024-11-07 16:55:37,,109,14,7,true
+fb_3_434,fb_rajesh_83,status,"Avoid the highway, huge jam #TrafficJam",2024-11-07 16:57:34,,308,13,6,true
+fb_rumour_share,fb_varunapur_residents_group,share,"URGENT - forwarded: Varunapur Dam has cracked, evacuate now! Share with everyone in the group #VarunapurDam #Emergency",2024-11-07 17:07:00,,410,180,950,true
+fb_rumour_c78,fb_rajesh_122,comment,Kya sach mein?,2024-11-07 17:07:32,fb_rumour_share,0,0,0,true
+fb_3_511_c513,fb_meena_130,comment,Very nice,2024-11-07 17:08:16,fb_3_511,14,0,0,true
+fb_rumour_c73,fb_sunita_91,comment,"Stop spreading panic, check official news",2024-11-07 17:09:54,fb_rumour_share,0,0,0,true
+fb_3_532_c535,fb_suresh_297,comment,True,2024-11-07 17:10:23,fb_3_532,6,0,0,true
+fb_rumour_c81,fb_rajesh_107,comment,"Stop spreading panic, check official news",2024-11-07 17:11:23,fb_rumour_share,0,0,0,true
+fb_rumour_c9,fb_meena_264,comment,"Stop spreading panic, check official news",2024-11-07 17:11:31,fb_rumour_share,0,0,0,true
+fb_rumour_c83,fb_suresh_165,comment,"Stop spreading panic, check official news",2024-11-07 17:11:31,fb_rumour_share,0,0,0,true
+fb_rumour_c51,fb_anil_17,comment,Packing bags just in case,2024-11-07 17:12:43,fb_rumour_share,0,0,0,true
+fb_rumour_c27,fb_sunita_62,comment,"Please share, this is serious",2024-11-07 17:13:01,fb_rumour_share,0,0,0,true
+fb_rumour_c32,fb_kavita_192,comment,Oh god is this true? Calling my family,2024-11-07 17:13:01,fb_rumour_share,0,0,0,true
+fb_rumour_c47,fb_deepak_136,comment,"My parents live downstream, very worried",2024-11-07 17:13:44,fb_rumour_share,0,0,0,true
+fb_rumour_c40,fb_deepak_190,comment,Someone confirm with the collector office,2024-11-07 17:13:55,fb_rumour_share,0,0,0,true
+fb_rumour_c16,fb_rajesh_8,comment,Kya sach mein?,2024-11-07 17:14:16,fb_rumour_share,0,0,0,true
+fb_rumour_c19,fb_pooja_94,comment,"Stop spreading panic, check official news",2024-11-07 17:14:19,fb_rumour_share,0,0,0,true
+fb_rumour_c85,fb_anil_272,comment,"My parents live downstream, very worried",2024-11-07 17:14:57,fb_rumour_share,0,0,0,true
+fb_rumour_c24,fb_meena_224,comment,"My parents live downstream, very worried",2024-11-07 17:15:27,fb_rumour_share,0,0,0,true
+fb_rumour_c54,fb_pooja_293,comment,"Stop spreading panic, check official news",2024-11-07 17:15:33,fb_rumour_share,0,0,0,true
+fb_rumour_c57,fb_sunita_268,comment,"Dam officials say it is safe, this is fake",2024-11-07 17:15:52,fb_rumour_share,0,0,0,true
+fb_rumour_c26,fb_meena_34,comment,Kya sach mein?,2024-11-07 17:16:58,fb_rumour_share,0,0,0,true
+fb_rumour_c80,fb_meena_246,comment,"My parents live downstream, very worried",2024-11-07 17:17:29,fb_rumour_share,0,0,0,true
+fb_rumour_c77,fb_pooja_117,comment,Someone confirm with the collector office,2024-11-07 17:17:47,fb_rumour_share,0,0,0,true
+fb_rumour_c43,fb_kavita_133,comment,"Stop spreading panic, check official news",2024-11-07 17:17:56,fb_rumour_share,0,0,0,true
+fb_rumour_c35,fb_anil_198,comment,Someone confirm with the collector office,2024-11-07 17:18:30,fb_rumour_share,0,0,0,true
+fb_rumour_c68,fb_suresh_124,comment,"My parents live downstream, very worried",2024-11-07 17:18:45,fb_rumour_share,0,0,0,true
+fb_3_459_c460,fb_suresh_235,comment,Thanks for sharing,2024-11-07 17:19:01,fb_3_459,4,0,0,true
+fb_rumour_c23,fb_meena_113,comment,Kya sach mein?,2024-11-07 17:19:19,fb_rumour_share,0,0,0,true
+fb_3_497_c498,fb_sunita_240,comment,Agreed,2024-11-07 17:20:12,fb_3_497,9,0,0,true
+fb_rumour_c36,fb_deepak_108,comment,"My parents live downstream, very worried",2024-11-07 17:20:21,fb_rumour_share,0,0,0,true
+fb_rumour_c86,fb_pooja_226,comment,Kya sach mein?,2024-11-07 17:20:33,fb_rumour_share,0,0,0,true
+fb_rumour_c4,fb_suresh_52,comment,"Stop spreading panic, check official news",2024-11-07 17:20:40,fb_rumour_share,0,0,0,true
+fb_rumour_c29,fb_anil_197,comment,"My parents live downstream, very worried",2024-11-07 17:20:44,fb_rumour_share,0,0,0,true
+fb_rumour_c71,fb_sunita_268,comment,"My parents live downstream, very worried",2024-11-07 17:21:51,fb_rumour_share,0,0,0,true
+fb_rumour_c15,fb_kavita_236,comment,"Stop spreading panic, check official news",2024-11-07 17:23:02,fb_rumour_share,0,0,0,true
+fb_rumour_c22,fb_sunita_77,comment,Packing bags just in case,2024-11-07 17:23:08,fb_rumour_share,0,0,0,true
+fb_rumour_c52,fb_kavita_183,comment,"Stop spreading panic, check official news",2024-11-07 17:23:15,fb_rumour_share,0,0,0,true
+fb_rumour_c10,fb_rajesh_42,comment,"Please share, this is serious",2024-11-07 17:24:20,fb_rumour_share,0,0,0,true
+fb_rumour_c38,fb_rajesh_140,comment,"Stop spreading panic, check official news",2024-11-07 17:24:44,fb_rumour_share,0,0,0,true
+fb_rumour_c62,fb_rajesh_271,comment,"Stop spreading panic, check official news",2024-11-07 17:25:07,fb_rumour_share,0,0,0,true
+fb_rumour_c89,fb_suresh_206,comment,Someone confirm with the collector office,2024-11-07 17:27:27,fb_rumour_share,0,0,0,true
+fb_rumour_c74,fb_meena_118,comment,Packing bags just in case,2024-11-07 17:27:38,fb_rumour_share,0,0,0,true
+fb_rumour_c13,fb_rajesh_5,comment,Kya sach mein?,2024-11-07 17:27:46,fb_rumour_share,0,0,0,true
+fb_rumour_c20,fb_meena_48,comment,"My parents live downstream, very worried",2024-11-07 17:28:01,fb_rumour_share,0,0,0,true
+fb_rumour_c66,fb_pooja_252,comment,"My parents live downstream, very worried",2024-11-07 17:28:48,fb_rumour_share,0,0,0,true
+fb_rumour_c61,fb_meena_96,comment,"Stop spreading panic, check official news",2024-11-07 17:28:50,fb_rumour_share,0,0,0,true
+fb_rumour_c76,fb_pooja_94,comment,Kya sach mein?,2024-11-07 17:29:15,fb_rumour_share,0,0,0,true
+fb_rumour_c87,fb_anil_14,comment,Oh god is this true? Calling my family,2024-11-07 17:29:33,fb_rumour_share,0,0,0,true
+fb_3_436_c437,fb_rajesh_154,comment,Hope it improves,2024-11-07 17:30:34,fb_3_436,8,0,0,true
+fb_rumour_c55,fb_deepak_161,comment,Packing bags just in case,2024-11-07 17:30:41,fb_rumour_share,0,0,0,true
+fb_rumour_c31,fb_suresh_262,comment,"Please share, this is serious",2024-11-07 17:31:17,fb_rumour_share,0,0,0,true
+fb_rumour_c21,fb_meena_224,comment,"Please share, this is serious",2024-11-07 17:32:10,fb_rumour_share,0,0,0,true
+fb_rumour_c0,fb_anil_245,comment,Oh god is this true? Calling my family,2024-11-07 17:33:56,fb_rumour_share,0,0,0,true
+fb_rumour_c34,fb_pooja_252,comment,Kya sach mein?,2024-11-07 17:33:56,fb_rumour_share,0,0,0,true
+fb_rumour_c84,fb_pooja_117,comment,Packing bags just in case,2024-11-07 17:34:04,fb_rumour_share,0,0,0,true
+fb_3_488_c490,fb_rajesh_261,comment,Agreed,2024-11-07 17:35:06,fb_3_488,7,0,0,true
+fb_rumour_c33,fb_rajesh_154,comment,"Stop spreading panic, check official news",2024-11-07 17:36:01,fb_rumour_share,0,0,0,true
+fb_rumour_c48,fb_pooja_258,comment,"Stop spreading panic, check official news",2024-11-07 17:36:09,fb_rumour_share,0,0,0,true
+fb_3_474_c475,fb_sunita_60,comment,Same in our area,2024-11-07 17:36:20,fb_3_474,4,0,0,true
+fb_rumour_c50,fb_pooja_54,comment,Someone confirm with the collector office,2024-11-07 17:36:31,fb_rumour_share,0,0,0,true
+fb_rumour_c41,fb_sunita_13,comment,"Dam officials say it is safe, this is fake",2024-11-07 17:36:40,fb_rumour_share,0,0,0,true
+fb_rumour_c58,fb_pooja_10,comment,"Please share, this is serious",2024-11-07 17:39:19,fb_rumour_share,0,0,0,true
+fb_rumour_c1,fb_sunita_242,comment,Oh god is this true? Calling my family,2024-11-07 17:41:04,fb_rumour_share,0,0,0,true
+fb_rumour_c69,fb_kavita_144,comment,Someone confirm with the collector office,2024-11-07 17:43:12,fb_rumour_share,0,0,0,true
+fb_rumour_c11,fb_kavita_253,comment,"Dam officials say it is safe, this is fake",2024-11-07 17:43:25,fb_rumour_share,0,0,0,true
+fb_rumour_c46,fb_suresh_239,comment,"Please share, this is serious",2024-11-07 17:44:07,fb_rumour_share,0,0,0,true
+fb_rumour_c63,fb_rajesh_111,comment,"Dam officials say it is safe, this is fake",2024-11-07 17:46:27,fb_rumour_share,0,0,0,true
+fb_rumour_c2,fb_meena_113,comment,Someone confirm with the collector office,2024-11-07 17:47:47,fb_rumour_share,0,0,0,true
+fb_rumour_c12,fb_rajesh_42,comment,"Dam officials say it is safe, this is fake",2024-11-07 17:49:25,fb_rumour_share,0,0,0,true
+fb_rumour_c5,fb_deepak_109,comment,Oh god is this true? Calling my family,2024-11-07 17:51:59,fb_rumour_share,0,0,0,true
+fb_rumour_c42,fb_rajesh_280,comment,"My parents live downstream, very worried",2024-11-07 17:52:55,fb_rumour_share,0,0,0,true
+fb_rumour_c75,fb_meena_151,comment,Packing bags just in case,2024-11-07 17:53:40,fb_rumour_share,0,0,0,true
+fb_rumour_c25,fb_sunita_56,comment,"My parents live downstream, very worried",2024-11-07 17:55:10,fb_rumour_share,0,0,0,true
+fb_rumour_c30,fb_deepak_31,comment,"Dam officials say it is safe, this is fake",2024-11-07 17:55:37,fb_rumour_share,0,0,0,true
+fb_rumour_c82,fb_anil_284,comment,"My parents live downstream, very worried",2024-11-07 17:57:12,fb_rumour_share,0,0,0,true
+fb_rumour_c17,fb_anil_21,comment,Someone confirm with the collector office,2024-11-07 17:58:20,fb_rumour_share,0,0,0,true
+fb_rumour_c37,fb_sunita_119,comment,Someone confirm with the collector office,2024-11-07 17:58:37,fb_rumour_share,0,0,0,true
+fb_rumour_c67,fb_anil_290,comment,"Please share, this is serious",2024-11-07 17:58:44,fb_rumour_share,0,0,0,true
+fb_rumour_c53,fb_deepak_285,comment,"Stop spreading panic, check official news",2024-11-07 17:58:53,fb_rumour_share,0,0,0,true
+fb_rumour_c59,fb_anil_290,comment,Oh god is this true? Calling my family,2024-11-07 17:59:36,fb_rumour_share,0,0,0,true
+fb_rumour_c72,fb_anil_283,comment,Kya sach mein?,2024-11-07 18:01:03,fb_rumour_share,0,0,0,true
+fb_rumour_c65,fb_suresh_262,comment,Packing bags just in case,2024-11-07 18:01:13,fb_rumour_share,0,0,0,true
+fb_rumour_c18,fb_deepak_57,comment,Oh god is this true? Calling my family,2024-11-07 18:02:07,fb_rumour_share,0,0,0,true
+fb_rumour_c64,fb_meena_264,comment,Oh god is this true? Calling my family,2024-11-07 18:02:15,fb_rumour_share,0,0,0,true
+fb_rumour_c44,fb_suresh_201,comment,"Stop spreading panic, check official news",2024-11-07 18:02:38,fb_rumour_share,0,0,0,true
+fb_rumour_c56,fb_kavita_7,comment,"Dam officials say it is safe, this is fake",2024-11-07 18:05:38,fb_rumour_share,0,0,0,true
+fb_rumour_c7,fb_sunita_240,comment,Kya sach mein?,2024-11-07 18:10:38,fb_rumour_share,0,0,0,true
+fb_rumour_c39,fb_sunita_126,comment,Packing bags just in case,2024-11-07 18:16:19,fb_rumour_share,0,0,0,true
+fb_rumour_c14,fb_kavita_236,comment,Kya sach mein?,2024-11-07 18:19:14,fb_rumour_share,0,0,0,true
+fb_rumour_c70,fb_meena_16,comment,Oh god is this true? Calling my family,2024-11-07 18:20:21,fb_rumour_share,0,0,0,true
+fb_rumour_c8,fb_sunita_12,comment,Oh god is this true? Calling my family,2024-11-07 18:23:11,fb_rumour_share,0,0,0,true
+fb_3_532_c534,fb_deepak_108,comment,Agreed,2024-11-07 18:38:12,fb_3_532,17,0,0,true
+fb_rumour_c79,fb_anil_283,comment,Kya sach mein?,2024-11-07 18:49:06,fb_rumour_share,0,0,0,true
+fb_rumour_c28,fb_deepak_136,comment,"Stop spreading panic, check official news",2024-11-07 18:54:44,fb_rumour_share,0,0,0,true
+fb_3_532_c533,fb_anil_189,comment,Sahi baat,2024-11-07 19:10:29,fb_3_532,10,0,0,true
+fb_3_434_c435,fb_rajesh_291,comment,Hope it improves,2024-11-07 19:10:32,fb_3_434,7,0,0,true
+fb_rumour_c49,fb_pooja_67,comment,Someone confirm with the collector office,2024-11-07 19:19:57,fb_rumour_share,0,0,0,true
+fb_rumour_c60,fb_pooja_229,comment,"Stop spreading panic, check official news",2024-11-07 19:23:25,fb_rumour_share,0,0,0,true
+fb_3_454_c455,fb_sunita_64,comment,Agreed,2024-11-07 19:25:08,fb_3_454,6,0,0,true
+fb_debunk,fb_district_admin_varunapur,status,District Administration Varunapur: The Varunapur Dam is safe. Reports of a crack are false. Please do not forward unverified messages. #VarunapurDam #FactCheck,2024-11-07 19:30:00,,2300,240,3100,true
+fb_debunk_c19,fb_suresh_239,comment,Relief!,2024-11-07 19:34:41,fb_debunk,0,0,0,true
+fb_3_454_c456,fb_pooja_293,comment,Happy Diwali to all,2024-11-07 19:34:55,fb_3_454,4,0,0,true
+fb_debunk_c5,fb_meena_118,comment,Relief!,2024-11-07 19:37:14,fb_debunk,0,0,0,true
+fb_debunk_c9,fb_meena_230,comment,Thank god it's fake,2024-11-07 19:37:29,fb_debunk,0,0,0,true
+fb_3_474_c476,fb_meena_2,comment,Thanks for sharing,2024-11-07 19:38:00,fb_3_474,0,0,0,true
+fb_3_532_c536,fb_kavita_186,comment,Happy Diwali to all,2024-11-07 19:40:50,fb_3_532,0,0,0,true
+fb_debunk_c21,fb_sunita_223,comment,People should stop forwarding,2024-11-07 19:42:10,fb_debunk,0,0,0,true
+fb_debunk_c3,fb_rajesh_277,comment,Relief!,2024-11-07 19:47:43,fb_debunk,0,0,0,true
+fb_debunk_c0,fb_suresh_247,comment,Relief!,2024-11-07 19:47:58,fb_debunk,0,0,0,true
+fb_debunk_c15,fb_deepak_136,comment,Thank god it's fake,2024-11-07 19:50:23,fb_debunk,0,0,0,true
+fb_debunk_c7,fb_suresh_279,comment,People should stop forwarding,2024-11-07 19:57:58,fb_debunk,0,0,0,true
+fb_rumour_c88,fb_deepak_109,comment,"Stop spreading panic, check official news",2024-11-07 19:59:13,fb_rumour_share,0,0,0,true
+fb_debunk_c24,fb_sunita_91,comment,People should stop forwarding,2024-11-07 20:02:48,fb_debunk,0,0,0,true
+fb_debunk_c22,fb_meena_134,comment,Relief!,2024-11-07 20:04:54,fb_debunk,0,0,0,true
+fb_debunk_c17,fb_pooja_15,comment,Relief!,2024-11-07 20:12:08,fb_debunk,0,0,0,true
+fb_debunk_c1,fb_suresh_52,comment,People should stop forwarding,2024-11-07 20:14:36,fb_debunk,0,0,0,true
+fb_debunk_c14,fb_suresh_288,comment,Thank you for clarifying,2024-11-07 20:14:47,fb_debunk,0,0,0,true
+fb_debunk_c2,fb_meena_151,comment,Thank god it's fake,2024-11-07 20:15:02,fb_debunk,0,0,0,true
+fb_debunk_c13,fb_meena_163,comment,Thank god it's fake,2024-11-07 20:15:07,fb_debunk,0,0,0,true
+fb_debunk_c20,fb_rajesh_280,comment,Thank god it's fake,2024-11-07 20:21:12,fb_debunk,0,0,0,true
+fb_rumour_c45,fb_deepak_161,comment,Kya sach mein?,2024-11-07 20:30:38,fb_rumour_share,0,0,0,true
+fb_debunk_c8,fb_sunita_13,comment,Relief!,2024-11-07 20:34:51,fb_debunk,0,0,0,true
+fb_debunk_c12,fb_anil_29,comment,Relief!,2024-11-07 20:41:57,fb_debunk,0,0,0,true
+fb_debunk_c16,fb_suresh_213,comment,Thank god it's fake,2024-11-07 20:47:51,fb_debunk,0,0,0,true
+fb_debunk_c6,fb_anil_66,comment,Thank god it's fake,2024-11-07 20:48:24,fb_debunk,0,0,0,true
+fb_debunk_c10,fb_anil_87,comment,Relief!,2024-11-07 20:49:16,fb_debunk,0,0,0,true
+fb_rumour_c3,fb_anil_220,comment,"Please share, this is serious",2024-11-07 21:02:31,fb_rumour_share,0,0,0,true
+fb_rumour_c6,fb_meena_143,comment,Someone confirm with the collector office,2024-11-07 21:04:18,fb_rumour_share,0,0,0,true
+fb_debunk_c4,fb_kavita_210,comment,People should stop forwarding,2024-11-07 21:08:20,fb_debunk,0,0,0,true
+fb_debunk_c18,fb_anil_125,comment,Relief!,2024-11-07 21:11:29,fb_debunk,0,0,0,true
+fb_debunk_c23,fb_sunita_30,comment,Relief!,2024-11-07 21:13:57,fb_debunk,0,0,0,true
+fb_debunk_c11,fb_anil_87,comment,Thank god it's fake,2024-11-07 21:20:42,fb_debunk,0,0,0,true
+fb_3_474_c477,fb_rajesh_5,comment,True,2024-11-07 21:21:52,fb_3_474,8,0,0,true
+fb_4_684,fb_pooja_10,status,Petrol price went up again in our area #PetrolPrice,2024-11-08 01:01:35,,54,5,9,true
+fb_4_578,fb_rajesh_83,status,"Avoid the highway, huge jam #TrafficJam",2024-11-08 01:31:52,,400,1,26,true
+fb_4_684_c687,fb_suresh_20,comment,True,2024-11-08 02:06:50,fb_4_684,5,0,0,true
+fb_4_684_c686,fb_rajesh_80,comment,Thanks for sharing,2024-11-08 02:17:59,fb_4_684,2,0,0,true
+fb_4_558,fb_kavita_37,status,Power cut since morning due to storm #Rain,2024-11-08 02:20:29,,440,38,24,true
+fb_4_591,fb_suresh_191,status,Diesel costlier this week #DieselPrice,2024-11-08 02:28:40,,28,35,11,true
+fb_4_664,fb_rajesh_74,status,Metro is faster than road today #DelhiTraffic,2024-11-08 02:30:39,,498,14,12,true
+fb_4_645,fb_anil_166,status,Diesel costlier this week #DieselPrice,2024-11-08 03:02:35,,578,11,4,true
+fb_4_603,fb_meena_139,status,Metro is faster than road today #DelhiTraffic,2024-11-08 03:17:49,,180,19,6,true
+fb_4_614,fb_deepak_135,status,Who else watched the match today? #INDvsAUS,2024-11-08 03:34:56,,128,13,11,true
+fb_4_617,fb_sunita_33,status,Who else watched the match today? #INDvsAUS,2024-11-08 03:44:18,,580,33,5,true
+fb_4_580,fb_pooja_209,status,Metro is faster than road today #DelhiTraffic,2024-11-08 03:49:29,,45,13,26,true
+fb_4_664_c666,fb_kavita_88,comment,Agreed,2024-11-08 04:12:46,fb_4_664,19,0,0,true
+fb_4_614_c615,fb_pooja_43,comment,Happy Diwali to all,2024-11-08 04:15:39,fb_4_614,14,0,0,true
+fb_4_591_c594,fb_anil_47,comment,Happy Diwali to all,2024-11-08 04:16:00,fb_4_591,3,0,0,true
+fb_4_591_c595,fb_anil_47,comment,Thanks for sharing,2024-11-08 04:18:43,fb_4_591,14,0,0,true
+fb_4_563,fb_rajesh_65,status,Who else watched the match today? #INDvsAUS,2024-11-08 04:21:28,,523,15,30,true
+fb_4_617_c618,fb_rajesh_111,comment,Sahi baat,2024-11-08 04:23:04,fb_4_617,6,0,0,true
+fb_4_580_c581,fb_rajesh_42,comment,Same in our area,2024-11-08 04:27:50,fb_4_580,2,0,0,true
+fb_4_591_c592,fb_sunita_56,comment,Hope it improves,2024-11-08 04:48:21,fb_4_591,13,0,0,true
+fb_4_603_c606,fb_rajesh_280,comment,Happy Diwali to all,2024-11-08 04:52:02,fb_4_603,19,0,0,true
+fb_4_684_c685,fb_rajesh_74,comment,True,2024-11-08 04:53:13,fb_4_684,7,0,0,true
+fb_4_580_c582,fb_suresh_297,comment,Happy Diwali to all,2024-11-08 04:56:45,fb_4_580,14,0,0,true
+fb_4_638,fb_deepak_76,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-08 05:04:47,,307,38,25,true
+fb_4_566,fb_anil_160,status,Metro is faster than road today #DelhiTraffic,2024-11-08 05:18:13,,143,27,18,true
+fb_4_664_c667,fb_suresh_263,comment,Same in our area,2024-11-08 05:28:37,fb_4_664,15,0,0,true
+fb_4_558_c560,fb_suresh_191,comment,True,2024-11-08 05:32:52,fb_4_558,2,0,0,true
+fb_4_638_c641,fb_deepak_177,comment,Agreed,2024-11-08 05:39:41,fb_4_638,0,0,0,true
+fb_4_650,fb_anil_158,status,Power cut since morning due to storm #Rain,2024-11-08 05:41:00,,325,7,5,true
+fb_4_637,fb_sunita_223,status,Society Diwali celebration photos #Diwali,2024-11-08 05:44:12,,360,29,1,true
+fb_4_680,fb_anil_90,status,Diesel costlier this week #DieselPrice,2024-11-08 06:03:56,,506,8,22,true
+fb_4_680_c682,fb_kavita_167,comment,Very nice,2024-11-08 06:13:02,fb_4_680,6,0,0,true
+fb_4_650_c652,fb_kavita_182,comment,True,2024-11-08 06:14:36,fb_4_650,8,0,0,true
+fb_4_659,fb_deepak_46,status,"Avoid the highway, huge jam #TrafficJam",2024-11-08 06:17:03,,127,6,27,true
+fb_4_591_c593,fb_pooja_94,comment,True,2024-11-08 06:22:58,fb_4_591,14,0,0,true
+fb_4_578_c579,fb_meena_113,comment,True,2024-11-08 06:29:13,fb_4_578,13,0,0,true
+fb_4_603_c605,fb_deepak_57,comment,Agreed,2024-11-08 06:32:53,fb_4_603,2,0,0,true
+fb_4_558_c559,fb_suresh_225,comment,True,2024-11-08 06:35:24,fb_4_558,15,0,0,true
+fb_4_558_c561,fb_sunita_204,comment,True,2024-11-08 06:40:01,fb_4_558,11,0,0,true
+fb_4_566_c567,fb_rajesh_280,comment,Happy Diwali to all,2024-11-08 06:42:06,fb_4_566,3,0,0,true
+fb_4_664_c665,fb_deepak_108,comment,Hope it improves,2024-11-08 06:52:17,fb_4_664,20,0,0,true
+fb_4_659_c662,fb_meena_241,comment,Agreed,2024-11-08 06:55:05,fb_4_659,11,0,0,true
+fb_4_650_c654,fb_deepak_275,comment,Happy Diwali to all,2024-11-08 07:07:05,fb_4_650,8,0,0,true
+fb_4_650_c651,fb_sunita_259,comment,True,2024-11-08 07:08:56,fb_4_650,11,0,0,true
+fb_4_580_c583,fb_kavita_88,comment,Hope it improves,2024-11-08 07:17:03,fb_4_580,19,0,0,true
+fb_4_558_c562,fb_kavita_159,comment,Sahi baat,2024-11-08 07:18:23,fb_4_558,8,0,0,true
+fb_4_633,fb_suresh_165,status,Society Diwali celebration photos #Diwali,2024-11-08 07:18:43,,540,25,19,true
+fb_4_650_c653,fb_pooja_293,comment,Hope it improves,2024-11-08 07:20:12,fb_4_650,4,0,0,true
+fb_4_680_c683,fb_sunita_150,comment,Very nice,2024-11-08 07:20:23,fb_4_680,12,0,0,true
+fb_4_603_c604,fb_kavita_286,comment,Same in our area,2024-11-08 07:28:41,fb_4_603,3,0,0,true
+fb_4_614_c616,fb_deepak_57,comment,Happy Diwali to all,2024-11-08 07:29:24,fb_4_614,16,0,0,true
+fb_4_642,fb_suresh_39,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-08 07:36:50,,574,12,24,true
+fb_4_638_c639,fb_rajesh_65,comment,Very nice,2024-11-08 07:40:18,fb_4_638,13,0,0,true
+fb_4_680_c681,fb_rajesh_115,comment,Same in our area,2024-11-08 07:40:46,fb_4_680,0,0,0,true
+fb_4_638_c640,fb_deepak_190,comment,Happy Diwali to all,2024-11-08 08:24:57,fb_4_638,17,0,0,true
+fb_4_674,fb_anil_125,status,Power cut since morning due to storm #Rain,2024-11-08 08:25:15,,382,34,22,true
+fb_4_693,fb_suresh_131,status,"Avoid the highway, huge jam #TrafficJam",2024-11-08 08:27:48,,553,1,6,true
+fb_4_563_c564,fb_meena_233,comment,Thanks for sharing,2024-11-08 08:33:15,fb_4_563,0,0,0,true
+fb_4_596,fb_sunita_240,status,Petrol price went up again in our area #PetrolPrice,2024-11-08 08:40:45,,213,21,19,true
+fb_4_573,fb_deepak_57,status,Metro is faster than road today #DelhiTraffic,2024-11-08 08:57:01,,329,25,22,true
+fb_4_563_c565,fb_anil_66,comment,Same in our area,2024-11-08 09:14:18,fb_4_563,9,0,0,true
+fb_4_669,fb_deepak_76,status,Society Diwali celebration photos #Diwali,2024-11-08 09:19:58,,543,32,22,true
+fb_4_668,fb_anil_142,status,"Avoid the highway, huge jam #TrafficJam",2024-11-08 09:31:46,,530,13,14,true
+fb_4_596_c600,fb_pooja_252,comment,Agreed,2024-11-08 09:46:29,fb_4_596,11,0,0,true
+fb_4_609,fb_pooja_10,status,Metro is faster than road today #DelhiTraffic,2024-11-08 09:57:18,,72,39,25,true
+fb_4_674_c678,fb_meena_224,comment,Sahi baat,2024-11-08 10:15:12,fb_4_674,13,0,0,true
+fb_4_609_c610,fb_deepak_135,comment,Happy Diwali to all,2024-11-08 10:21:42,fb_4_609,4,0,0,true
+fb_4_659_c661,fb_suresh_153,comment,True,2024-11-08 10:23:25,fb_4_659,2,0,0,true
+fb_4_573_c576,fb_deepak_177,comment,Agreed,2024-11-08 10:23:46,fb_4_573,5,0,0,true
+fb_4_659_c660,fb_anil_21,comment,Happy Diwali to all,2024-11-08 10:30:26,fb_4_659,20,0,0,true
+fb_4_633_c636,fb_rajesh_261,comment,Thanks for sharing,2024-11-08 10:39:19,fb_4_633,0,0,0,true
+fb_4_596_c597,fb_rajesh_123,comment,Happy Diwali to all,2024-11-08 10:46:24,fb_4_596,15,0,0,true
+fb_4_596_c598,fb_kavita_200,comment,Agreed,2024-11-08 10:47:48,fb_4_596,7,0,0,true
+fb_4_633_c635,fb_anil_81,comment,Sahi baat,2024-11-08 10:48:33,fb_4_633,2,0,0,true
+fb_4_619,fb_anil_166,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-08 10:49:32,,379,36,29,true
+fb_4_659_c663,fb_meena_113,comment,Thanks for sharing,2024-11-08 10:51:48,fb_4_659,1,0,0,true
+fb_4_642_c644,fb_pooja_43,comment,Same in our area,2024-11-08 11:04:39,fb_4_642,10,0,0,true
+fb_4_623,fb_suresh_279,status,Diesel costlier this week #DieselPrice,2024-11-08 11:06:32,,86,21,0,true
+fb_4_669_c673,fb_anil_160,comment,Very nice,2024-11-08 11:07:31,fb_4_669,15,0,0,true
+fb_4_655,fb_suresh_276,status,Petrol price went up again in our area #PetrolPrice,2024-11-08 11:11:02,,248,8,22,true
+fb_4_642_c643,fb_anil_269,comment,True,2024-11-08 11:15:16,fb_4_642,1,0,0,true
+fb_4_669_c670,fb_anil_296,comment,Agreed,2024-11-08 11:39:04,fb_4_669,16,0,0,true
+fb_4_693_c694,fb_anil_21,comment,Happy Diwali to all,2024-11-08 11:40:32,fb_4_693,14,0,0,true
+fb_4_573_c577,fb_deepak_193,comment,Agreed,2024-11-08 11:43:39,fb_4_573,6,0,0,true
+fb_4_669_c671,fb_meena_234,comment,Agreed,2024-11-08 11:55:39,fb_4_669,1,0,0,true
+fb_4_633_c634,fb_sunita_265,comment,Same in our area,2024-11-08 12:04:32,fb_4_633,15,0,0,true
+fb_4_623_c626,fb_pooja_132,comment,Happy Diwali to all,2024-11-08 12:09:59,fb_4_623,7,0,0,true
+fb_4_596_c599,fb_suresh_247,comment,Hope it improves,2024-11-08 12:13:11,fb_4_596,11,0,0,true
+fb_4_628,fb_kavita_253,status,Proud of Team India #TeamIndia,2024-11-08 12:15:01,,298,32,29,true
+fb_4_674_c675,fb_suresh_162,comment,Thanks for sharing,2024-11-08 12:16:47,fb_4_674,9,0,0,true
+fb_4_584,fb_anil_294,status,Proud of Team India #TeamIndia,2024-11-08 12:23:17,,481,2,12,true
+fb_4_573_c574,fb_anil_19,comment,Hope it improves,2024-11-08 12:25:15,fb_4_573,17,0,0,true
+fb_4_623_c625,fb_rajesh_261,comment,Thanks for sharing,2024-11-08 12:25:54,fb_4_623,18,0,0,true
+fb_4_674_c676,fb_kavita_192,comment,True,2024-11-08 12:26:46,fb_4_674,10,0,0,true
+fb_4_674_c677,fb_deepak_73,comment,Happy Diwali to all,2024-11-08 12:27:34,fb_4_674,13,0,0,true
+fb_4_622,fb_pooja_299,status,Metro is faster than road today #DelhiTraffic,2024-11-08 12:32:38,,145,14,9,true
+fb_4_691,fb_sunita_259,status,"Avoid the highway, huge jam #TrafficJam",2024-11-08 12:34:17,,387,17,22,true
+fb_4_628_c631,fb_sunita_204,comment,Agreed,2024-11-08 12:37:59,fb_4_628,8,0,0,true
+fb_4_693_c695,fb_rajesh_4,comment,Thanks for sharing,2024-11-08 12:39:39,fb_4_693,18,0,0,true
+fb_4_669_c672,fb_suresh_219,comment,True,2024-11-08 13:03:45,fb_4_669,13,0,0,true
+fb_4_628_c629,fb_kavita_228,comment,True,2024-11-08 13:07:44,fb_4_628,15,0,0,true
+fb_4_691_c692,fb_rajesh_58,comment,Thanks for sharing,2024-11-08 13:13:44,fb_4_691,1,0,0,true
+fb_4_573_c575,fb_rajesh_22,comment,Hope it improves,2024-11-08 13:22:07,fb_4_573,18,0,0,true
+fb_4_601,fb_pooja_147,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-08 13:35:33,,213,4,2,true
+fb_4_628_c630,fb_anil_66,comment,Very nice,2024-11-08 13:35:43,fb_4_628,3,0,0,true
+fb_4_609_c612,fb_rajesh_5,comment,Sahi baat,2024-11-08 13:36:37,fb_4_609,20,0,0,true
+fb_4_584_c585,fb_pooja_256,comment,Same in our area,2024-11-08 13:43:13,fb_4_584,1,0,0,true
+fb_4_623_c624,fb_suresh_263,comment,Happy Diwali to all,2024-11-08 13:54:55,fb_4_623,2,0,0,true
+fb_4_584_c586,fb_sunita_60,comment,Thanks for sharing,2024-11-08 14:06:04,fb_4_584,0,0,0,true
+fb_4_609_c611,fb_suresh_86,comment,Happy Diwali to all,2024-11-08 14:09:08,fb_4_609,5,0,0,true
+fb_4_569,fb_pooja_79,status,Diesel costlier this week #DieselPrice,2024-11-08 14:20:09,,60,5,4,true
+fb_4_587,fb_anil_298,status,Festival market is so crowded #Festival,2024-11-08 14:26:10,,406,18,25,true
+fb_4_690,fb_meena_0,status,Proud of Team India #TeamIndia,2024-11-08 14:31:40,,346,2,1,true
+fb_4_569_c572,fb_rajesh_111,comment,Thanks for sharing,2024-11-08 14:31:43,fb_4_569,2,0,0,true
+fb_4_587_c588,fb_suresh_276,comment,Same in our area,2024-11-08 14:37:39,fb_4_587,0,0,0,true
+fb_4_587_c590,fb_rajesh_65,comment,True,2024-11-08 14:39:09,fb_4_587,18,0,0,true
+fb_4_568,fb_anil_294,status,Power cut since morning due to storm #Rain,2024-11-08 14:55:33,,592,17,1,true
+fb_4_619_c620,fb_kavita_44,comment,Sahi baat,2024-11-08 15:03:59,fb_4_619,16,0,0,true
+fb_4_627,fb_kavita_186,status,Society Diwali celebration photos #Diwali,2024-11-08 15:19:01,,277,17,17,true
+fb_4_655_c657,fb_pooja_255,comment,True,2024-11-08 15:24:32,fb_4_655,6,0,0,true
+fb_4_619_c621,fb_anil_180,comment,Same in our area,2024-11-08 15:26:50,fb_4_619,12,0,0,true
+fb_4_607,fb_kavita_270,status,Petrol price went up again in our area #PetrolPrice,2024-11-08 15:33:05,,423,11,2,true
+fb_4_613,fb_kavita_286,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-08 15:36:17,,134,12,2,true
+fb_4_646,fb_rajesh_40,status,Petrol price went up again in our area #PetrolPrice,2024-11-08 15:39:00,,572,2,3,true
+fb_4_679,fb_pooja_184,status,Society Diwali celebration photos #Diwali,2024-11-08 15:39:53,,380,8,0,true
+fb_4_688,fb_kavita_44,status,Proud of Team India #TeamIndia,2024-11-08 15:43:17,,158,4,5,true
+fb_4_607_c608,fb_anil_32,comment,Hope it improves,2024-11-08 15:46:23,fb_4_607,14,0,0,true
+fb_4_655_c656,fb_rajesh_8,comment,Sahi baat,2024-11-08 16:08:48,fb_4_655,9,0,0,true
+fb_4_569_c570,fb_anil_267,comment,Same in our area,2024-11-08 16:14:20,fb_4_569,16,0,0,true
+fb_4_628_c632,fb_anil_127,comment,Agreed,2024-11-08 16:15:59,fb_4_628,6,0,0,true
+fb_4_658,fb_suresh_129,status,Metro is faster than road today #DelhiTraffic,2024-11-08 16:48:01,,579,9,26,true
+fb_4_587_c589,fb_rajesh_123,comment,Happy Diwali to all,2024-11-08 17:28:32,fb_4_587,16,0,0,true
+fb_4_601_c602,fb_kavita_182,comment,Thanks for sharing,2024-11-08 18:13:28,fb_4_601,2,0,0,true
+fb_4_646_c649,fb_suresh_26,comment,Hope it improves,2024-11-08 18:13:30,fb_4_646,19,0,0,true
+fb_4_569_c571,fb_suresh_156,comment,Same in our area,2024-11-08 18:21:18,fb_4_569,7,0,0,true
+fb_4_688_c689,fb_kavita_44,comment,Hope it improves,2024-11-08 18:50:30,fb_4_688,9,0,0,true
+fb_4_646_c648,fb_rajesh_176,comment,Sahi baat,2024-11-08 19:25:06,fb_4_646,18,0,0,true
+fb_4_646_c647,fb_meena_68,comment,Very nice,2024-11-08 20:05:54,fb_4_646,4,0,0,true
+fb_5_767,fb_pooja_141,status,Petrol price went up again in our area #PetrolPrice,2024-11-09 01:07:33,,339,29,2,true
+fb_5_757,fb_rajesh_248,status,Who else watched the match today? #INDvsAUS,2024-11-09 01:47:52,,144,39,23,true
+fb_5_762,fb_rajesh_148,status,Diesel costlier this week #DieselPrice,2024-11-09 02:15:39,,482,7,0,true
+fb_5_712,fb_rajesh_95,status,Who else watched the match today? #INDvsAUS,2024-11-09 03:06:53,,308,36,16,true
+fb_5_712_c713,fb_sunita_268,comment,Same in our area,2024-11-09 03:17:57,fb_5_712,3,0,0,true
+fb_5_762_c764,fb_kavita_183,comment,Hope it improves,2024-11-09 03:33:30,fb_5_762,13,0,0,true
+fb_5_762_c765,fb_pooja_117,comment,Sahi baat,2024-11-09 03:57:48,fb_5_762,1,0,0,true
+fb_5_748,fb_pooja_244,status,Festival market is so crowded #Festival,2024-11-09 04:04:50,,182,8,25,true
+fb_5_751,fb_suresh_292,status,Who else watched the match today? #INDvsAUS,2024-11-09 04:07:38,,53,30,13,true
+fb_5_767_c769,fb_rajesh_140,comment,Hope it improves,2024-11-09 04:25:24,fb_5_767,4,0,0,true
+fb_5_762_c763,fb_deepak_57,comment,Very nice,2024-11-09 04:31:55,fb_5_762,10,0,0,true
+fb_5_748_c750,fb_deepak_9,comment,Same in our area,2024-11-09 04:33:02,fb_5_748,10,0,0,true
+fb_5_700,fb_suresh_263,status,Society Diwali celebration photos #Diwali,2024-11-09 04:35:28,,89,33,6,true
+fb_5_739,fb_rajesh_111,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-09 04:39:10,,334,0,17,true
+fb_5_823,fb_anil_158,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-09 04:40:41,,539,4,20,true
+fb_5_730,fb_rajesh_291,status,Proud of Team India #TeamIndia,2024-11-09 04:44:58,,179,30,11,true
+fb_5_712_c714,fb_rajesh_98,comment,Same in our area,2024-11-09 05:09:30,fb_5_712,2,0,0,true
+fb_5_794,fb_kavita_144,status,Power cut since morning due to storm #Rain,2024-11-09 05:19:39,,302,4,18,true
+fb_5_767_c768,fb_pooja_71,comment,Happy Diwali to all,2024-11-09 05:41:16,fb_5_767,13,0,0,true
+fb_5_803,fb_meena_168,status,"Avoid the highway, huge jam #TrafficJam",2024-11-09 05:43:35,,404,23,25,true
+fb_5_730_c732,fb_suresh_288,comment,Very nice,2024-11-09 05:48:12,fb_5_730,1,0,0,true
+fb_5_723,fb_sunita_60,status,Petrol price went up again in our area #PetrolPrice,2024-11-09 05:56:50,,95,6,30,true
+fb_5_808,fb_meena_0,status,"Avoid the highway, huge jam #TrafficJam",2024-11-09 05:57:39,,40,19,14,true
+fb_5_757_c758,fb_anil_220,comment,Agreed,2024-11-09 05:59:51,fb_5_757,8,0,0,true
+fb_5_730_c733,fb_suresh_205,comment,Sahi baat,2024-11-09 06:05:01,fb_5_730,17,0,0,true
+fb_5_762_c766,fb_anil_198,comment,Very nice,2024-11-09 06:06:26,fb_5_762,6,0,0,true
+fb_5_751_c752,fb_pooja_92,comment,True,2024-11-09 06:21:49,fb_5_751,13,0,0,true
+fb_5_739_c741,fb_rajesh_5,comment,Sahi baat,2024-11-09 06:42:25,fb_5_739,15,0,0,true
+fb_5_730_c734,fb_anil_75,comment,Sahi baat,2024-11-09 06:51:58,fb_5_730,16,0,0,true
+fb_5_748_c749,fb_deepak_161,comment,Sahi baat,2024-11-09 07:05:22,fb_5_748,10,0,0,true
+fb_5_730_c731,fb_suresh_247,comment,Happy Diwali to all,2024-11-09 07:13:46,fb_5_730,0,0,0,true
+fb_5_799,fb_kavita_186,status,Diesel costlier this week #DieselPrice,2024-11-09 07:54:32,,74,26,22,true
+fb_5_830,fb_pooja_94,status,"Avoid the highway, huge jam #TrafficJam",2024-11-09 08:09:15,,367,36,8,true
+fb_5_701,fb_sunita_254,status,Society Diwali celebration photos #Diwali,2024-11-09 08:14:22,,356,7,0,true
+fb_5_739_c740,fb_rajesh_53,comment,Happy Diwali to all,2024-11-09 08:27:18,fb_5_739,10,0,0,true
+fb_5_739_c743,fb_pooja_92,comment,Same in our area,2024-11-09 08:37:56,fb_5_739,15,0,0,true
+fb_5_715,fb_deepak_190,status,"Avoid the highway, huge jam #TrafficJam",2024-11-09 08:39:26,,186,5,2,true
+fb_5_803_c804,fb_kavita_101,comment,Hope it improves,2024-11-09 08:42:00,fb_5_803,15,0,0,true
+fb_5_715_c719,fb_suresh_153,comment,Hope it improves,2024-11-09 08:58:03,fb_5_715,12,0,0,true
+fb_5_744,fb_sunita_60,status,Power cut since morning due to storm #Rain,2024-11-09 08:59:25,,232,0,21,true
+fb_5_701_c704,fb_suresh_297,comment,Thanks for sharing,2024-11-09 09:12:53,fb_5_701,2,0,0,true
+fb_5_770,fb_suresh_52,status,"Avoid the highway, huge jam #TrafficJam",2024-11-09 09:19:09,,573,5,12,true
+fb_5_770_c773,fb_anil_269,comment,Happy Diwali to all,2024-11-09 09:22:13,fb_5_770,1,0,0,true
+fb_5_744_c746,fb_pooja_207,comment,Happy Diwali to all,2024-11-09 09:22:53,fb_5_744,11,0,0,true
+fb_5_735,fb_suresh_288,status,Diesel costlier this week #DieselPrice,2024-11-09 09:25:04,,204,31,10,true
+fb_5_709,fb_rajesh_74,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-09 09:25:47,,226,26,4,true
+fb_5_823_c824,fb_anil_197,comment,Happy Diwali to all,2024-11-09 09:36:54,fb_5_823,12,0,0,true
+fb_5_739_c742,fb_pooja_171,comment,Same in our area,2024-11-09 09:37:24,fb_5_739,10,0,0,true
+fb_5_779,fb_anil_290,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-09 09:37:39,,352,36,19,true
+fb_5_830_c831,fb_pooja_24,comment,Agreed,2024-11-09 09:48:09,fb_5_830,8,0,0,true
+fb_5_723_c725,fb_anil_17,comment,Same in our area,2024-11-09 09:51:31,fb_5_723,20,0,0,true
+fb_5_735_c737,fb_suresh_235,comment,Agreed,2024-11-09 09:54:07,fb_5_735,12,0,0,true
+fb_5_808_c809,fb_rajesh_8,comment,Sahi baat,2024-11-09 09:55:19,fb_5_808,0,0,0,true
+fb_5_715_c718,fb_sunita_12,comment,Happy Diwali to all,2024-11-09 09:57:53,fb_5_715,13,0,0,true
+fb_5_808_c810,fb_sunita_173,comment,Happy Diwali to all,2024-11-09 09:58:40,fb_5_808,4,0,0,true
+fb_5_770_c771,fb_rajesh_8,comment,Thanks for sharing,2024-11-09 09:59:41,fb_5_770,0,0,0,true
+fb_5_723_c724,fb_meena_34,comment,Happy Diwali to all,2024-11-09 10:09:43,fb_5_723,0,0,0,true
+fb_5_759,fb_pooja_252,status,Diesel costlier this week #DieselPrice,2024-11-09 10:16:26,,355,6,8,true
+fb_5_753,fb_meena_48,status,Metro is faster than road today #DelhiTraffic,2024-11-09 10:19:51,,139,4,23,true
+fb_5_795,fb_rajesh_80,status,Power cut since morning due to storm #Rain,2024-11-09 10:25:40,,134,23,7,true
+fb_5_821,fb_suresh_288,status,Festival market is so crowded #Festival,2024-11-09 10:51:00,,309,38,21,true
+fb_5_735_c738,fb_anil_69,comment,Hope it improves,2024-11-09 11:14:56,fb_5_735,19,0,0,true
+fb_5_828,fb_suresh_153,status,"Avoid the highway, huge jam #TrafficJam",2024-11-09 11:16:32,,393,31,25,true
+fb_5_709_c711,fb_meena_0,comment,True,2024-11-09 11:32:32,fb_5_709,0,0,0,true
+fb_5_753_c755,fb_meena_130,comment,Same in our area,2024-11-09 11:52:11,fb_5_753,14,0,0,true
+fb_5_770_c772,fb_anil_127,comment,Very nice,2024-11-09 11:57:02,fb_5_770,7,0,0,true
+fb_5_795_c798,fb_deepak_57,comment,Hope it improves,2024-11-09 12:00:02,fb_5_795,4,0,0,true
+fb_5_744_c747,fb_sunita_265,comment,Thanks for sharing,2024-11-09 12:04:42,fb_5_744,1,0,0,true
+fb_5_735_c736,fb_sunita_173,comment,Agreed,2024-11-09 12:10:37,fb_5_735,4,0,0,true
+fb_5_744_c745,fb_meena_59,comment,Happy Diwali to all,2024-11-09 12:11:07,fb_5_744,19,0,0,true
+fb_5_779_c781,fb_anil_189,comment,Thanks for sharing,2024-11-09 12:16:26,fb_5_779,15,0,0,true
+fb_5_701_c703,fb_rajesh_74,comment,Thanks for sharing,2024-11-09 12:18:07,fb_5_701,4,0,0,true
+fb_5_799_c800,fb_meena_241,comment,Thanks for sharing,2024-11-09 12:19:50,fb_5_799,9,0,0,true
+fb_5_701_c702,fb_pooja_93,comment,Hope it improves,2024-11-09 12:28:26,fb_5_701,9,0,0,true
+fb_5_715_c716,fb_rajesh_282,comment,Agreed,2024-11-09 12:33:10,fb_5_715,3,0,0,true
+fb_5_825,fb_anil_125,status,Festival market is so crowded #Festival,2024-11-09 12:37:38,,431,18,11,true
+fb_5_802,fb_suresh_164,status,Proud of Team India #TeamIndia,2024-11-09 12:47:18,,4,18,23,true
+fb_5_832,fb_pooja_184,status,"Avoid the highway, huge jam #TrafficJam",2024-11-09 12:50:27,,386,12,1,true
+fb_5_701_c705,fb_deepak_135,comment,Very nice,2024-11-09 12:54:24,fb_5_701,9,0,0,true
+fb_5_832_c836,fb_pooja_209,comment,Thanks for sharing,2024-11-09 12:55:19,fb_5_832,19,0,0,true
+fb_5_753_c756,fb_sunita_265,comment,Same in our area,2024-11-09 12:59:41,fb_5_753,10,0,0,true
+fb_5_789,fb_rajesh_42,status,Diesel costlier this week #DieselPrice,2024-11-09 13:00:09,,497,34,24,true
+fb_5_779_c780,fb_rajesh_195,comment,Very nice,2024-11-09 13:02:47,fb_5_779,0,0,0,true
+fb_5_811,fb_pooja_244,status,"Avoid the highway, huge jam #TrafficJam",2024-11-09 13:10:44,,436,31,10,true
+fb_5_759_c761,fb_sunita_121,comment,Agreed,2024-11-09 13:16:02,fb_5_759,7,0,0,true
+fb_5_715_c717,fb_rajesh_123,comment,Sahi baat,2024-11-09 13:19:33,fb_5_715,8,0,0,true
+fb_5_726,fb_deepak_76,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-09 13:25:28,,87,0,16,true
+fb_5_759_c760,fb_anil_32,comment,Agreed,2024-11-09 13:35:35,fb_5_759,16,0,0,true
+fb_5_825_c826,fb_anil_78,comment,Hope it improves,2024-11-09 13:40:37,fb_5_825,1,0,0,true
+fb_5_821_c822,fb_anil_189,comment,Happy Diwali to all,2024-11-09 13:47:30,fb_5_821,3,0,0,true
+fb_5_795_c797,fb_kavita_270,comment,True,2024-11-09 13:49:39,fb_5_795,0,0,0,true
+fb_5_820,fb_suresh_219,status,Festival market is so crowded #Festival,2024-11-09 13:52:31,,245,11,7,true
+fb_5_805,fb_sunita_77,status,Power cut since morning due to storm #Rain,2024-11-09 13:54:53,,228,6,12,true
+fb_5_709_c710,fb_deepak_285,comment,Thanks for sharing,2024-11-09 14:11:50,fb_5_709,13,0,0,true
+fb_5_792,fb_kavita_228,status,Festival market is so crowded #Festival,2024-11-09 14:11:54,,511,23,3,true
+fb_5_720,fb_pooja_67,status,Who else watched the match today? #INDvsAUS,2024-11-09 14:13:00,,410,32,18,true
+fb_5_720_c722,fb_suresh_124,comment,Same in our area,2024-11-09 14:19:45,fb_5_720,6,0,0,true
+fb_5_726_c727,fb_sunita_268,comment,Hope it improves,2024-11-09 14:20:50,fb_5_726,18,0,0,true
+fb_5_782,fb_sunita_138,status,Festival market is so crowded #Festival,2024-11-09 14:25:03,,405,25,19,true
+fb_5_832_c835,fb_pooja_293,comment,Hope it improves,2024-11-09 14:37:27,fb_5_832,7,0,0,true
+fb_5_795_c796,fb_anil_87,comment,Happy Diwali to all,2024-11-09 14:38:00,fb_5_795,18,0,0,true
+fb_5_726_c728,fb_suresh_178,comment,Same in our area,2024-11-09 14:42:53,fb_5_726,10,0,0,true
+fb_5_805_c807,fb_anil_272,comment,Hope it improves,2024-11-09 14:50:39,fb_5_805,10,0,0,true
+fb_5_696,fb_anil_66,status,Power cut since morning due to storm #Rain,2024-11-09 15:04:26,,530,29,24,true
+fb_5_811_c813,fb_pooja_171,comment,Same in our area,2024-11-09 15:04:39,fb_5_811,12,0,0,true
+fb_5_811_c814,fb_meena_2,comment,True,2024-11-09 15:06:20,fb_5_811,11,0,0,true
+fb_5_753_c754,fb_sunita_12,comment,Thanks for sharing,2024-11-09 15:13:19,fb_5_753,6,0,0,true
+fb_5_815,fb_suresh_292,status,Society Diwali celebration photos #Diwali,2024-11-09 15:17:20,,560,18,29,true
+fb_5_832_c834,fb_meena_216,comment,Agreed,2024-11-09 15:29:33,fb_5_832,13,0,0,true
+fb_5_828_c829,fb_kavita_128,comment,True,2024-11-09 15:32:27,fb_5_828,20,0,0,true
+fb_5_706,fb_rajesh_45,status,Festival market is so crowded #Festival,2024-11-09 15:33:14,,58,0,30,true
+fb_5_801,fb_sunita_77,status,Petrol price went up again in our area #PetrolPrice,2024-11-09 15:39:48,,70,39,9,true
+fb_5_720_c721,fb_kavita_203,comment,Agreed,2024-11-09 16:08:36,fb_5_720,6,0,0,true
+fb_5_789_c790,fb_anil_197,comment,Sahi baat,2024-11-09 16:13:39,fb_5_789,0,0,0,true
+fb_5_789_c791,fb_pooja_117,comment,Happy Diwali to all,2024-11-09 16:15:53,fb_5_789,0,0,0,true
+fb_5_832_c833,fb_suresh_39,comment,Hope it improves,2024-11-09 16:16:43,fb_5_832,17,0,0,true
+fb_5_774,fb_anil_35,status,Festival market is so crowded #Festival,2024-11-09 16:23:55,,569,32,10,true
+fb_5_782_c784,fb_meena_48,comment,Thanks for sharing,2024-11-09 16:29:57,fb_5_782,0,0,0,true
+fb_5_811_c812,fb_rajesh_291,comment,Happy Diwali to all,2024-11-09 16:35:10,fb_5_811,15,0,0,true
+fb_5_825_c827,fb_pooja_93,comment,True,2024-11-09 16:35:14,fb_5_825,17,0,0,true
+fb_5_786,fb_suresh_235,status,Power cut since morning due to storm #Rain,2024-11-09 16:40:49,,31,4,7,true
+fb_5_706_c707,fb_anil_273,comment,True,2024-11-09 16:59:16,fb_5_706,2,0,0,true
+fb_5_792_c793,fb_kavita_236,comment,Same in our area,2024-11-09 17:20:47,fb_5_792,1,0,0,true
+fb_5_815_c817,fb_rajesh_22,comment,Happy Diwali to all,2024-11-09 17:24:51,fb_5_815,3,0,0,true
+fb_5_782_c785,fb_deepak_136,comment,Hope it improves,2024-11-09 17:36:47,fb_5_782,2,0,0,true
+fb_5_805_c806,fb_meena_216,comment,Sahi baat,2024-11-09 17:41:55,fb_5_805,4,0,0,true
+fb_5_696_c697,fb_meena_16,comment,Same in our area,2024-11-09 17:49:31,fb_5_696,13,0,0,true
+fb_5_786_c787,fb_anil_75,comment,Thanks for sharing,2024-11-09 17:50:42,fb_5_786,4,0,0,true
+fb_5_815_c819,fb_pooja_255,comment,Happy Diwali to all,2024-11-09 17:52:39,fb_5_815,11,0,0,true
+fb_5_726_c729,fb_suresh_225,comment,Hope it improves,2024-11-09 18:10:25,fb_5_726,19,0,0,true
+fb_5_706_c708,fb_suresh_39,comment,True,2024-11-09 18:44:41,fb_5_706,17,0,0,true
+fb_5_815_c818,fb_sunita_99,comment,Thanks for sharing,2024-11-09 18:54:17,fb_5_815,6,0,0,true
+fb_5_696_c699,fb_meena_113,comment,Very nice,2024-11-09 19:04:12,fb_5_696,6,0,0,true
+fb_5_696_c698,fb_anil_106,comment,Sahi baat,2024-11-09 19:06:58,fb_5_696,0,0,0,true
+fb_5_782_c783,fb_pooja_79,comment,Sahi baat,2024-11-09 19:18:39,fb_5_782,16,0,0,true
+fb_5_774_c775,fb_meena_118,comment,Thanks for sharing,2024-11-09 19:49:04,fb_5_774,13,0,0,true
+fb_5_786_c788,fb_sunita_138,comment,Sahi baat,2024-11-09 20:07:52,fb_5_786,16,0,0,true
+fb_5_815_c816,fb_anil_32,comment,Same in our area,2024-11-09 20:16:38,fb_5_815,12,0,0,true
+fb_5_774_c778,fb_sunita_28,comment,Same in our area,2024-11-09 20:19:07,fb_5_774,1,0,0,true
+fb_5_774_c777,fb_meena_137,comment,Hope it improves,2024-11-09 20:21:47,fb_5_774,12,0,0,true
+fb_5_774_c776,fb_meena_59,comment,Thanks for sharing,2024-11-09 20:30:58,fb_5_774,10,0,0,true
+fb_6_931,fb_suresh_178,status,Petrol price went up again in our area #PetrolPrice,2024-11-10 01:53:40,,239,24,15,true
+fb_6_936,fb_suresh_178,status,Diesel costlier this week #DieselPrice,2024-11-10 02:11:05,,477,20,18,true
+fb_6_876,fb_meena_68,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-10 02:12:04,,292,23,26,true
+fb_6_861,fb_suresh_63,status,Petrol price went up again in our area #PetrolPrice,2024-11-10 02:26:40,,221,39,22,true
+fb_6_931_c932,fb_sunita_18,comment,Sahi baat,2024-11-10 02:31:14,fb_6_931,4,0,0,true
+fb_6_950,fb_pooja_293,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-10 02:37:05,,265,34,11,true
+fb_6_936_c938,fb_anil_238,comment,Happy Diwali to all,2024-11-10 02:45:43,fb_6_936,20,0,0,true
+fb_6_889,fb_deepak_177,status,Society Diwali celebration photos #Diwali,2024-11-10 02:52:13,,398,0,26,true
+fb_6_936_c937,fb_rajesh_122,comment,Very nice,2024-11-10 03:00:58,fb_6_936,10,0,0,true
+fb_6_905,fb_rajesh_249,status,"Avoid the highway, huge jam #TrafficJam",2024-11-10 03:09:01,,403,3,19,true
+fb_6_927,fb_anil_294,status,Proud of Team India #TeamIndia,2024-11-10 03:24:34,,221,16,14,true
+fb_6_948,fb_suresh_41,status,Society Diwali celebration photos #Diwali,2024-11-10 03:44:24,,435,6,30,true
+fb_6_948_c949,fb_rajesh_5,comment,Very nice,2024-11-10 03:47:33,fb_6_948,15,0,0,true
+fb_6_931_c934,fb_anil_283,comment,Same in our area,2024-11-10 03:57:41,fb_6_931,20,0,0,true
+fb_6_861_c862,fb_sunita_28,comment,True,2024-11-10 04:07:58,fb_6_861,5,0,0,true
+fb_6_936_c940,fb_pooja_252,comment,Thanks for sharing,2024-11-10 04:18:25,fb_6_936,16,0,0,true
+fb_6_954,fb_anil_166,status,Proud of Team India #TeamIndia,2024-11-10 04:22:22,,44,33,11,true
+fb_6_861_c865,fb_meena_233,comment,Sahi baat,2024-11-10 04:47:06,fb_6_861,0,0,0,true
+fb_6_876_c877,fb_sunita_60,comment,Sahi baat,2024-11-10 05:00:21,fb_6_876,3,0,0,true
+fb_6_904,fb_deepak_177,status,Who else watched the match today? #INDvsAUS,2024-11-10 05:09:00,,331,36,25,true
+fb_6_839,fb_kavita_270,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-10 05:17:04,,465,18,2,true
+fb_6_889_c890,fb_suresh_39,comment,Happy Diwali to all,2024-11-10 05:24:52,fb_6_889,3,0,0,true
+fb_6_839_c841,fb_deepak_76,comment,Very nice,2024-11-10 05:32:08,fb_6_839,18,0,0,true
+fb_6_927_c929,fb_rajesh_145,comment,Sahi baat,2024-11-10 05:36:56,fb_6_927,7,0,0,true
+fb_6_936_c939,fb_meena_168,comment,Happy Diwali to all,2024-11-10 05:39:43,fb_6_936,9,0,0,true
+fb_6_876_c878,fb_kavita_192,comment,True,2024-11-10 05:51:01,fb_6_876,20,0,0,true
+fb_6_885,fb_anil_142,status,Proud of Team India #TeamIndia,2024-11-10 05:53:48,,499,38,16,true
+fb_6_931_c935,fb_pooja_103,comment,Sahi baat,2024-11-10 05:55:27,fb_6_931,10,0,0,true
+fb_6_876_c879,fb_deepak_11,comment,Hope it improves,2024-11-10 06:01:03,fb_6_876,6,0,0,true
+fb_6_954_c956,fb_meena_120,comment,Happy Diwali to all,2024-11-10 06:04:08,fb_6_954,14,0,0,true
+fb_6_858,fb_anil_274,status,"Avoid the highway, huge jam #TrafficJam",2024-11-10 06:08:29,,463,6,26,true
+fb_6_861_c863,fb_rajesh_195,comment,Same in our area,2024-11-10 06:14:01,fb_6_861,3,0,0,true
+fb_6_889_c892,fb_anil_100,comment,Happy Diwali to all,2024-11-10 06:18:48,fb_6_889,5,0,0,true
+fb_6_954_c955,fb_rajesh_282,comment,Hope it improves,2024-11-10 06:20:52,fb_6_954,11,0,0,true
+fb_6_927_c928,fb_kavita_88,comment,Hope it improves,2024-11-10 06:22:07,fb_6_927,5,0,0,true
+fb_6_931_c933,fb_sunita_33,comment,Very nice,2024-11-10 06:25:44,fb_6_931,3,0,0,true
+fb_6_889_c891,fb_rajesh_40,comment,Agreed,2024-11-10 06:33:06,fb_6_889,11,0,0,true
+fb_6_957,fb_suresh_188,status,"Avoid the highway, huge jam #TrafficJam",2024-11-10 06:50:55,,441,34,14,true
+fb_6_894,fb_anil_66,status,Metro is faster than road today #DelhiTraffic,2024-11-10 06:57:34,,80,10,21,true
+fb_6_951,fb_kavita_50,status,Festival market is so crowded #Festival,2024-11-10 07:00:44,,275,4,6,true
+fb_6_839_c840,fb_rajesh_38,comment,Sahi baat,2024-11-10 07:04:30,fb_6_839,17,0,0,true
+fb_6_962,fb_kavita_7,status,Proud of Team India #TeamIndia,2024-11-10 07:09:17,,447,38,16,true
+fb_6_927_c930,fb_suresh_219,comment,Very nice,2024-11-10 07:09:23,fb_6_927,16,0,0,true
+fb_6_851,fb_meena_234,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-10 07:18:09,,473,40,30,true
+fb_6_861_c864,fb_anil_69,comment,Thanks for sharing,2024-11-10 07:19:35,fb_6_861,10,0,0,true
+fb_6_880,fb_suresh_156,status,Who else watched the match today? #INDvsAUS,2024-11-10 07:22:25,,324,24,13,true
+fb_6_965,fb_kavita_128,status,Festival market is so crowded #Festival,2024-11-10 07:24:14,,364,18,19,true
+fb_6_924,fb_deepak_227,status,Metro is faster than road today #DelhiTraffic,2024-11-10 07:29:37,,103,36,2,true
+fb_6_906,fb_anil_284,status,Power cut since morning due to storm #Rain,2024-11-10 07:30:25,,123,0,10,true
+fb_6_837,fb_pooja_293,status,Petrol price went up again in our area #PetrolPrice,2024-11-10 07:35:40,,493,13,9,true
+fb_6_907,fb_sunita_173,status,Power cut since morning due to storm #Rain,2024-11-10 07:41:04,,98,11,29,true
+fb_6_911,fb_anil_296,status,Power cut since morning due to storm #Rain,2024-11-10 07:44:10,,427,9,24,true
+fb_6_916,fb_rajesh_74,status,Petrol price went up again in our area #PetrolPrice,2024-11-10 07:45:35,,182,18,0,true
+fb_6_837_c838,fb_kavita_128,comment,True,2024-11-10 07:48:48,fb_6_837,3,0,0,true
+fb_6_874,fb_rajesh_53,status,Proud of Team India #TeamIndia,2024-11-10 07:56:33,,292,18,24,true
+fb_6_961,fb_sunita_119,status,Power cut since morning due to storm #Rain,2024-11-10 07:56:47,,379,32,24,true
+fb_6_894_c897,fb_anil_75,comment,Same in our area,2024-11-10 07:58:50,fb_6_894,20,0,0,true
+fb_6_965_c966,fb_kavita_210,comment,Agreed,2024-11-10 08:00:29,fb_6_965,0,0,0,true
+fb_6_880_c881,fb_suresh_219,comment,Agreed,2024-11-10 08:18:50,fb_6_880,13,0,0,true
+fb_6_911_c915,fb_meena_134,comment,Hope it improves,2024-11-10 08:25:16,fb_6_911,5,0,0,true
+fb_6_907_c908,fb_suresh_131,comment,Thanks for sharing,2024-11-10 08:26:21,fb_6_907,19,0,0,true
+fb_6_900,fb_suresh_262,status,Metro is faster than road today #DelhiTraffic,2024-11-10 08:38:56,,4,6,19,true
+fb_6_858_c859,fb_pooja_229,comment,Agreed,2024-11-10 08:52:27,fb_6_858,18,0,0,true
+fb_6_855,fb_rajesh_145,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-10 08:56:13,,257,31,27,true
+fb_6_911_c912,fb_anil_81,comment,Agreed,2024-11-10 08:59:02,fb_6_911,4,0,0,true
+fb_6_911_c914,fb_kavita_44,comment,Sahi baat,2024-11-10 09:03:26,fb_6_911,10,0,0,true
+fb_6_894_c896,fb_suresh_20,comment,Same in our area,2024-11-10 09:09:38,fb_6_894,3,0,0,true
+fb_6_951_c952,fb_deepak_112,comment,Very nice,2024-11-10 09:12:08,fb_6_951,12,0,0,true
+fb_6_855_c856,fb_suresh_39,comment,True,2024-11-10 09:33:15,fb_6_855,3,0,0,true
+fb_6_894_c895,fb_kavita_72,comment,Happy Diwali to all,2024-11-10 09:41:41,fb_6_894,10,0,0,true
+fb_6_957_c958,fb_deepak_187,comment,Thanks for sharing,2024-11-10 09:41:48,fb_6_957,10,0,0,true
+fb_6_965_c967,fb_deepak_227,comment,Happy Diwali to all,2024-11-10 09:45:49,fb_6_965,14,0,0,true
+fb_6_898,fb_pooja_94,status,Metro is faster than road today #DelhiTraffic,2024-11-10 09:47:13,,407,39,21,true
+fb_6_885_c886,fb_deepak_27,comment,Very nice,2024-11-10 09:53:45,fb_6_885,15,0,0,true
+fb_6_882,fb_deepak_177,status,Metro is faster than road today #DelhiTraffic,2024-11-10 09:54:01,,49,1,21,true
+fb_6_851_c852,fb_deepak_46,comment,Hope it improves,2024-11-10 09:57:25,fb_6_851,9,0,0,true
+fb_6_960,fb_meena_68,status,Petrol price went up again in our area #PetrolPrice,2024-11-10 10:03:48,,94,40,20,true
+fb_6_858_c860,fb_rajesh_8,comment,Same in our area,2024-11-10 10:12:32,fb_6_858,14,0,0,true
+fb_6_851_c853,fb_sunita_268,comment,Happy Diwali to all,2024-11-10 10:12:45,fb_6_851,6,0,0,true
+fb_6_885_c887,fb_rajesh_291,comment,Very nice,2024-11-10 10:19:08,fb_6_885,17,0,0,true
+fb_6_845,fb_rajesh_261,status,Festival market is so crowded #Festival,2024-11-10 10:20:49,,409,19,28,true
+fb_6_885_c888,fb_suresh_279,comment,Agreed,2024-11-10 10:30:37,fb_6_885,1,0,0,true
+fb_6_845_c847,fb_suresh_205,comment,Same in our area,2024-11-10 10:47:33,fb_6_845,6,0,0,true
+fb_6_900_c901,fb_anil_149,comment,Hope it improves,2024-11-10 10:55:30,fb_6_900,1,0,0,true
+fb_6_874_c875,fb_rajesh_215,comment,Very nice,2024-11-10 10:56:12,fb_6_874,20,0,0,true
+fb_6_855_c857,fb_sunita_240,comment,Happy Diwali to all,2024-11-10 11:00:50,fb_6_855,3,0,0,true
+fb_6_911_c913,fb_deepak_136,comment,Sahi baat,2024-11-10 11:07:03,fb_6_911,18,0,0,true
+fb_6_907_c909,fb_sunita_12,comment,Sahi baat,2024-11-10 11:09:02,fb_6_907,14,0,0,true
+fb_6_951_c953,fb_suresh_52,comment,Agreed,2024-11-10 11:09:20,fb_6_951,4,0,0,true
+fb_6_962_c964,fb_anil_238,comment,Hope it improves,2024-11-10 11:10:46,fb_6_962,0,0,0,true
+fb_6_851_c854,fb_suresh_263,comment,Hope it improves,2024-11-10 11:18:49,fb_6_851,15,0,0,true
+fb_6_882_c884,fb_sunita_64,comment,True,2024-11-10 11:29:45,fb_6_882,20,0,0,true
+fb_6_957_c959,fb_rajesh_102,comment,True,2024-11-10 11:30:20,fb_6_957,7,0,0,true
+fb_6_962_c963,fb_deepak_23,comment,Sahi baat,2024-11-10 11:36:14,fb_6_962,11,0,0,true
+fb_6_920,fb_suresh_41,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-10 11:45:39,,410,22,15,true
+fb_6_845_c848,fb_pooja_244,comment,Same in our area,2024-11-10 11:47:28,fb_6_845,18,0,0,true
+fb_6_965_c968,fb_anil_149,comment,Agreed,2024-11-10 12:02:42,fb_6_965,0,0,0,true
+fb_6_907_c910,fb_sunita_62,comment,True,2024-11-10 12:03:03,fb_6_907,13,0,0,true
+fb_6_845_c846,fb_suresh_288,comment,Sahi baat,2024-11-10 12:05:30,fb_6_845,13,0,0,true
+fb_6_941,fb_rajesh_218,status,Festival market is so crowded #Festival,2024-11-10 12:23:49,,68,21,25,true
+fb_6_870,fb_meena_59,status,Metro is faster than road today #DelhiTraffic,2024-11-10 12:31:39,,448,2,16,true
+fb_6_842,fb_meena_68,status,Society Diwali celebration photos #Diwali,2024-11-10 12:34:50,,329,21,2,true
+fb_6_900_c903,fb_suresh_164,comment,Same in our area,2024-11-10 12:36:18,fb_6_900,4,0,0,true
+fb_6_870_c871,fb_pooja_67,comment,Hope it improves,2024-11-10 12:48:42,fb_6_870,3,0,0,true
+fb_6_882_c883,fb_anil_19,comment,Thanks for sharing,2024-11-10 13:02:24,fb_6_882,8,0,0,true
+fb_6_920_c922,fb_anil_158,comment,True,2024-11-10 13:02:57,fb_6_920,19,0,0,true
+fb_6_866,fb_deepak_187,status,"Avoid the highway, huge jam #TrafficJam",2024-11-10 13:04:56,,60,0,4,true
+fb_6_900_c902,fb_meena_216,comment,True,2024-11-10 13:06:33,fb_6_900,12,0,0,true
+fb_6_849,fb_meena_59,status,Metro is faster than road today #DelhiTraffic,2024-11-10 13:22:20,,194,15,20,true
+fb_6_842_c843,fb_pooja_79,comment,True,2024-11-10 13:24:38,fb_6_842,13,0,0,true
+fb_6_870_c872,fb_meena_16,comment,Very nice,2024-11-10 13:34:30,fb_6_870,4,0,0,true
+fb_6_870_c873,fb_suresh_86,comment,Very nice,2024-11-10 13:36:06,fb_6_870,7,0,0,true
+fb_6_920_c923,fb_meena_55,comment,Agreed,2024-11-10 13:48:56,fb_6_920,12,0,0,true
+fb_6_898_c899,fb_pooja_171,comment,Hope it improves,2024-11-10 14:11:13,fb_6_898,1,0,0,true
+fb_6_917,fb_rajesh_248,status,Metro is faster than road today #DelhiTraffic,2024-11-10 14:24:00,,560,5,15,true
+fb_6_941_c942,fb_suresh_131,comment,Happy Diwali to all,2024-11-10 14:51:33,fb_6_941,14,0,0,true
+fb_6_893,fb_pooja_147,status,Diesel costlier this week #DieselPrice,2024-11-10 15:32:02,,550,27,22,true
+fb_6_943,fb_sunita_12,status,Proud of Team India #TeamIndia,2024-11-10 16:03:16,,472,19,28,true
+fb_6_925,fb_sunita_99,status,"Heavy rain in our colony, roads flooded #Monsoon",2024-11-10 16:03:35,,67,25,2,true
+fb_6_849_c850,fb_suresh_247,comment,Same in our area,2024-11-10 16:11:17,fb_6_849,10,0,0,true
+fb_6_866_c868,fb_suresh_263,comment,Sahi baat,2024-11-10 16:12:35,fb_6_866,2,0,0,true
+fb_6_943_c945,fb_anil_273,comment,Happy Diwali to all,2024-11-10 16:21:19,fb_6_943,4,0,0,true
+fb_6_920_c921,fb_anil_142,comment,Sahi baat,2024-11-10 16:35:35,fb_6_920,17,0,0,true
+fb_6_842_c844,fb_sunita_28,comment,True,2024-11-10 16:56:05,fb_6_842,1,0,0,true
+fb_6_866_c867,fb_suresh_85,comment,Happy Diwali to all,2024-11-10 17:07:24,fb_6_866,3,0,0,true
+fb_6_917_c918,fb_pooja_10,comment,Thanks for sharing,2024-11-10 17:11:07,fb_6_917,11,0,0,true
+fb_6_917_c919,fb_anil_69,comment,True,2024-11-10 17:23:37,fb_6_917,12,0,0,true
+fb_6_943_c944,fb_pooja_258,comment,Agreed,2024-11-10 17:36:34,fb_6_943,18,0,0,true
+fb_6_866_c869,fb_pooja_71,comment,Happy Diwali to all,2024-11-10 17:53:02,fb_6_866,4,0,0,true
+fb_6_925_c926,fb_meena_6,comment,Same in our area,2024-11-10 18:13:18,fb_6_925,19,0,0,true
+fb_6_943_c946,fb_deepak_76,comment,True,2024-11-10 18:58:12,fb_6_943,8,0,0,true
+fb_6_943_c947,fb_sunita_265,comment,Hope it improves,2024-11-10 19:47:43,fb_6_943,9,0,0,true

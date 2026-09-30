@@ -21,6 +21,8 @@ interface AppState {
   organicOnly: boolean
   theme: Theme
   navOpen: boolean
+  navCollapsed: boolean
+  setNavCollapsed: (v: boolean) => void
   setShowBriefing: (v: boolean) => void
   setTourActive: (v: boolean) => void
   setTourStep: (v: number) => void
@@ -36,6 +38,8 @@ export const useAppStore = create<AppState>((set) => ({
   organicOnly: load('prahari.organicOnly', false),
   theme: load<Theme>('prahari.theme', 'light'),
   navOpen: false,
+  navCollapsed: load('prahari.navCollapsed', false),
+  setNavCollapsed: (v) => { save('prahari.navCollapsed', v); set({ navCollapsed: v }) },
   setShowBriefing: (v) => { if (!v) save('prahari.briefingSeen', true); set({ showBriefing: v }) },
   setTourActive: (v) => set({ tourActive: v, tourStep: v ? 0 : 0 }),
   setTourStep: (v) => set({ tourStep: v }),

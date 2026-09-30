@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Area, CartesianGrid, ComposedChart, Line, ReferenceArea, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { Sparkles } from 'lucide-react'
-import { useSummarize, useSummary, useTopic, useTopicSeries, useTopics } from '../hooks/useApi'
+import { useKeywords, useSummarize, useSummary, useTopic, useTopicSeries, useTopics } from '../hooks/useApi'
 import { Card, ChartOrTable, ChartTip, Empty, Legend, PageHead, Seg, StatusBadge } from '../components/ui'
 import { AXIS_TICK, ORGANIC, PLATFORM_LABEL, PLATFORM_SLOT, RAW } from '../lib/viz'
 import { ist, istShort, num, pct } from '../lib/fmt'
@@ -27,6 +27,36 @@ function SummaryBox({ topicId }: { topicId: number }) {
       </button>
       {summarize.isError && <span className="muted" style={{ fontSize: 12 }}>{String(summarize.error)}</span>}
     </div>
+  )
+}
+
+function Keywords() {
+  const { data } = useKeywords()
+  const [view, setView] = useState<'viral' | 'top'>('viral')
+  const rows: any[] = data?.[view] ?? []
+  return (
+    <Card title="Viral hashtags" sub={view === 'viral' ? 'biggest spikes: busiest hour compared with the usual hourly rate' : 'most used over the whole period'}
+      style={{ marginTop: 20 }}
+      actions={<Seg<'viral' | 'top'> label="Hashtag ranking" value={view} onChange={setView} options={[{ value: 'viral', label: 'Viral spikes' }, { value: 'top', label: 'Most used' }]} />}>
+      {rows.length === 0 ? <Empty>No hashtags yet.</Empty> : (
+        <div className="table-wrap">
+          <table className="tbl">
+            <thead><tr><th>#</th><th>Hashtag</th><th>Peak hour</th><th className="num">Posts at peak</th><th className="num">Spike</th><th className="num">All time</th><th>Where</th></tr></thead>
+            <tbody>{rows.map((k, i) => (
+              <tr key={k.keyword}>
+                <td className="muted tnum">{i + 1}</td>
+                <td style={{ fontWeight: 600 }}>{k.keyword}</td>
+                <td className="muted">{istShort(k.peak_at)}</td>
+                <td className="num">{num(k.peak_per_hour)}</td>
+                <td className="num" style={{ fontWeight: 600 }}>{k.spike.toFixed(0)}×</td>
+                <td className="num">{num(k.posts)}</td>
+                <td className="muted">{k.platforms.map((p: string) => PLATFORM_LABEL[p] ?? p).join(' · ')}</td>
+              </tr>
+            ))}</tbody>
+          </table>
+        </div>
+      )}
+    </Card>
   )
 }
 
@@ -134,6 +164,7 @@ export default function Trends() {
           </div>
         ) : <Empty>Select a topic.</Empty>}
       </div>
+      <Keywords />
     </div>
   )
 }

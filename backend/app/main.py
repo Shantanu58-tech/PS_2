@@ -10,7 +10,7 @@ from fastapi.responses import FileResponse, JSONResponse
 
 from app.api.routers import (
     alerts, cases, collectors, coordination, demographics, eval_router, graph, health, ledger_router,
-    lineage, posts, replay_router, search, stream, timeline, topics, traceability,
+    lineage, platforms, posts, replay_router, search, stream, timeline, topics, traceability,
 )
 from app.config import ROOT, settings
 from app.db.session import init_db_sync
@@ -60,7 +60,7 @@ async def demo_readonly_guard(request: Request, call_next):
 app.include_router(health.router)
 app.include_router(health.router, prefix="/api")
 for r in (posts, timeline, topics, graph, coordination, lineage, demographics, alerts, cases,
-          ledger_router, stream, collectors, search, eval_router, replay_router, traceability):
+          ledger_router, stream, collectors, search, eval_router, replay_router, traceability, platforms):
     app.include_router(r.router, prefix="/api")
 
 

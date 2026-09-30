@@ -5,6 +5,7 @@ import { test, expect } from '@playwright/test'
 const ROUTES: [string, RegExp][] = [
   ['/', /Overview/],
   ['/timeline', /Emotions/],
+  ['/platforms', /Platforms/],
   ['/trends', /Trends/],
   ['/coordination', /Coordination/],
   ['/network', /Network/],

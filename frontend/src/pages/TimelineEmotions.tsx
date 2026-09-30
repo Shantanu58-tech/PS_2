@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { useCompare, useEmotions, useTopics } from '../hooks/useApi'
 import { Card, ChartTip, Empty, InfoPop, Legend, PageHead, Seg } from '../components/ui'
-import { AXIS_TICK, EMOTIONS, EMOTION_LABEL, EMOTION_SLOT, RAW, type Emotion } from '../lib/viz'
+import { AXIS_TICK, EMOTIONS, EMOTION_LABEL, EMOTION_SLOT, PLATFORMS, PLATFORM_LABEL, RAW, type Emotion } from '../lib/viz'
 import { ist, istDay, istShort, pct } from '../lib/fmt'
 
 function Panel({ emotion, data, bucket }: { emotion: Emotion; data: any[]; bucket: string }) {
@@ -34,10 +34,12 @@ function Panel({ emotion, data, bucket }: { emotion: Emotion; data: any[]; bucke
 export default function TimelineEmotions() {
   const [bucket, setBucket] = useState<'1h' | '1d'>('1d')
   const [topicId, setTopicId] = useState<number | undefined>(undefined)
-  const { data: raw } = useEmotions(false, bucket, topicId)
-  const { data: org } = useEmotions(true, bucket, topicId)
+  const [platform, setPlatform] = useState('')
+  const [kind, setKind] = useState<'all' | 'posts' | 'comments'>('all')
+  const { data: raw } = useEmotions(false, bucket, topicId, platform, kind)
+  const { data: org } = useEmotions(true, bucket, topicId, platform, kind)
   const { data: topicsData } = useTopics('coordinated', 30)
-  const { data: cmp } = useCompare(topicId)
+  const { data: cmp } = useCompare(topicId, platform, kind)
 
   const merged = useMemo(() => {
     const m = new Map<string, any>()
@@ -56,6 +58,12 @@ export default function TimelineEmotions() {
       <PageHead title="Emotions"
         sub="How people feel about it over time: all activity in gray, organic accounts in colour."
         actions={<>
+          <select className="input" value={platform} onChange={e => setPlatform(e.target.value)} aria-label="Platform filter">
+            <option value="">All platforms</option>
+            {PLATFORMS.map(p => <option key={p} value={p}>{PLATFORM_LABEL[p]}</option>)}
+          </select>
+          <Seg<'all' | 'posts' | 'comments'> label="Post type" value={kind} onChange={setKind} options={[
+            { value: 'all', label: 'All' }, { value: 'posts', label: 'Posts' }, { value: 'comments', label: 'Comments' }]} />
           <select className="input" value={topicId ?? ''} onChange={e => setTopicId(e.target.value ? Number(e.target.value) : undefined)} aria-label="Topic filter">
             <option value="">All topics</option>
             {topics.map(t => <option key={t.topic_id} value={t.topic_id}>{t.nature === 'manufactured' ? '⚠ ' : ''}{t.label}</option>)}
@@ -64,7 +72,7 @@ export default function TimelineEmotions() {
         </>} />
 
 
-      {merged.length === 0 ? <Empty>No emotion data yet.</Empty> : (
+      {merged.length === 0 ? <Empty>No posts match these filters.</Empty> : (
         <>
           <div className="grid g-3" style={{ marginBottom: 20, alignItems: 'start' }}>
             {EMOTIONS.map(e => <Panel key={e} emotion={e} data={merged} bucket={bucket} />)}

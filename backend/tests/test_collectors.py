@@ -79,6 +79,17 @@ def test_facebook_csv_import():
     assert post.synthetic is False
 
 
+def test_csv_sample_rows_can_mark_themselves_synthetic():
+    from app.collectors.import_csv import read_csv_text
+
+    text = ("id,username,type,text,created_time,parent_id,synthetic\n"
+            "ig_1,ig_priya_1,photo,Rainy chai #Rain,2024-11-05 10:00:00,,true\n"
+            "ig_1_c2,ig_rahul_2,comment,So pretty,2024-11-05 10:05:00,ig_1,\n")
+    post, comment = (normalize(r)[0] for r in read_csv_text(text, "instagram", "sample.csv"))
+    assert post.synthetic is True and comment.synthetic is False
+    assert comment.kind == "comment" and comment.parent_post_id == "ig_1"
+
+
 def test_import_rejects_other_platforms():
     from app.collectors.import_csv import read_csv_text
 

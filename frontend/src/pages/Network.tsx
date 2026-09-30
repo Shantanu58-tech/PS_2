@@ -2,11 +2,11 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import ForceGraph2D from 'react-force-graph-2d'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { ArrowDown, ArrowUp, Minus } from 'lucide-react'
-import { useGraph, useInfluencers, useSpread } from '../hooks/useApi'
+import { useGraph, useInfluencers, useSegmentSpread, useSpread } from '../hooks/useApi'
 import { useAppStore } from '../store/app'
 import { Card, ChartOrTable, ChartTip, Empty, InfoPop, Legend, PageHead, StatusBadge } from '../components/ui'
 import { AXIS_TICK, cssVar } from '../lib/viz'
-import { ist, istShort, num } from '../lib/fmt'
+import { ist, istShort, num, pct } from '../lib/fmt'
 
 // Only the first three categorical slots are distinguishable all-pairs (dataviz palette note);
 // smaller communities fold into a neutral "other".
@@ -28,6 +28,50 @@ function RankDelta({ rank, other }: { rank: number; other?: number | null }) {
   const d = other - rank
   if (d === 0) return <span className="muted"><Minus size={12} /></span>
   return <span className="row tnum" style={{ gap: 2 }} title={`Rank ${other} in the other view`}>{d > 0 ? <ArrowUp size={12} /> : <ArrowDown size={12} />}{Math.abs(d)}</span>
+}
+
+const SEG_SLOT: Record<string, string> = { s0: 'var(--critical)', s1: 'var(--s1)', s2: 'var(--s2)', s3: 'var(--s3)', s4: 'var(--s4)', other: 'var(--neutral-series)' }
+
+/** How one narrative hops between audience segments over time, and how anxious each segment gets. */
+function SegmentSpread() {
+  const { data } = useSegmentSpread()
+  const frames: any[] = data?.frames ?? []
+  const summary: any[] = data?.summary ?? []
+  if (!frames.length) return null
+  const max = Math.max(1, ...frames.flatMap(f => summary.map(s => f[s.key] ?? 0)))
+  const t0 = new Date(frames[0].hour).getTime()
+  const t1 = new Date(frames[frames.length - 1].hour).getTime()
+  const x = (h: string) => 3 + 90 * ((new Date(h).getTime() - t0) / Math.max(1, t1 - t0))
+  return (
+    <Card title="How it spread between groups" style={{ marginTop: 20 }}
+      sub={`the most-pushed narrative, ${data.bucket === '10m' ? '10-minute' : 'hourly'} steps · bubble size = posts`}
+      actions={<InfoPop>Groups are communities found in the interaction network; the coordinated group is kept separate. Reading down the list shows the order in which each group was reached.</InfoPop>}>
+      <ChartOrTable
+        chart={
+          <div className="stack" style={{ gap: 4 }}>
+            {summary.map(s => (
+              <div key={s.key} className="lane" style={{ gridTemplateColumns: '230px 1fr 110px' }}>
+                <span className="row" style={{ fontSize: 13 }}>
+                  <span style={{ width: 10, height: 10, borderRadius: 3, background: SEG_SLOT[s.key], flexShrink: 0 }} />{s.label}
+                </span>
+                <div className="lane-track">
+                  {frames.filter(f => f[s.key]).map(f => {
+                    const r = 5 + 13 * Math.sqrt((f[s.key] ?? 0) / max)
+                    return <span key={f.hour} title={`${ist(f.hour)} · ${f[s.key]} posts`} className="lane-dot"
+                      style={{ left: `${x(f.hour)}%`, width: r * 2, height: r * 2, background: SEG_SLOT[s.key], opacity: 0.85 }} />
+                  })}
+                </div>
+                <span className="muted" style={{ fontSize: 12.5, textAlign: 'right' }}>anxiety {s.anxiety != null ? pct(s.anxiety, 0) : '—'}</span>
+              </div>
+            ))}
+            <div className="spread muted" style={{ fontSize: 12, paddingLeft: 242, paddingRight: 122 }}>
+              <span>{istShort(frames[0].hour)}</span><span>{istShort(frames[frames.length - 1].hour)}</span>
+            </div>
+          </div>}
+        table={<table className="tbl"><thead><tr><th>Group</th><th>First reached</th><th className="num">Posts</th><th className="num">Anxiety</th></tr></thead>
+          <tbody>{summary.map(s => <tr key={s.key}><td>{s.label}</td><td>{ist(s.first_seen)}</td><td className="num">{num(s.posts)}</td><td className="num">{s.anxiety != null ? pct(s.anxiety, 0) : '—'}</td></tr>)}</tbody></table>} />
+    </Card>
+  )
 }
 
 export default function Network() {
@@ -124,7 +168,9 @@ export default function Network() {
         </div>
       </div>
 
-      <Card title="How it spread" sub="cumulative reach of the most-pushed narrative" style={{ marginTop: 20 }}>
+      <SegmentSpread />
+
+      <Card title="Reach over time" sub="cumulative reach of the most-pushed narrative" style={{ marginTop: 20 }}>
         {(spread?.frames ?? []).length === 0 ? <Empty>No spread data.</Empty> : (
           <ChartOrTable
             chart={<>

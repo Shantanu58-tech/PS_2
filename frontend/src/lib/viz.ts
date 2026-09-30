@@ -11,7 +11,7 @@ export const EMOTION_LABEL: Record<Emotion, string> = {
   anxiety: 'Anxiety / panic', excitement: 'Excitement', supportive: 'Supportive', against: 'Against', sarcasm: 'Sarcasm',
 }
 
-export const PLATFORMS = ['x', 'telegram', 'reddit', 'youtube', 'instagram', 'facebook'] as const
+export const PLATFORMS = ['x', 'telegram', 'instagram', 'facebook', 'reddit', 'youtube'] as const
 export const PLATFORM_SLOT: Record<string, string> = {
   x: 'var(--s1)', telegram: 'var(--s2)', reddit: 'var(--s3)', youtube: 'var(--s4)', instagram: 'var(--s5)', facebook: 'var(--s6)',
 }
