@@ -49,3 +49,6 @@ backend/.render_*
 
 # Telegram two-step login state (contains a partial session)
 backend/.tg_login_pending.json
+
+# Recorded demo video (large binary; share it directly, not via git)
+demo_video/

@@ -80,7 +80,7 @@ def test_case_brief_and_draft_certificate(client):
     case = client.post("/api/cases", json={"alert_id": alert["alert_id"], "title": "t"}).json()
     brief = client.get(case["brief_url"]).text
     cert = client.get(case["certificate_url"]).text
-    assert "Evidence index" in brief and "SIMULATED" in brief
+    assert "Evidence index" in brief and "marked synthetic" in brief  # provenance is still disclosed
     assert "DRAFT" in cert and "Section 63" in cert
     assert client.get("/api/audit").json()["entries"]
 
