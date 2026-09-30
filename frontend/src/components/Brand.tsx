@@ -1,15 +1,15 @@
 /**
- * PRAHARI mark: a deepastambha, the Indian temple lamp tower that keeps a light
+ * DEEPASTAMBHA mark: a deepastambha, the Indian temple lamp tower that keeps a light
  * burning through the night, drawn inside a round seal. The six lamps on its three
  * tiers stand for the six platforms watched; the saffron flame on top is the
- * sentinel (prahari), with listening arcs around it; the green base line completes
+ * watchful flame, with listening arcs around it; the green base line completes
  * the tricolour. An original project emblem, not an official insignia.
  * Below 28px the seal's dotted ring and outer arcs are dropped so it stays legible.
  */
-export function PrahariMark({ size = 36 }: { size?: number }) {
+export function DeepastambhaMark({ size = 36 }: { size?: number }) {
   const full = size >= 28
   return (
-    <svg width={size} height={size} viewBox="0 0 64 64" role="img" aria-label="PRAHARI logo">
+    <svg width={size} height={size} viewBox="0 0 64 64" role="img" aria-label="DEEPASTAMBHA logo">
       <circle cx="32" cy="32" r="30" fill="#FBF6EF" stroke="#C87D43" strokeWidth={full ? 2.5 : 3.5} />
       {full && <circle cx="32" cy="32" r="26" fill="none" stroke="#B89F88" strokeWidth="1" strokeDasharray="1.6 2.4" />}
       <g fill="none" stroke="#C87D43" strokeWidth="1.6" strokeLinecap="round">
@@ -38,14 +38,14 @@ export function PrahariMark({ size = 36 }: { size?: number }) {
 export const TAGLINE = 'Every narrative watched. Every record kept.'
 export const TAGLINE_HI = 'हर कथा पर नज़र · हर अभिलेख सुरक्षित'
 
-export function PrahariLogo({ size = 36, compact = false }: { size?: number; compact?: boolean }) {
+export function DeepastambhaLogo({ size = 36, compact = false }: { size?: number; compact?: boolean }) {
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
-      <PrahariMark size={size} />
+      <DeepastambhaMark size={size} />
       {!compact && (
         <span style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
-          <span style={{ fontWeight: 800, fontSize: 19, letterSpacing: '0.08em', color: 'var(--ink-1)' }}>PRAHARI</span>
-          <span style={{ fontSize: 11.5, color: 'var(--ink-3)', fontWeight: 500 }}>प्रहरी · narrative watch</span>
+          <span style={{ fontWeight: 800, fontSize: 19, letterSpacing: '0.08em', color: 'var(--ink-1)' }}>DEEPASTAMBHA</span>
+          <span style={{ fontSize: 11.5, color: 'var(--ink-3)', fontWeight: 500 }}>दीपस्तम्भ · narrative watch</span>
         </span>
       )}
     </span>

@@ -17,17 +17,17 @@ const CaseFile = lazy(() => import('./pages/CaseFile'))
 const Ledger = lazy(() => import('./pages/Ledger'))
 const Search = lazy(() => import('./pages/Search'))
 import { useAppStore } from './store/app'
-import { PrahariMark, TAGLINE } from './components/Brand'
+import { DeepastambhaMark, TAGLINE } from './components/Brand'
 
 function MissionBriefing() {
   const { setShowBriefing, setTourActive } = useAppStore()
   return (
     <div className="overlay" role="dialog" aria-modal="true" aria-labelledby="briefing-title">
       <div className="card" style={{ maxWidth: 520, width: '100%', padding: 32, textAlign: 'center' }}>
-        <div style={{ display: 'flex', justifyContent: 'center' }}><PrahariMark size={92} /></div>
-        <h1 id="briefing-title" style={{ fontSize: 28, fontWeight: 800, margin: '14px 0 2px', letterSpacing: '0.06em' }}>
-          <span style={{ fontFamily: '"Noto Sans Devanagari", var(--font)', letterSpacing: 0 }}>प्रहरी</span>
-          <span style={{ color: 'var(--accent)', margin: '0 10px', fontWeight: 400 }}>|</span>PRAHARI
+        <div style={{ display: 'flex', justifyContent: 'center' }}><DeepastambhaMark size={92} /></div>
+        <h1 id="briefing-title" style={{ fontSize: 24, fontWeight: 800, margin: '14px 0 2px', letterSpacing: '0.06em' }}>
+          <span style={{ fontFamily: '"Noto Sans Devanagari", var(--font)', letterSpacing: 0 }}>दीपस्तम्भ</span>
+          <span style={{ color: 'var(--accent)', margin: '0 10px', fontWeight: 400 }}>|</span>DEEPASTAMBHA
         </h1>
         <div className="muted" style={{ fontSize: 13 }}>National Narrative Situation Room</div>
         <div style={{ margin: '6px 0 18px', fontSize: 13.5, fontWeight: 600, color: 'var(--accent-ink)' }}>{TAGLINE}</div>
@@ -58,7 +58,7 @@ function GuidedTour() {
     { route: '/timeline', organic: true, title: 'Organic only',
       body: 'The switch in the top bar is now on Organic only. Gray is all activity; colour is what real users feel once coordinated accounts are removed.' },
     { route: '/coordination', organic: false, title: 'Step 3 · Investigate who is behind it',
-      body: 'This group posts copy-paste text within seconds of each other, on a clock-like rhythm. PRAHARI flags the pattern for review; it never calls anyone a bot.' },
+      body: 'This group posts copy-paste text within seconds of each other, on a clock-like rhythm. DEEPASTAMBHA flags the pattern for review; it never calls anyone a bot.' },
     { route: '/network', organic: false, title: 'The network, across apps',
       body: 'Nodes are coloured by platform; press Play to watch the network form over time. Click any account for its followers, connections and activity on every platform.' },
     { route: '/lineage', organic: false, title: 'Where it started',

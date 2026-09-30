@@ -6,7 +6,7 @@
 - Approved by: Om Soma
 
 ## Context
-PRAHARI has to ingest from four live platforms plus replay datasets. It needs to run Hinglish NLP on a 6 GB RTX 3050, compute temporal coordination graphs, and serve an analyst console. The hosted demo must run for free. The brief (§3.1) proposes a stack. TRIVENI (`docs/HOSTING_NOTES.md`) showed what worked for this team and what hurt.
+DEEPASTAMBHA has to ingest from four live platforms plus replay datasets. It needs to run Hinglish NLP on a 6 GB RTX 3050, compute temporal coordination graphs, and serve an analyst console. The hosted demo must run for free. The brief (§3.1) proposes a stack. TRIVENI (`docs/HOSTING_NOTES.md`) showed what worked for this team and what hurt.
 
 ## Decision
 

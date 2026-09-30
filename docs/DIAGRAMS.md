@@ -1,4 +1,4 @@
-# PRAHARI: diagrams (Mermaid) and references
+# DEEPASTAMBHA: diagrams (Mermaid) and references
 
 Paste each block into https://mermaid.live (or any Mermaid renderer) to export PNG/SVG for slides.
 
@@ -99,13 +99,13 @@ flowchart TD
 
 ## 3. Impact square
 
-Qualitative positioning of what PRAHARI changes, by who benefits (x-axis) and how
+Qualitative positioning of what DEEPASTAMBHA changes, by who benefits (x-axis) and how
 direct the effect is (y-axis). Placement is a judgement, not a measurement; the
 measured numbers are in `eval/reports/summary.json`.
 
 ```mermaid
 quadrantChart
-    title PRAHARI impact square
+    title DEEPASTAMBHA impact square
     x-axis Operational - analyst team --> Societal - public and institutions
     y-axis Indirect benefit --> Direct benefit
     quadrant-1 Public safety and trust

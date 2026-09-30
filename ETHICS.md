@@ -1,6 +1,6 @@
 # Ethics and responsible use
 
-PRAHARI is a prototype built for SIH 2026 PS 26152 (NTRO). These commitments
+DEEPASTAMBHA is a prototype built for SIH 2026 PS 26152 (NTRO). These commitments
 are enforced in code where possible, and the tests named below check them.
 
 ## What the system does not do

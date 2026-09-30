@@ -1,4 +1,4 @@
-# PRAHARI on Render (free)
+# DEEPASTAMBHA on Render (free)
 
 Live: https://prahari-h849.onrender.com · keepalive: https://prahari-keepalive.triveni-moggers.workers.dev
 

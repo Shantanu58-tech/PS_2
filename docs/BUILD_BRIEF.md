@@ -1,4 +1,4 @@
-# BUILD BRIEF: PRAHARI (working name)
+# BUILD BRIEF: DEEPASTAMBHA (working name)
 ## SIH26152 Social Media Analytics (NTRO) | Team MOGGERS, VIT Pune | Team Leader: Om Soma
 
 > Read this whole file before writing any code. It is the master instruction set.
@@ -142,7 +142,7 @@ If `D:\SIH` shows a stack that worked well for hosting, prefer consistency with 
 
 ### 3.2 Repository layout
 ```
-PRAHARI/
+DEEPASTAMBHA/
   CLAUDE.md
   README.md
   LICENSE

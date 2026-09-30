@@ -1,4 +1,4 @@
-# PRAHARI: current approach, end to end (interim)
+# DEEPASTAMBHA: current approach, end to end (interim)
 
 > Snapshot for team context and PPT prep, written mid-build (2026-09-30).
 > Numbers marked **interim** come from the latest `eval/reports/` run and may change

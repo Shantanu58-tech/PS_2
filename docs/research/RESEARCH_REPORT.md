@@ -142,7 +142,7 @@ S = strong, W = weak/partial, — = absent/not evident. Columns: A–E; IN = Ind
 
 ## Recommendations
 
-**Positioning: "Compliance-first narrative forensics for India's code-mixed information space."** (Working names: *SUTRA* or *PRAHARI*.) The pitch to NTRO: *we detect when a narrative is being pushed, by whom (as clusters, not individuals), across Telegram and X, in Hinglish, with measured accuracy, without building a surveillance database.*
+**Positioning: "Compliance-first narrative forensics for India's code-mixed information space."** (Working names: *SUTRA* or *DEEPASTAMBHA*.) The pitch to NTRO: *we detect when a narrative is being pushed, by whom (as clusters, not individuals), across Telegram and X, in Hinglish, with measured accuracy, without building a surveillance database.*
 
 **Five USPs mapped to the evidence-backed gaps**
 1. **Calibrated Hinglish affect with abstention (Gap 1).** Fine-tune MuRIL/XLM-R on SentiMix plus the sarcasm corpora; add stance and emotion heads; apply temperature scaling so the model returns "uncertain" instead of guessing. Put an **evaluation card** on the slide (macro-F1 per class, and against VADER as a baseline). Almost no competitor shows numbers.

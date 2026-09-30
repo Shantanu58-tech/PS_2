@@ -1,13 +1,13 @@
-# PRAHARI
+# DEEPASTAMBHA
 
 **SIH 2026 · Problem Statement 26152 (Social Media Analytics) · NTRO · Theme: Blockchain & Cybersecurity**
 **Team MOGGERS — VIT Pune**
 
-> **PRAHARI** (प्रहरी, "sentinel")
+> **DEEPASTAMBHA** (दीपस्तम्भ, "pillar of light": the temple lamp tower that keeps watch through the night)
 > is a next-generation, privacy-first intelligence platform engineered to detect coordinated inauthentic
 > behavior and sophisticated disinformation campaigns across major platforms including X (Twitter), Telegram, Reddit, and YouTube.
 > Built with military-grade tamper-evident ledgers, advanced behavioral heuristics, and k-anonymized demographic analysis,
-> PRAHARI empowers analysts with real-time, actionable insights while maintaining uncompromising ethical standards and data integrity.
+> DEEPASTAMBHA empowers analysts with real-time, actionable insights while maintaining uncompromising ethical standards and data integrity.
 
 **Live demo (public, read-only, synthetic data):** https://prahari-h849.onrender.com  
 **Code:** https://github.com/Shantanu58-tech/PS_2

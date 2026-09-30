@@ -45,7 +45,7 @@ async def lifespan(app: FastAPI):
         await asyncio.gather(task, return_exceptions=True)
 
 
-app = FastAPI(title="PRAHARI", version=VERSION, lifespan=lifespan)
+app = FastAPI(title="DEEPASTAMBHA", version=VERSION, lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,

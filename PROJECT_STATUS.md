@@ -1,4 +1,4 @@
-# PRAHARI: Project Status
+# DEEPASTAMBHA: Project Status
 
 **Team MOGGERS · VIT Pune · SIH 2026 · PS 26152 (NTRO)**
 _Last verified: 2026-09-30. Every claim below was checked by running the code. Metrics come from `eval/reports/summary.json`._

@@ -1,11 +1,11 @@
-# PRAHARI: idea PPT support (SIH26152)
+# DEEPASTAMBHA: idea PPT support (SIH26152)
 
-This is the source content for the six-slide SIH idea deck. Every factual claim traces back to `docs/research/RESEARCH_REPORT.md`, where the citation numbers in brackets point. **Nothing on these slides claims a measured PRAHARI result yet.** The metrics are shown as the *evaluation plan* and the *published baselines we must beat*. Say it that way on stage; it is part of our credibility.
+This is the source content for the six-slide SIH idea deck. Every factual claim traces back to `docs/research/RESEARCH_REPORT.md`, where the citation numbers in brackets point. **Nothing on these slides claims a measured DEEPASTAMBHA result yet.** The metrics are shown as the *evaluation plan* and the *published baselines we must beat*. Say it that way on stage; it is part of our credibility.
 
 ---
 
 ## Slide 1: Title
-- **PRAHARI**: *Narrative forensics, not surveillance.*
+- **DEEPASTAMBHA**: *Narrative forensics, not surveillance.*
 - Subtitle: compliance-first detection of coordinated narratives across Telegram and X, in Hinglish.
 - SIH26152 · Social Media Analytics · NTRO
 - Team MOGGERS, VIT Pune · Team Leader: **Om Soma** · (member names)
@@ -21,9 +21,9 @@ This is the source content for the six-slide SIH idea deck. Every factual claim 
 - In Q3 2023, Meta removed a China-origin network aimed at India's Arunachal Pradesh discourse. Its fictitious personas posed as journalists, lawyers and human-rights activists on Facebook and X, and about 1,400 accounts joined one of its Groups. In the same report, part of a separate 4,789-account network switched from posing as Americans to posing as India-based. [81]
 - Could India catch this **in Hinglish, across Telegram and X, without surveilling citizens?**
 
-**What PRAHARI does**, with components A–E read as an influence-operations workflow:
+**What DEEPASTAMBHA does**, with components A–E read as an influence-operations workflow:
 
-| PS component | PRAHARI answer |
+| PS component | DEEPASTAMBHA answer |
 |---|---|
 | A. Collection | Official APIs plus a curated public-channel allowlist, with a provenance tag on every event (LIVE / REPLAY / IMPORT / SYNTHETIC) |
 | B. Nuanced affect | Hinglish-first multi-head model (sentiment, stance, emotion, sarcasm) with **calibrated confidence and abstention** |

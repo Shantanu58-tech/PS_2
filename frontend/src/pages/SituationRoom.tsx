@@ -50,7 +50,7 @@ function SitRep({ sit }: { sit: any }) {
             <span className="muted" style={{ fontSize: 12.5 }}>as of {ist(r.as_of)}</span>
           </div>
           <p>
-            PRAHARI is watching <b>{num(r.posts)} posts</b> across <b>{r.platforms} platforms</b>.{' '}
+            DEEPASTAMBHA is watching <b>{num(r.posts)} posts</b> across <b>{r.platforms} platforms</b>.{' '}
             {lead ? <>
               A coordinated campaign is pushing <span className="hl" style={{ textTransform: 'capitalize' }}>“{lead.label}”</span> in <b>{lead.sector}</b>:{' '}
               <b>{pct(lead.coordinated_share, 0)}</b> of its {num(lead.posts)} posts come from a group of <b>{lead.group_accounts} accounts acting in sync</b>.

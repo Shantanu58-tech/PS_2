@@ -1,4 +1,4 @@
-# Hosting notes: how TRIVENI (SIH26027) was hosted, and what PRAHARI takes from it
+# Hosting notes: how TRIVENI (SIH26027) was hosted, and what DEEPASTAMBHA takes from it
 
 Source: a read-only review of `D:\SIH` on 2026-09-29. No secrets were opened or copied. Env var **names** are listed below, never their values.
 
@@ -52,9 +52,9 @@ Hugging Face Docker Space (alternative) -> same Dockerfile, app_port 7860
 6. **Monolith:** the 2,000-line `main.py` was hard to test in parts.
 7. **No CI:** nothing caught a broken build before the deploy.
 
-## 5. What PRAHARI adopts (decided in ADR 0002)
+## 5. What DEEPASTAMBHA adopts (decided in ADR 0002)
 
-| TRIVENI lesson | PRAHARI decision |
+| TRIVENI lesson | DEEPASTAMBHA decision |
 |---|---|
 | Docker image, slim, non-root, `MALLOC_ARENA_MAX=2` | Same base, pattern and flags |
 | 512 MB was too small | API plus ONNX inference on a **Hugging Face Docker Space** (free CPU tier, far more RAM). Render remains the fallback. |
@@ -66,4 +66,4 @@ Hugging Face Docker Space (alternative) -> same Dockerfile, app_port 7860
 | No CI | pytest, ruff and gitleaks in CI from Phase 5 onwards |
 | Demo must never break | Hosted mode is **REPLAY + SYNTHETIC** only; live connectors are off by default |
 
-Project: PRAHARI, Team MOGGERS, VIT Pune. Team Leader: Om Soma.
+Project: DEEPASTAMBHA, Team MOGGERS, VIT Pune. Team Leader: Om Soma.

@@ -8,7 +8,7 @@
 ## Context
 TRIVENI ran on Render's free tier (Docker, 512 MB, 0.1 CPU). The code bundle was pulled from a private Hugging Face repo at boot, a Cloudflare keep-alive Worker hit the service, and a warm-up screen covered cold starts (`docs/HOSTING_NOTES.md`). What hurt: cold starts, too little RAM, the database resetting on every restart, and manual bundling.
 
-PRAHARI adds needs TRIVENI did not have:
+DEEPASTAMBHA adds needs TRIVENI did not have:
 - An ONNX int8 transformer, roughly 250 to 300 MB in memory.
 - Postgres that persists across restarts.
 - A Redis Streams bus.

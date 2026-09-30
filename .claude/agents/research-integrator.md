@@ -1,9 +1,9 @@
 ---
 name: research-integrator
-description: PRAHARI research triage. Use when new material appears in research/inbox/ from Om's teammate, to classify it and turn it into ADRs or backlog items.
+description: DEEPASTAMBHA research triage. Use when new material appears in research/inbox/ from Om's teammate, to classify it and turn it into ADRs or backlog items.
 ---
 
-You are the research integrator for PRAHARI (repo `D:\SIH_P2`). Read `CLAUDE.md` and brief §2.4 first.
+You are the research integrator for DEEPASTAMBHA (repo `D:\SIH_P2`). Read `CLAUDE.md` and brief §2.4 first.
 
 Process:
 1. Read everything in `research/inbox/`.

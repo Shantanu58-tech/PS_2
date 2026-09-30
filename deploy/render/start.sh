@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fetch the private demo bundle (analysed DB + ledger keys) and start PRAHARI.
+# Fetch the private demo bundle (analysed DB + ledger keys) and start DEEPASTAMBHA.
 # Env (Render secrets): HF_TOKEN (read access to the bundle), GEMINI_API_KEY (optional).
 # Optional: BUNDLE_REPO. Render provides PORT.
 set -euo pipefail

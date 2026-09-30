@@ -8,7 +8,7 @@ import { useAppStore } from '../store/app'
 import { useHealth, useSituation, useCases } from '../hooks/useApi'
 import { useLiveStatus } from '../hooks/useLive'
 import { Seg } from './ui'
-import { PrahariMark } from './Brand'
+import { DeepastambhaMark } from './Brand'
 import { NEXT, STAGES, stageOf } from '../lib/flow'
 
 type Item = { path: string; label: string; icon: ReactNode; count?: (d: any) => { text: string; hot?: boolean } | null }
@@ -94,11 +94,11 @@ export default function Layout({ children }: { children: ReactNode }) {
       <header className="masthead">
         <div className="masthead-inner">
           <button className="hamburger" aria-label="Toggle menu" aria-controls="primary-nav" aria-expanded={navCollapsed ? navOpen : !navCollapsed} onClick={toggleNav}><Menu size={21} /></button>
-          <Link to="/" aria-label="PRAHARI home" className="row" style={{ gap: 10 }}>
-            <PrahariMark size={34} />
+          <Link to="/" aria-label="DEEPASTAMBHA home" className="row" style={{ gap: 10 }}>
+            <DeepastambhaMark size={34} />
             <span style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15 }}>
-              <span style={{ fontWeight: 800, fontSize: 18, letterSpacing: '0.08em' }}>PRAHARI</span>
-              <span className="brand-sub">प्रहरी · National Narrative Situation Room</span>
+              <span style={{ fontWeight: 800, fontSize: 18, letterSpacing: '0.08em' }}>DEEPASTAMBHA</span>
+              <span className="brand-sub">दीपस्तम्भ · National Narrative Situation Room</span>
             </span>
           </Link>
           <TopSearch />
@@ -135,8 +135,8 @@ export default function Layout({ children }: { children: ReactNode }) {
           <button className="nav-link" style={{ border: 0, background: 'transparent', cursor: 'pointer', font: 'inherit', textAlign: 'left' }} title="Guided tour" onClick={() => setTourActive(true)}>
             <PlayCircle size={18} /><span>Guided tour</span>
           </button>
-          <button className="nav-link" style={{ border: 0, background: 'transparent', cursor: 'pointer', font: 'inherit', textAlign: 'left' }} title="About PRAHARI" onClick={() => setShowBriefing(true)}>
-            <Info size={18} /><span>About PRAHARI</span>
+          <button className="nav-link" style={{ border: 0, background: 'transparent', cursor: 'pointer', font: 'inherit', textAlign: 'left' }} title="About DEEPASTAMBHA" onClick={() => setShowBriefing(true)}>
+            <Info size={18} /><span>About DEEPASTAMBHA</span>
           </button>
         </div>
       </aside>

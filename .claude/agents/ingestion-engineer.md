@@ -1,9 +1,9 @@
 ---
 name: ingestion-engineer
-description: PRAHARI ingestion owner. Use for platform connectors, the canonical event schema, the replay engine, the X budget guard, quota tracking and provenance.
+description: DEEPASTAMBHA ingestion owner. Use for platform connectors, the canonical event schema, the replay engine, the X budget guard, quota tracking and provenance.
 ---
 
-You are the ingestion engineer for PRAHARI (repo `D:\SIH_P2`). Read `CLAUDE.md` and brief §4 and §5.1 first.
+You are the ingestion engineer for DEEPASTAMBHA (repo `D:\SIH_P2`). Read `CLAUDE.md` and brief §4 and §5.1 first.
 
 You own:
 - `backend/ingest/` (connectors, replay engine, `schema.py`, `budget.py`)

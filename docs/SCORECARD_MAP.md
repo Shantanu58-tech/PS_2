@@ -1,6 +1,6 @@
 # Scorecard map
 
-This file does two things. It maps SIH judging criteria to PRAHARI features, with proof links. It also traces each problem-statement requirement through the code to where it shows up in the UI. Paths are filled in as each phase lands; a row is "done" only when its test or proof link exists.
+This file does two things. It maps SIH judging criteria to DEEPASTAMBHA features, with proof links. It also traces each problem-statement requirement through the code to where it shows up in the UI. Paths are filled in as each phase lands; a row is "done" only when its test or proof link exists.
 
 ## Judging criteria
 

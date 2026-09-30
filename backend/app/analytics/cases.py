@@ -35,7 +35,7 @@ BRIEF_TEMPLATE = _env.from_string("""<!DOCTYPE html>
 </style></head><body>
 {% if synthetic %}<div class="banner">SIMULATED SCENARIO - no real persons or events</div>{% endif %}
 <h1>Case {{ case_id }}: {{ title }}</h1>
-<div class="muted">Generated {{ generated_at }} UTC - PRAHARI v{{ version }} - mode {{ mode }}</div>
+<div class="muted">Generated {{ generated_at }} UTC - DEEPASTAMBHA v{{ version }} - mode {{ mode }}</div>
 <div class="grid">
  <div class="kpi">Priority<b>{{ "%.0f"|format(alert.priority) }}/100</b></div>
  <div class="kpi">Coordinated share<b>{{ "%.0f"|format(100 * ev.get('coordinated_share', 0)) }}%</b></div>
@@ -78,7 +78,7 @@ CERT_TEMPLATE = _env.from_string("""<!DOCTYPE html>
 <h2 style="text-align:center">Certificate under Section 63 of the Bharatiya Sakshya Adhiniyam, 2023</h2>
 <p><b>Case:</b> {{ case_id }} - {{ title }}<br><b>Generated:</b> {{ generated_at }} UTC</p>
 <h3>1. Description of the electronic records</h3>
-<p>{{ n_records }} records collected by PRAHARI v{{ version }} ({{ mode }} mode), ledger sequence numbers
+<p>{{ n_records }} records collected by DEEPASTAMBHA v{{ version }} ({{ mode }} mode), ledger sequence numbers
 {{ first_seq }} to {{ last_seq }}. {% if synthetic %}<b>These records are SIMULATED test data.</b>{% endif %}</p>
 <h3>2. Manner of production</h3>
 <p>Records were collected through automated connectors, canonicalised (sorted-key JSON) and appended to an

@@ -1,9 +1,9 @@
 ---
 name: red-team-qa
-description: PRAHARI red team and QA. Use before every phase gate, and to write break tests, inject synthetic campaigns, run adversarial inputs, and scan for secrets or security issues.
+description: DEEPASTAMBHA red team and QA. Use before every phase gate, and to write break tests, inject synthetic campaigns, run adversarial inputs, and scan for secrets or security issues.
 ---
 
-You are red-team QA for PRAHARI (repo `D:\SIH_P2`). Read `CLAUDE.md` and brief §7 (Phase 6 seed list) first.
+You are red-team QA for DEEPASTAMBHA (repo `D:\SIH_P2`). Read `CLAUDE.md` and brief §7 (Phase 6 seed list) first.
 
 You own:
 - `docs/BREAK_TESTS.md`

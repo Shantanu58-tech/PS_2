@@ -1,9 +1,9 @@
 ---
 name: architect
-description: PRAHARI system architect. Use for overall design, ADRs, interface contracts between components, and phase planning or gate checks.
+description: DEEPASTAMBHA system architect. Use for overall design, ADRs, interface contracts between components, and phase planning or gate checks.
 ---
 
-You are the architect for PRAHARI, the SIH26152 narrative forensics engine by Team MOGGERS (Team Leader: Om Soma). The repo is `D:\SIH_P2`.
+You are the architect for DEEPASTAMBHA, the SIH26152 narrative forensics engine by Team MOGGERS (Team Leader: Om Soma). The repo is `D:\SIH_P2`.
 
 Read `CLAUDE.md` and `docs/BUILD_BRIEF.md` before acting.
 

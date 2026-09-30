@@ -25,7 +25,7 @@ for (const [path, heading] of ROUTES) {
     const skip = page.getByText('Explore on my own')
     if (await skip.isVisible().catch(() => false)) await skip.click()
     await expect(page.locator('h1').first()).toHaveText(heading)
-    await expect(page.getByRole('img', { name: 'PRAHARI logo' }).first()).toBeVisible()
+    await expect(page.getByRole('img', { name: 'DEEPASTAMBHA logo' }).first()).toBeVisible()
     expect(errors).toEqual([])
   })
 }

@@ -1,6 +1,6 @@
 """Synthetic Instagram and Facebook export CSVs for the demo scenario.
 
-Neither platform offers a free live API for public posts, so PRAHARI ingests
+Neither platform offers a free live API for public posts, so DEEPASTAMBHA ingests
 them from analyst-supplied exports (Meta Content Library style CSV). This
 script writes a fictional sample in that format covering the same week as the
 replay scenario, including the Varunapur dam rumour reaching a Facebook

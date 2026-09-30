@@ -1,4 +1,4 @@
-# PRAHARI phase plan
+# DEEPASTAMBHA phase plan
 
 Legend: `[x]` done, `[~]` in progress, `[ ]` not started, `[!]` blocked (reason given)
 

@@ -1,5 +1,5 @@
 """
-PRAHARI scenario generator v2 (PRD section 10.1). Fully fictional; every
+DEEPASTAMBHA scenario generator v2 (PRD section 10.1). Fully fictional; every
 object carries synthetic=true and the UI shows a SIMULATED banner.
 
 7 days, ~40k posts:
@@ -405,7 +405,7 @@ def generate_scenario(seed: int, output_path: str, media_dir: str | None = None,
 def main() -> None:
     from app.config import settings
 
-    parser = argparse.ArgumentParser(description="PRAHARI scenario generator")
+    parser = argparse.ArgumentParser(description="DEEPASTAMBHA scenario generator")
     parser.add_argument("--seed", type=int, default=7)
     parser.add_argument("--output", default=settings.scenario_path)
     parser.add_argument("--media-dir", default=settings.media_dir,

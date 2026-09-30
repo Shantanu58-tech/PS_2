@@ -1,4 +1,4 @@
-# PRAHARI: Master Context
+# DEEPASTAMBHA: Master Context
 
 **Team MOGGERS · VIT Pune · Smart India Hackathon 2026**
 **Problem Statement 26152 "Social Media Analytics" · NTRO · Category: Software · Theme: Blockchain & Cybersecurity**
@@ -15,7 +15,7 @@
 
 ## 1. One-liner and thesis
 
-**One-liner:** PRAHARI turns raw multi-platform social streams into evidence-grade
+**One-liner:** DEEPASTAMBHA turns raw multi-platform social streams into evidence-grade
 intelligence. It shows what narrative is spreading, where it was first seen, who is
 amplifying it, whether that amplification is organic or coordinated, and it keeps every
 collected record in a tamper-evident, independently verifiable ledger.
@@ -266,7 +266,7 @@ k-anonymity (Sweeney 2002); differential privacy (Dwork 2006).
 
 ## 9. Demo script (about 3 min)
 The full click-by-click walkthrough and the video script are in the shared doc
-"PRAHARI — Demo Walkthrough & Video Script". The console follows one numbered flow, shown in the
+"DEEPASTAMBHA — Demo Walkthrough & Video Script". The console follows one numbered flow, shown in the
 bar under the masthead: **1 Situation Room → 2 Detect → 3 Investigate → 4 Evidence**. Every page
 ends with a "Next in the flow" card, and every tile on the first page opens its detail in one click.
 

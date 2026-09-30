@@ -4,7 +4,7 @@
 
 **Done**
 - Read the build brief and the research report. The Phase 0 and Phase 1 plan was approved by Om.
-- Repo decision: build in `D:\SIH_P2` (not `D:\PRAHARI`); the project name stays PRAHARI.
+- Repo decision: build in `D:\SIH_P2` (not `D:\PRAHARI`); the project name stays DEEPASTAMBHA.
 - Initialised git on `main`. Moved the docs to `docs/BUILD_BRIEF.md` and `docs/research/RESEARCH_REPORT.md`. Created the `D:\PRAHARI_DATA` tree.
 - Read `D:\SIH` (read-only) and wrote `docs/HOSTING_NOTES.md`.
 - ADRs 0001 (stack), 0002 (hosting), 0003 (local infra), 0004 (Smart App Control).

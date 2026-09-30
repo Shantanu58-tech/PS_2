@@ -1,4 +1,4 @@
-# PRAHARI — instructions for Claude Code
+# DEEPASTAMBHA — instructions for Claude Code
 
 You are building the system in PRD sections 5–14 of PRAHARI_PRD_and_Dev_Handoff.md.
 
