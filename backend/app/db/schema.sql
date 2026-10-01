@@ -272,6 +272,7 @@ CREATE TABLE IF NOT EXISTS segment_labels (
 
 -- read-path indexes (topic counts, series and bursts per topic were full scans)
 CREATE INDEX IF NOT EXISTS idx_topic_assign_topic ON topic_assign(topic_id);
+CREATE INDEX IF NOT EXISTS idx_topic_assign_post ON topic_assign(platform, post_id);
 CREATE INDEX IF NOT EXISTS idx_topic_series_topic ON topic_series(topic_id, bucket_start);
 CREATE INDEX IF NOT EXISTS idx_bursts_topic ON bursts(topic_id);
 CREATE INDEX IF NOT EXISTS idx_coord_accounts_acc ON coord_accounts(account_id);

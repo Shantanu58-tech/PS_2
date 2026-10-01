@@ -183,13 +183,7 @@ export function Loading({ label = 'Loading' }: { label?: string }) {
 
 /** Empty states never dead-end: they point to the replay (or explain read-only mode). */
 export function Empty({ children }: { children?: ReactNode }) {
-  const { data: health } = useHealth()
-  return (
-    <div className="empty">
-      {children ?? 'No data yet.'}
-      {health && !health.demo_readonly && <div style={{ marginTop: 8 }}><Link to="/situation">Load data from the Overview →</Link></div>}
-    </div>
-  )
+  return <div className="empty">{children ?? 'No data yet.'}</div>
 }
 
 export function ErrorNote({ error }: { error: unknown }) {

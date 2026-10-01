@@ -1,11 +1,16 @@
 from fastapi import APIRouter, Query
 
+from app.api.cache import cached
 from app.api.deps import ORGANIC_CLAUSE, fetch_all
 
 router = APIRouter()
 
 # SQLite strftime patterns per bucket size (timestamps are UTC; the UI shows IST).
 BUCKETS = {"1h": "%Y-%m-%dT%H:00:00Z", "1d": "%Y-%m-%dT00:00:00Z"}
+
+# A topic filter as one lookup: SQLite builds the topic's post set once, instead of a correlated
+# EXISTS per post (40k probes; over a minute on the 0.1-CPU host).
+TOPIC_IN = "(p.platform, p.post_id) IN (SELECT platform, post_id FROM topic_assign WHERE topic_id=?)"
 
 
 @router.get("/timeline/emotions")
@@ -29,11 +34,11 @@ async def emotions_timeline(
     if organic_only:
         clauses.append(ORGANIC_CLAUSE)
     if topic_id is not None:
-        clauses.append("EXISTS (SELECT 1 FROM topic_assign ta WHERE ta.platform=p.platform "
-                       "AND ta.post_id=p.post_id AND ta.topic_id=?)")
+        clauses.append(TOPIC_IN)
         params.append(topic_id)
     where = ("AND " + " AND ".join(clauses)) if clauses else ""
-    rows = await fetch_all(
+    key = f"emo:{bucket}:{topic_id}:{organic_only}:{platform}:{kind}"
+    rows = await cached(key, lambda: fetch_all(
         f"""
         SELECT strftime('{BUCKETS[bucket]}', p.created_at) AS bucket,
                AVG(pe.anxiety) AS anxiety, AVG(pe.excitement) AS excitement,
@@ -45,7 +50,7 @@ async def emotions_timeline(
         GROUP BY 1 ORDER BY 1
         """,
         params,
-    )
+    ))
     return {"buckets": rows, "bucket": bucket, "organic_only": organic_only}
 
 
@@ -71,8 +76,7 @@ async def raw_vs_organic(
     kind: str = Query("all", pattern="^(all|posts|comments)$"),
 ):
     """Mean affect with and without coordinated accounts - the 'distortion'."""
-    topic_clause = ("AND EXISTS (SELECT 1 FROM topic_assign ta WHERE ta.platform=p.platform "
-                    "AND ta.post_id=p.post_id AND ta.topic_id=?)") if topic_id is not None else ""
+    topic_clause = f"AND {TOPIC_IN}" if topic_id is not None else ""
     params: list[object] = [topic_id] if topic_id is not None else []
     if platform:
         topic_clause += " AND p.platform=?"
@@ -81,6 +85,10 @@ async def raw_vs_organic(
         topic_clause += " AND p.kind IN ('reply', 'comment')"
     elif kind == "posts":
         topic_clause += " AND p.kind NOT IN ('reply', 'comment')"
+    return await cached(f"cmp:{topic_id}:{platform}:{kind}", lambda: _compare(topic_clause, params))
+
+
+async def _compare(topic_clause: str, params: list[object]) -> dict:
     out = {}
     for label, extra in (("raw", ""), ("organic", f"AND {ORGANIC_CLAUSE}")):
         row = await fetch_all(

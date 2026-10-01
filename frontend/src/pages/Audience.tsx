@@ -17,6 +17,7 @@ const DIM_INFO: Record<string, string> = {
   language: 'The language each account mostly posts in, including Hinglish.',
 }
 const LANG: Record<string, string> = { en: 'English', hi: 'Hindi', 'hi-latn': 'Hinglish', mr: 'Marathi', ta: 'Tamil', te: 'Telugu', bn: 'Bengali', ur: 'Urdu' }
+const MIN_POSTS = 60  // a story this size usually has 30+ distinct accounts
 const SERIES = ['var(--s1)', 'var(--s2)', 'var(--s3)', 'var(--s4)', 'var(--s5)', 'var(--s7)']
 const OTHER_FILL = 'var(--surface-3)'
 
@@ -61,10 +62,17 @@ function Note({ unknown, total, what, suppressed }: { unknown: number; total: nu
 
 export default function Audience() {
   const { organicOnly } = useAppStore()
-  const { data: topicsData } = useTopics('coordinated', 30)
-  const topics: any[] = (topicsData?.topics ?? topicsData ?? []).slice(0, 10)
+  const { data: topicsData } = useTopics('volume', 60)
+  // only stories with enough people to report on (smaller groups would be hidden for privacy anyway);
+  // likely coordinated ones first, then by size
+  const topics: any[] = (topicsData?.topics ?? topicsData ?? [])
+    .filter((t: any) => (t.n_posts ?? 0) >= MIN_POSTS)
+    .sort((a: any, b: any) => (b.nature === 'manufactured' ? 1 : 0) - (a.nature === 'manufactured' ? 1 : 0) || b.n_posts - a.n_posts)
+    .slice(0, 12)
   const [scope, setScope] = useState('live')
-  const { data, isFetching } = useDemographics(organicOnly, scope)
+  const { data, isFetching, isPlaceholderData } = useDemographics(organicOnly, scope)
+  const switching = isPlaceholderData && isFetching  // still showing the previous selection
+  const tooSmall = data && !switching && data.coverage?.accounts == null
   const dims: Record<string, Dim> = data?.dimensions ?? {}
   const cov = data?.coverage
   const geo = prepare('geography', dims.geography)
@@ -89,14 +97,16 @@ export default function Audience() {
           <b>Whose audience?</b>
           <select value={scope} onChange={e => setScope(e.target.value)} aria-label="Audience scope">
             <option value="live">Everyone in the monitored conversation</option>
-            {topics.map(t => <option key={t.topic_id} value={`topic:${t.topic_id}`}>People posting about: {t.label}</option>)}
+            {topics.map(t => <option key={t.topic_id} value={`topic:${t.topic_id}`}>{t.nature === 'manufactured' ? '⚠ ' : ''}{t.label} ({num(t.n_posts)} posts)</option>)}
           </select>
         </label>
-        <span className="muted">{subtitle}</span>
+        <span className="muted" aria-live="polite">{switching ? 'Counting the people in this story…' : subtitle}</span>
       </div>
 
-      {!data ? <Empty>Counting the audience…</Empty> : (
-        <div className={`aud-grid ${isFetching ? 'loading-hold' : ''}`}>
+      {!data ? <Empty>Counting the audience…</Empty> : tooSmall ? (
+        <Empty>Fewer than {data.k_anon ?? 10} people took part in this story, too few to describe without risking identifying them. Pick a bigger story.</Empty>
+      ) : (
+        <div className={`aud-grid ${switching ? 'loading-hold' : ''}`} aria-busy={switching}>
           <Card title="Where they are" sub="Accounts per state, from the location on their profile" actions={<InfoPop>{DIM_INFO.geography}</InfoPop>}>
             <ChartOrTable
               chart={geo.rows.length ? <IndiaMap states={geo.rows.map(r => ({ state: r.name.toLowerCase(), released: true, posts: r.count }))} metric="posts" onSelect={() => {}} />

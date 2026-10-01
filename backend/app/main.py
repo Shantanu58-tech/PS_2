@@ -31,7 +31,17 @@ async def lifespan(app: FastAPI):
 
     async def _warm() -> None:  # build the cached views before the first visitor needs them
         from app.analytics.situation import situation
-        from app.api.routers import graph as g, lineage as lin, topics as tp
+        from app.api.routers import graph as g, lineage as lin, timeline as tl, topics as tp
+
+        async def flagged_story() -> None:
+            # Emotions opens on the flagged story; have its numbers ready (hourly, both views)
+            sit = await asyncio.to_thread(situation, settings.db_path)
+            tid = ((sit.get("kpis") or {}).get("top_alert") or {}).get("topic_id")
+            for t in (tid, None):
+                await tl.raw_vs_organic(topic_id=t, platform=None, kind="all")
+            if tid is not None:
+                for org in (False, True):
+                    await tl.emotions_timeline(bucket="1h", topic_id=tid, organic_only=org, platform=None, kind="all")
 
         steps = [
             lambda: asyncio.to_thread(situation, settings.db_path),
@@ -40,6 +50,7 @@ async def lifespan(app: FastAPI):
             lin.lineage_overview, lambda: g.get_graph(organic_only=False, max_nodes=300),
             lambda: g.get_segment_spread(), lambda: g.get_spread(),
             lambda: g.get_graph(organic_only=True, max_nodes=300),  # the "Organic only" switch
+            flagged_story,
         ]
         for step in steps:
             try:

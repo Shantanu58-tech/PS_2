@@ -186,9 +186,14 @@ def test_network_nodes_carry_platform_and_details(client):
     assert client.get("/api/graph/node/does-not-exist").status_code == 404
 
 
-def test_live_telegram_feed_is_safe_without_a_session(client):
+def test_live_telegram_feed_is_safe_without_a_session(client, monkeypatch):
+    from app.collectors import live_feed
+
+    # a developer's .env may hold a real session: force "none" and skip any cached fetch
+    monkeypatch.setattr(live_feed.settings, "tg_session_string", "")
+    monkeypatch.setattr(live_feed, "_cache", {})
     j = client.get("/api/live/telegram").json()
-    assert j["connected"] is False and j["posts"] == []  # tests never hold real credentials
+    assert j["connected"] is False and j["posts"] == []
 
 
 def test_live_feed_channels_come_only_from_config():

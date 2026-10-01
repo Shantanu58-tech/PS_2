@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { useCompare, useEmotions, useSituation, useTopics } from '../hooks/useApi'
-import { Card, ChartTip, Empty, InfoPop, Legend, NextStep, PageHead, Seg } from '../components/ui'
+import { Card, ChartTip, Empty, InfoPop, Legend, Loading, NextStep, PageHead, Seg } from '../components/ui'
 import { AXIS_TICK, EMOTIONS, EMOTION_LABEL, EMOTION_SLOT, PLATFORMS, PLATFORM_LABEL, RAW, type Emotion } from '../lib/viz'
 import { ist, istDay, istShort, pct } from '../lib/fmt'
 
@@ -43,8 +43,9 @@ export default function TimelineEmotions() {
   useEffect(() => { if (!picked && flagged != null) { setTopicIdRaw(flagged); setBucket('1h') } }, [flagged, picked])
   const [platform, setPlatform] = useState('')
   const [kind, setKind] = useState<'all' | 'posts' | 'comments'>('all')
-  const { data: raw } = useEmotions(false, bucket, topicId, platform, kind)
-  const { data: org } = useEmotions(true, bucket, topicId, platform, kind)
+  const { data: raw, isFetching: f1, isPlaceholderData: p1 } = useEmotions(false, bucket, topicId, platform, kind)
+  const { data: org, isFetching: f2, isPlaceholderData: p2 } = useEmotions(true, bucket, topicId, platform, kind)
+  const switching = (p1 && f1) || (p2 && f2)
   const { data: topicsData } = useTopics('coordinated', 30)
   const { data: cmp } = useCompare(topicId, platform, kind)
   const { data: base } = useCompare(undefined, platform, kind)
@@ -92,8 +93,8 @@ export default function TimelineEmotions() {
           {cmp?.organic?.[lead.e] != null && <> ({pct(cmp.raw[lead.e], 1)} overall, {pct(cmp.organic[lead.e], 1)} among ordinary accounts)</>}.
         </div>
       )}
-      {merged.length === 0 ? <Empty>No posts match these filters.</Empty> : (
-        <>
+      {!raw || !org ? <Loading label="Reading the emotions" /> : merged.length === 0 ? <Empty>No posts match these filters.</Empty> : (
+        <div className={switching ? 'loading-hold' : ''} aria-busy={switching}>
           <Card style={{ marginBottom: 20 }} title={topicId != null ? 'This story vs the everyday level' : 'All activity vs organic'}
             sub={topicId != null ? 'average score, whole period · everyday = all topics' : 'average score, whole period'}
             actions={<InfoPop>Each post gets a score from 0 to 100% per emotion. "Everyday" is the average over every topic. "Organic" leaves out the coordinated accounts, so the gap between the two shows how much the campaign shifts the mood. Differences are in percentage points.</InfoPop>}>
@@ -130,7 +131,7 @@ export default function TimelineEmotions() {
               </table>
             </div>
           </details>
-        </>
+        </div>
       )}
       <NextStep />
     </div>

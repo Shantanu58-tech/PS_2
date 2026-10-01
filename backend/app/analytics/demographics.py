@@ -253,11 +253,15 @@ def scoped_demographics(db_path: str, topic_id: int | None = None, organic_only:
     with sqlite3.connect(db_path) as conn:
         conn.row_factory = sqlite3.Row
         where, params = "", []
+        # people in a topic = authors of its posts plus everyone who replied to them; each set is
+        # looked up once (a per-account EXISTS took 20 s on the 0.1-CPU host)
+        in_topic = "(SELECT platform, post_id FROM topic_assign WHERE topic_id=?)"
+        topic_posts = (f"SELECT p.platform, p.post_id, p.created_at, p.author_id FROM posts p "
+                       f"WHERE (p.platform, p.post_id) IN {in_topic} UNION "
+                       f"SELECT p.platform, p.post_id, p.created_at, p.author_id FROM posts p "
+                       f"WHERE (p.platform, p.parent_post_id) IN {in_topic}")
         if topic_id is not None:
-            where = ("WHERE EXISTS (SELECT 1 FROM posts p LEFT JOIN topic_assign ta ON ta.platform=p.platform "
-                     "AND ta.post_id=p.post_id LEFT JOIN topic_assign tp ON tp.platform=p.platform "
-                     "AND tp.post_id=p.parent_post_id WHERE p.platform=a.platform AND p.author_id=a.account_id "
-                     "AND (ta.topic_id=? OR tp.topic_id=?))")
+            where = f"WHERE (a.platform, a.account_id) IN (SELECT platform, author_id FROM ({topic_posts}))"
             params = [topic_id, topic_id]
         if organic_only:
             where += (" AND " if where else "WHERE ") + (
@@ -269,11 +273,9 @@ def scoped_demographics(db_path: str, topic_id: int | None = None, organic_only:
             "SELECT platform, author_id, lang FROM (SELECT platform, author_id, lang, COUNT(*) n FROM posts "
             "WHERE lang IS NOT NULL GROUP BY 1, 2, 3 ORDER BY n) GROUP BY 1, 2")}
         span = conn.execute(
-            "SELECT MIN(p.created_at), MAX(p.created_at) FROM posts p" + (
-                " LEFT JOIN topic_assign ta ON ta.platform=p.platform AND ta.post_id=p.post_id "
-                "LEFT JOIN topic_assign tp ON tp.platform=p.platform AND tp.post_id=p.parent_post_id "
-                "WHERE ta.topic_id=? OR tp.topic_id=?" if topic_id is not None else ""),
-            params).fetchone()
+            f"SELECT MIN(created_at), MAX(created_at) FROM ({topic_posts})" if topic_id is not None
+            else "SELECT MIN(created_at), MAX(created_at) FROM posts", [topic_id, topic_id] if topic_id is not None else []
+        ).fetchone()
     counts: dict[str, dict[str, int]] = {"geography": {}, "language": {}, "interests": {}, "age": {}}
     for acc in accounts:
         geo = _infer_state(acc["location_text"]) or "unknown"
