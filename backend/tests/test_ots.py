@@ -70,3 +70,22 @@ def test_verify_bitcoin_against_block_explorer():
     bad = ots.verify_bitcoin(proof, ROOT_HEX, fetch=lambda u: "h" if "height" in u else json.dumps({"merkle_root": "00" * 32}))
     assert bad["status"] == "FAIL"
     assert ots.verify_bitcoin(proof, "cd" * 32, fetch=fetch)["status"] == "FAIL"  # other root
+
+
+def test_only_the_newest_checkpoint_is_stamped(db_path, monkeypatch):
+    import sqlite3
+
+    monkeypatch.setattr(ots.settings, "enable_ots", True)
+    monkeypatch.setattr("opentimestamps.calendar.RemoteCalendar", FakeCalendar)
+    monkeypatch.setattr(ots.settings, "ots_calendars", "https://cal.example")
+    with sqlite3.connect(db_path) as c:
+        cols = {r[1] for r in c.execute("PRAGMA table_info(ledger_checkpoints)")}
+        base = {"first_seq": 1, "last_seq": 100, "signature": "s", "pubkey_id": "k", "created_at": "2026-01-01"}
+        for i, root in ((1, "aa" * 32), (2, "bb" * 32)):
+            row = {k: v for k, v in {**base, "id": i, "merkle_root": root}.items() if k in cols}
+            c.execute(f"INSERT INTO ledger_checkpoints ({','.join(row)}) VALUES ({','.join('?' * len(row))})", list(row.values()))
+    assert ots.anchor_pending_checkpoints(db_path) == {"stamped": 1, "checkpoint_id": 2}
+    # newest already stamped: the older seal is covered through the chain and is left alone
+    assert ots.anchor_pending_checkpoints(db_path) == {"stamped": 0}
+    with sqlite3.connect(db_path) as c:
+        assert c.execute("SELECT id FROM ledger_checkpoints WHERE ots_proof IS NOT NULL").fetchall() == [(2,)]

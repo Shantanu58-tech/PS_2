@@ -138,10 +138,12 @@ def anchor_pending_checkpoints(db_path: str) -> dict:
     if not settings.enable_ots:
         return {"skipped": "ENABLE_OTS=false"}
     with sqlite3.connect(db_path) as conn:
+        # only the newest seal: through the chain it covers every earlier record, so older
+        # unstamped seals never need their own anchor
         row = conn.execute(
-            "SELECT id, merkle_root FROM ledger_checkpoints WHERE ots_proof IS NULL ORDER BY id DESC LIMIT 1"
+            "SELECT id, merkle_root, ots_proof FROM ledger_checkpoints ORDER BY id DESC LIMIT 1"
         ).fetchone()
-        if not row:
+        if not row or row[2] is not None:
             return {"stamped": 0}
         try:
             proof = stamp(row[1])
