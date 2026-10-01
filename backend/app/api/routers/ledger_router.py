@@ -24,6 +24,10 @@ async def ledger_status():
         "SELECT id, first_seq, last_seq, merkle_root, signature, pubkey_id, created_at, ots_status, ots_block "
         "FROM ledger_checkpoints ORDER BY id DESC LIMIT 1")
     n_cp = await fetch_one("SELECT COUNT(*) AS n FROM ledger_checkpoints")
+    # the newest checkpoint sent to Bitcoin; through the chain it covers every record up to last_seq
+    anchor = await fetch_one(
+        "SELECT id, last_seq, ots_status AS status, ots_block AS block FROM ledger_checkpoints "
+        "WHERE ots_proof IS NOT NULL ORDER BY id DESC LIMIT 1")
     return {
         "record_count": count["n"] if count else 0,
         "last_seq": count["last_seq"] if count else None,
@@ -31,6 +35,7 @@ async def ledger_status():
         "last_checkpoint": cp,
         "pubkey_id": Signer().pubkey_id,
         "ots_enabled": settings.enable_ots,
+        "anchor": anchor,
     }
 
 

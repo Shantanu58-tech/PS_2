@@ -37,6 +37,8 @@ def main() -> None:
     out = Path(a.out).resolve()
     work = out / "data"
     if a.pack_only:
+        os.environ.update(DB_PATH=str(work / "deepastambha.db"), KEYS_DIR=str(work / "keys"))
+        stamp_bitcoin(str(work / "deepastambha.db"))  # no-op when the newest checkpoint is already stamped
         pack(out, work, time.time())
         return
     shutil.rmtree(out, ignore_errors=True)
@@ -76,8 +78,19 @@ def main() -> None:
     result = verify_chain(settings.db_path)
     print("verify:", result, flush=True)
     assert result.get("status") == "PASS"
+    stamp_bitcoin(settings.db_path)
 
     pack(out, work, t)
+
+
+def stamp_bitcoin(db_path: str) -> None:
+    """Submit the newest checkpoint to the public OpenTimestamps calendars (pending proof);
+    the server later upgrades it to the Bitcoin block that confirms it."""
+    from app.config import settings
+    from app.ledger.ots import anchor_pending_checkpoints
+
+    settings.enable_ots = True
+    print("bitcoin anchor:", anchor_pending_checkpoints(db_path), flush=True)
 
 
 def pack(out: Path, work: Path, t: float) -> None:

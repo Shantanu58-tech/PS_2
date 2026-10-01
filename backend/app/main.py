@@ -58,9 +58,30 @@ async def lifespan(app: FastAPI):
             except Exception:  # an empty database has nothing to warm
                 pass
 
+    async def _ots_loop() -> None:
+        """Bitcoin anchoring in two stages: stamp the newest signed checkpoint on the public
+        OpenTimestamps calendars (seconds; one stamp covers every earlier record through the
+        chain), then keep asking until the calendars have put it in a Bitcoin block (hours)."""
+        from app.ledger.ots import anchor_pending_checkpoints, upgrade_all
+
+        await asyncio.sleep(20)  # let the warm-up go first on a small host
+        while not stop.is_set():
+            try:
+                await asyncio.to_thread(anchor_pending_checkpoints, settings.db_path)
+                await asyncio.to_thread(upgrade_all, settings.db_path)
+            except Exception:  # offline calendars must never take the API down
+                pass
+            try:
+                await asyncio.wait_for(stop.wait(), timeout=1800)
+            except asyncio.TimeoutError:
+                pass
+
     warm = asyncio.create_task(_warm())
+    ots = asyncio.create_task(_ots_loop()) if settings.enable_ots else None
     yield
     warm.cancel()
+    if ots:
+        ots.cancel()
     stop.set()
     if task:
         await asyncio.gather(task, return_exceptions=True)

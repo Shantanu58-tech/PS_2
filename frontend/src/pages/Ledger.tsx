@@ -10,6 +10,7 @@ const short = (h?: string) => (h ? `${h.slice(0, 10)}…${h.slice(-6)}` : '—')
 export default function Ledger() {
   const qc = useQueryClient()
   const { data: status } = useLedgerStatus()
+  const anchor = status?.anchor
   const { data: cps } = useCheckpoints()
   const { data: audit } = useAudit()
   const [verify, setVerify] = useState<any>(null)
@@ -40,8 +41,13 @@ export default function Ledger() {
           info={<>Every post is fingerprinted (SHA-256) and linked to the previous one, so changing any post breaks the chain from that point on.</>} />
         <Kpi icon={<Stamp size={20} />} label="Signed seals" value={num(status?.checkpoint_count)} foot="one for every 100 posts"
           info={<>Every 100 posts are rolled into a single Merkle root and digitally signed (Ed25519).</>} />
-        <Kpi icon={<Bitcoin size={20} />} label="Bitcoin anchor" value={<span style={{ textTransform: 'capitalize' }}>{status?.last_checkpoint?.ots_status ?? (status?.ots_enabled ? 'enabled' : 'off')}</span>} foot="via OpenTimestamps"
-          info={<>The newest seal is timestamped on the Bitcoin blockchain, proving the evidence existed at that time.</>} />
+        <Kpi icon={<Bitcoin size={20} />} label="Bitcoin anchor"
+          value={anchor?.status === 'verified' ? 'Confirmed' : anchor ? 'Submitted' : status?.ots_enabled ? 'Starting' : 'Off'}
+          tone={anchor?.status === 'verified' ? 'good' : undefined}
+          foot={anchor?.status === 'verified' ? `in Bitcoin block ${num(anchor.block)} · covers posts 1–${num(anchor.last_seq)}`
+            : anchor ? `waiting for a Bitcoin block (usually a few hours) · covers posts 1–${num(anchor.last_seq)}`
+            : 'via OpenTimestamps'}
+          info={<>The newest seal's fingerprint is sent to public OpenTimestamps calendars, which put it into a Bitcoin block. Once confirmed, anyone can prove these records existed by that time, without trusting us. Because every seal is chained to the one before, one anchor covers all earlier records.</>} />
       </div>
 
       <div className="grid g-2" style={{ marginBottom: 16 }}>
